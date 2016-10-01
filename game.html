@@ -39,21 +39,19 @@
 
             player.body.collideWorldBounds = true;
 
-            player.body.drag.x = 750;
-            player.body.drag.y = 750;
+            player.body.drag.x = 1000;
+            player.body.drag.y = 1000;
 
         }
 
 
         function update(){
             
-            if(game.input.activePointer.leftButton.isDown){
-
+            if(game.input.activePointer.leftButton.isDown ){
 
                 //move player towards mouse button
-                game.physics.arcade.moveToPointer(player, 500);
+                game.physics.arcade.moveToPointer(player, Math.min(400, Math.pow(game.physics.arcade.distanceToPointer(player), 2)));
                 //game.physics.accelerateToPointer(player, this.game.input.activePointer, 600, 100, 100);
-
             }
         }
 
