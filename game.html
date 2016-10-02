@@ -6,6 +6,8 @@
         
         <script type="text/javascript" src="js/phaser.js"></script>
 
+        <script type="text/javascript" src="js/RandomSpawn.js"></script>
+
     </head>
     <body>
 
@@ -17,6 +19,7 @@
 
 
         var player;
+
         function preload () {
 
             //load images
@@ -42,6 +45,10 @@
             player.body.drag.x = 750;
             player.body.drag.y = 750;
 
+
+            RandomSpawn(); //First call of function to randomly spawn background buildings. Subsequent calls through the randomized interval handled within function
+            //Current idea: Pass an array of the Building Objects/Images to the function so it can also create them internally after selection
+
         }
 
 
@@ -53,8 +60,8 @@
                 //move player towards mouse button
                 game.physics.arcade.moveToPointer(player, 500);
                 //game.physics.accelerateToPointer(player, this.game.input.activePointer, 600, 100, 100);
-
             }
+
         }
 
     };
