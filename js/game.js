@@ -6,7 +6,7 @@ window.onload = function() {
 		update: update
 	});
 
-	var player, dragMagnitude = 500, boatSpeed = 400,
+	var player, dragMagnitude = 500, boatSpeed = 600, slowDist = 200,
 		scrollSpeed = 5;
 	
 	var world, bgWalls,
@@ -54,21 +54,17 @@ window.onload = function() {
 		scrollSpeed = Math.min(scrollSpeed * 1.001, 100);
 		bgWalls.update();
 		
-		//do something with the drag somehow
-		if(player.body.velocity);
-		//game.time.elapsed
-		
 		if(game.input.activePointer.leftButton.isDown) {
-
 			//move player towards mouse button
-			game.physics.arcade.moveToPointer(player, 500);
-			player.body.velocity.x = Math.min(
-				player.body.velocity.x,
-				player.body.velocity.x,
+			game.physics.arcade.moveToPointer(player,
+				game.math.bezierInterpolation(
+					[0, boatSpeed],
+					Math.max(0, Math.min(1, // Constrain to range [0, 1]
+						game.physics.arcade.distanceToPointer(player) / slowDist
+					))
+				)
 			);
-			//	Math.pow(game.physics.arcade.distanceToPointer(player), 2) / 40) );
-			//console.log("velocity: " + Math.pow(game.physics.arcade.distanceToPointer(player), 2));
-			//game.physics.accelerateToPointer(player, this.game.input.activePointer, 600, 100, 100);
+			
 		} else {
 			var velocityMagnitude = Math.sqrt(player.body.velocity.x * player.body.velocity.x + player.body.velocity.y * player.body.velocity.y);
 
