@@ -61,7 +61,7 @@ window.onload = function() {
 		update: update
 	}
 	
-	var player, dragMagnitude = 500, boatSpeed = 600, slowDist = 200,
+	var player, dragMagnitude = 500, boatSpeed = 500, slowDist = 200,
 		scrollSpeed = 5;
 
 	var items;

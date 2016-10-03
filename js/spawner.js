@@ -1,6 +1,7 @@
 function Spawner(game, parent, keys, minInt, maxInt, minY, maxY) {
 	this.game   = game;
-	this.group  = game.add.group(parent);
+	this.group  = game.add.group(parent, undefined, false,
+		true, Phaser.Physics.ARCADE);
 	this.keys   = keys;
 	this.minInt = minInt;
 	this.maxInt = maxInt;
