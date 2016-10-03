@@ -1,4 +1,14 @@
+var screenToWorldX, worldToScreenX;
+
 window.onload = function() {
+	
+	screenToWorldX = function(x) {
+		return x - world.x;
+	}
+	
+	worldToScreenX = function(x) {
+		return x + world.x;
+	}
 
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '', {
 		preload: preload,
@@ -100,7 +110,7 @@ window.onload = function() {
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		game.world.bounds.y = bgWalls.minHeight;
+		items   = new Spawner(game, world, ['item'], 20, 1000, bgWalls.minHeight);
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -113,11 +123,6 @@ window.onload = function() {
 
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-		
-		//create memorabilia items
-
-		items = game.add.group(world);
-		items.enableBody = true;
 
 		//create rock
 		rocks = game.add.group(world);
@@ -159,8 +164,9 @@ window.onload = function() {
 	function update() {
 		
 		world.x -= scrollSpeed;
-		scrollSpeed = Math.min(scrollSpeed * 1.001, 100);
+		scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
+		items.update();
 		
 		if(game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
@@ -187,10 +193,15 @@ window.onload = function() {
 
 			}
 		}
+		
+		if (player.y < bgWalls.minHeight) {
+			player.y = bgWalls.minHeight;
+			player.body.velocity.y = 0;
+		}
 
 		//collectable code
 		//collisions
-		game.physics.arcade.overlap(player, items, collectItem, null, this);
+		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
 		game.physics.arcade.overlap(player, bros, broPickup, null, this);
 		game.physics.arcade.overlap(player, rocks, rockHit, null, this);
 
