@@ -33,7 +33,7 @@ window.onload = function() {
 		game.load.image ('rock', 'bullet.png');
 		game.load.image ('mem', 'star.png');
 		game.load.image ('bro', 'einstein.png')
-		game.load.spritesheet ('dudeBroRaft', 'dude.png', 32, 48);      
+		game.load.image ('dudeBroRaft', 'player.png');      
 
 	}
 
