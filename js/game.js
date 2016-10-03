@@ -6,6 +6,51 @@ window.onload = function() {
 		update: update
 	});
 
+	var menu = function(game){
+		console.log("starting menu");
+	}
+	menu.prototype = {
+		preload: function(){
+			//load a title image
+			game.load.image('title', 'assets/sprites/title.png');
+		},
+
+		create: function(){
+			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+
+    		//  Moves the image anchor to the middle, so it centers inside the game properly
+    		image.anchor.set(0.5);
+
+    		//  Enables all kind of input actions on this image (click, etc)
+    		image.inputEnabled = true;
+
+    		text = game.add.text(250, 16, '', { fill: '#ffffff' });
+
+    		image.events.onInputDown.add(listener, this);
+
+			//create a text object
+			var text = game.add.text(100,100,"PLACEHOLDER TITLE", {font: "bold 32px Arial", fill: "#fff"});
+
+			
+
+		}		
+	}
+
+	function listener(){
+		//make a callback to go to the game state when finished
+		this.game.state.start("gameplay");
+	}
+
+	var gameplay = function(game){
+		console.log("starting game");
+	}
+
+	gameplay.prototype ={
+		preload: preload,
+		create: create,
+		update: update
+	}
+	
 	var player, dragMagnitude = 500, boatSpeed = 600, slowDist = 200,
 		scrollSpeed = 5;
 
@@ -172,5 +217,9 @@ window.onload = function() {
 		lives -= 1;
 		badSound.play();
 	}
+
+	game.state.add("menu", menu);
+	game.state.add("gameplay", gameplay);
+	game.state.start("menu");
 
 };
