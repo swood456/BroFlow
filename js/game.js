@@ -132,28 +132,6 @@ window.onload = function() {
 		game.physics.arcade.overlap(player, bros, broPickup, null, this);
 		game.physics.arcade.overlap(player, rocks, rockHit, null, this);
 
-		//player drag
-		player.body.drag.x = 1000;
-		player.body.drag.y = 1000;
-
-		//move player
-		if(cursors.left.isDown)
-		{
-			player.body.velocity.x = -200;
-		}
-		else if (cursors.right.isDown){
-			player.body.velocity.x = 200;
-		}
-
-		if(cursors.up.isDown)
-		{
-			player.body.velocity.y = -200;
-		}
-		else if (cursors.down.isDown)
-		{
-			player.body.velocity.y = 200;
-		}
-
 		//update score
 		labelScore.text = score;
 		labelLives.text = lives;
