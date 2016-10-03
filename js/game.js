@@ -64,7 +64,7 @@ window.onload = function() {
 			game.physics.arcade.moveToPointer(player, 500);
 			player.body.velocity.x = Math.min(
 				player.body.velocity.x,
-				player.body.velocity.x,
+				player.body.velocity.x
 			);
 			//	Math.pow(game.physics.arcade.distanceToPointer(player), 2) / 40) );
 			//console.log("velocity: " + Math.pow(game.physics.arcade.distanceToPointer(player), 2));
