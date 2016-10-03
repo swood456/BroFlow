@@ -48,7 +48,7 @@ window.onload = function() {
 		game.world.bounds.y = bgWalls.minHeight;
 
 		//make a player thing
-		player = game.add.sprite(200,200, 'dudeBroRaft	');
+		player = game.add.sprite(200,200, 'dudeBroRaft');
 
 		game.physics.enable(player, Phaser.Physics.ARCADE);
 		
