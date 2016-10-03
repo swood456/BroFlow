@@ -134,9 +134,6 @@ window.onload = function() {
 
 		//create all the objects
 		for(var i=0;i<12;i++){
-			//mems
-			var item = items.create(900,i*240,'item');
-			item.body.velocity.x = -100;
 			//rocks
 			var rock = rocks.create(900,80+i*240,'rock');
 			rock.body.velocity.x = -100;
@@ -153,13 +150,11 @@ window.onload = function() {
 		labelLives = game.add.text (300, 500, text, style);
 
 		//Add Sound and Music Vars to scene
-
 		BGMusic = game.add.audio('backgroundMusic');
 		goodSound = game.add.audio('goodSound');
 		badSound = game.add.audio('badSound');
 
 		//BGMusic.play();
-
 		BGMusic.loopFull(0.6); //Loops BG music at 60% Volume
 		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
 	}
@@ -233,11 +228,14 @@ window.onload = function() {
 		badSound.play();
 	}
 
+	game.state.add("menu", menu);
+	game.state.add("gameplay", gameplay);
+	game.state.start("menu");
+
 	//Fucntion to test that background music is looping. Mainly debugging function right now.
 	function hasLooped(sound) {
 
-    console.log("Song looping");
+    	console.log("Song looping");
 
 	}
-
 };
