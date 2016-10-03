@@ -22,6 +22,10 @@ window.onload = function() {
 		          'bg4', 'bg5', 'bg6',
 		          'bg7', 'bg8', 'bg9'];
 
+	var BGMusic;
+	var goodSound;
+	var badSound;
+
 	function preload () {
 		
 		game.load.path = 'assets/sprites/';
@@ -33,6 +37,13 @@ window.onload = function() {
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
 		         .spritesheet ('dudeBroRaft', 'dude.png', 32, 48);
+
+		//Load in Sound effects and BG Music
+		game.load.path = 'assets/sounds/';
+
+		game.load.audio ('backgroundMusic', 'StockBGMusic.mp3')
+				 .audio ('goodSound', 'chimeSound.wav')
+				 .audio ('badSound', 'boingSound.wav');
 	}
 
 	function create () {
@@ -89,6 +100,13 @@ window.onload = function() {
 		labelScore = game.add.text (100, 500, text, style);
 		text = lives;
 		labelLives = game.add.text (300, 500, text, style);
+
+		//Add Sound and Music Vars to scene
+		BGMusic = game.add.audio('backgroundMusic');
+		goodSound = game.add.audio('goodSound');
+		badSound = game.add.audio('badSound');
+
+		BGMusic.play();
 	}
 
 
@@ -139,16 +157,19 @@ window.onload = function() {
 	function collectItem(thisPlayer, thisItem){
 		thisItem.kill();
 		score += 1;
+		goodSound.play();
 	}
 
 	function broPickup(thisPlayer, thisBro){
 		thisBro.kill();
 		lives += 1;
+		goodSound.play();
 	}
 
 	function rockHit(thisPlayer, thisRock){
 		thisRock.kill();
 		lives -= 1;
+		badSound.play();
 	}
 
 };
