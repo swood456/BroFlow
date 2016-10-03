@@ -134,6 +134,9 @@ window.onload = function() {
 
 		//create all the objects
 		for(var i=0;i<12;i++){
+			//mems
+			var item = items.create(900,i*240,'item');
+			item.body.velocity.x = -100;
 			//rocks
 			var rock = rocks.create(900,80+i*240,'rock');
 			rock.body.velocity.x = -100;
@@ -229,5 +232,4 @@ window.onload = function() {
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
 	game.state.start("menu");
-
 };
