@@ -31,9 +31,9 @@ window.onload = function() {
 		         .images(bgKeys);
 
 		game.load.image ('rock', 'bullet.png');
-		game.load.image ('mem', 'star.png');
+		game.load.image ('item', 'star.png');
 		game.load.image ('bro', 'einstein.png')
-		game.load.image ('dudeBroRaft', 'player.png');      
+		game.load.image ('dudeBroRaft', 'player.png');
 
 	}
 
@@ -75,7 +75,7 @@ window.onload = function() {
 		//create all the objects
 		for(var i=0;i<12;i++){
 			//mems
-			var item = items.create(900,i*240,'mem');
+			var item = items.create(900,i*240,'item');
 			item.body.velocity.x = -100;
 			//rocks
 			var rock = rocks.create(900,80+i*240,'rock');
