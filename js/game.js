@@ -27,13 +27,12 @@ window.onload = function() {
 		game.load.path = 'assets/sprites/';
 
 		//load images
-		game.load.image('player', 'player.png')
-		         .images(bgKeys);
-
-		game.load.image ('rock', 'bullet.png');
-		game.load.image ('mem', 'star.png');
-		game.load.image ('bro', 'einstein.png')
-		game.load.spritesheet ('dudeBroRaft', 'dude.png', 32, 48);      
+		game.load.image ('player', 'player.png')
+		         .images(bgKeys)
+		         .image ('rock', 'bullet.png')
+		         .image ('mem', 'star.png')
+		         .image ('bro', 'einstein.png')
+		         .spritesheet ('dudeBroRaft', 'dude.png', 32, 48);      
 
 	}
 
