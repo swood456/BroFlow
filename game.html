@@ -57,11 +57,12 @@
             if(game.input.activePointer.leftButton.isDown ){
 
                 //move player towards mouse button
-                game.physics.arcade.moveToPointer(player, Math.min(400, Math.pow(game.physics.arcade.distanceToPointer(player), 2)));
-                
+                game.physics.arcade.moveToPointer(player, Math.min(500, Math.pow(game.physics.arcade.distanceToPointer(player), 2) / 100) );
+                //console.log("velocity: " + Math.pow(game.physics.arcade.distanceToPointer(player), 2));
                 //game.physics.accelerateToPointer(player, this.game.input.activePointer, 600, 100, 100);
             } else{
                 var velocityMagnitude = Math.sqrt(player.body.velocity.x * player.body.velocity.x + player.body.velocity.y * player.body.velocity.y);
+
                 //if boat is moving with some amount of speed
                 if(velocityMagnitude < 10){
                     player.body.drag.x = Math.sqrt(2) * dragMagnitude;
