@@ -1,4 +1,14 @@
+var screenToWorldX, worldToScreenX;
+
 window.onload = function() {
+	
+	screenToWorldX = function(x) {
+		return x - world.x;
+	}
+	
+	worldToScreenX = function(x) {
+		return x + world.x;
+	}
 
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '', {
 		preload: preload,
@@ -6,11 +16,57 @@ window.onload = function() {
 		update: update
 	});
 
+	var menu = function(game){
+		console.log("starting menu");
+	}
+	menu.prototype = {
+		preload: function(){
+			//load a title image
+			game.load.image('title', 'assets/sprites/title.png');
+		},
+
+		create: function(){
+			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+
+    		//  Moves the image anchor to the middle, so it centers inside the game properly
+    		image.anchor.set(0.5);
+
+    		//  Enables all kind of input actions on this image (click, etc)
+    		image.inputEnabled = true;
+
+    		text = game.add.text(250, 16, '', { fill: '#ffffff' });
+
+    		image.events.onInputDown.add(listener, this);
+
+			//create a text object
+			var text = game.add.text(100,100,"PLACEHOLDER TITLE", {font: "bold 32px Arial", fill: "#fff"});
+
+			
+
+		}		
+	}
+
+	function listener(){
+		//make a callback to go to the game state when finished
+		this.game.state.start("gameplay");
+	}
+
+	var gameplay = function(game){
+		console.log("starting game");
+	}
+
+	gameplay.prototype ={
+		preload: preload,
+		create: create,
+		update: update
+	}
+	
 	var player, dragMagnitude = 500, boatSpeed = 600, slowDist = 200,
 		scrollSpeed = 5;
 
 	var items;
 	var rocks;
+	var bros;
 
 	var score=0;
 	var labelScore;
@@ -54,10 +110,10 @@ window.onload = function() {
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		game.world.bounds.y = bgWalls.minHeight;
+		items   = new Spawner(game, world, ['item'], 20, 1000, bgWalls.minHeight);
 
 		//make a player thing
-		player = game.add.sprite(200,200, 'dudeBroRaft');
+		player = game.add.sprite(200,200, 'player');
 
 		game.physics.enable(player, Phaser.Physics.ARCADE);
 		
@@ -67,11 +123,6 @@ window.onload = function() {
 
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-		
-		//create memorabilia items
-
-		items = game.add.group(world);
-		items.enableBody = true;
 
 		//create rock
 		rocks = game.add.group(world);
@@ -102,23 +153,20 @@ window.onload = function() {
 		labelLives = game.add.text (300, 500, text, style);
 
 		//Add Sound and Music Vars to scene
-
 		BGMusic = game.add.audio('backgroundMusic');
 		goodSound = game.add.audio('goodSound');
 		badSound = game.add.audio('badSound');
 
-		//BGMusic.play();
-
-		BGMusic.loopFull(0.6); //Loops BG music at 60% Volume
-		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
+		BGMusic.play();
 	}
 
 
 	function update() {
 		
 		world.x -= scrollSpeed;
-		scrollSpeed = Math.min(scrollSpeed * 1.001, 100);
+		scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
+		items.update();
 		
 		if(game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
@@ -145,10 +193,15 @@ window.onload = function() {
 
 			}
 		}
+		
+		if (player.y < bgWalls.minHeight) {
+			player.y = bgWalls.minHeight;
+			player.body.velocity.y = 0;
+		}
 
 		//collectable code
 		//collisions
-		game.physics.arcade.overlap(player, items, collectItem, null, this);
+		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
 		game.physics.arcade.overlap(player, bros, broPickup, null, this);
 		game.physics.arcade.overlap(player, rocks, rockHit, null, this);
 
@@ -176,11 +229,8 @@ window.onload = function() {
 		badSound.play();
 	}
 
-	//Fucntion to test that background music is looping. Mainly debugging function right now.
-	function hasLooped(sound) {
-
-    console.log("Song looping");
-
-	}
+	game.state.add("menu", menu);
+	game.state.add("gameplay", gameplay);
+	game.state.start("menu");
 
 };
