@@ -12,7 +12,7 @@ function BGWalls(game, parent, keys) {
 	this.group.y = this.minHeight;
 	
 	// Window must always be covered
-	this.numSprites = Math.ceil(game.width / this.minWidth);
+	this.numSprites = Math.ceil(game.width / this.minWidth) + 1;
 	this.first = this.right = 0;
 	
 	for (var i = this.numSprites; i > 0; --i) {
