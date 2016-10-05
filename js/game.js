@@ -10,11 +10,7 @@ window.onload = function() {
 		return x + world.x;
 	}
 
-	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '', {
-		preload: preload,
-		create: create,
-		update: update
-	});
+	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '');
 
 	var menu = function(game){
 		console.log("starting menu");
@@ -40,7 +36,7 @@ window.onload = function() {
     		image.events.onInputDown.add(listener, this);
 
 			//create a text object
-			var text = game.add.text(100,100,"PLACEHOLDER TITLE", {font: "bold 32px Arial", fill: "#fff"});
+			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
 
 			
 
@@ -112,6 +108,8 @@ window.onload = function() {
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
 		items   = new Spawner(game, world, ['item'], 20, 1000, bgWalls.minHeight);
+		rocks	= new Spawner(game, world, ['rock'], 20, 1000, bgWalls.minHeight);
+
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -126,9 +124,9 @@ window.onload = function() {
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
 		//create rock
-		rocks = game.add.group(world);
+		/*rocks = game.add.group(world);
 		rocks.enableBody = true;
-
+		*/
 		//create bro
 		bros = game.add.group(world);
 		bros.enableBody = true;
@@ -136,8 +134,9 @@ window.onload = function() {
 		//create all the objects
 		for(var i=0;i<12;i++){
 			//rocks
-			var rock = rocks.create(900,80+i*240,'rock');
+			/*var rock = rocks.create(900,80+i*240,'rock');
 			rock.body.velocity.x = -100;
+			*/
 			//bros
 			var bro = bros.create(900,160+i*240,'bro')
 			bro.body.velocity.x = -100;
@@ -167,6 +166,7 @@ window.onload = function() {
 		scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
+		rocks.update();
 		
 		if(game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
@@ -203,7 +203,7 @@ window.onload = function() {
 		//collisions
 		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
 		game.physics.arcade.overlap(player, bros, broPickup, null, this);
-		game.physics.arcade.overlap(player, rocks, rockHit, null, this);
+		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
 
 		//update score
 		labelScore.text = score;
@@ -227,6 +227,10 @@ window.onload = function() {
 		thisRock.kill();
 		lives -= 1;
 		badSound.play();
+
+		if (lives < 0){
+			this.game.state.start("menu");
+		}
 	}
 
 	game.state.add("menu", menu);
