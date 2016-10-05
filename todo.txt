@@ -1,0 +1,39 @@
+Critical to function:
+	--Art
+		* player sprite
+			# Move animation
+			# Stationary sprite
+		* Water
+		* Basic obstacle (rock)
+	--Programming
+		* Implement win condition / Lose condition
+		* Add in how player makes progress
+		* Add in sprites and animations to game
+	--Sound
+		* Create background music
+	--Design
+		* Decide what is end condition
+		* Decide how player makes progress
+		* Lose condition
+
+Nice to have:
+	--Art
+		* Top scrolling background
+		* Player sprite
+			# Pick up animation
+		* Title screen
+	--Programming
+		* Add in additional types of obstacles
+		* Implement additional animations and art assets
+	--Sound
+		* Pickup sound effects
+	--Design
+		* Design other obstacles / powerups
+			# Currents
+			# Powerups (speed boost, invulnerability)
+
+Stretch goals:
+	--Art
+	--Programing
+	--Sound
+	--Design
