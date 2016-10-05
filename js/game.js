@@ -60,29 +60,25 @@ window.onload = function() {
 	
 	var player, dragMagnitude = 500, boatSpeed = 500, slowDist = 200,
 		scrollSpeed = 5;
+	
+	var items, rocks, bros;
 
 	/*
 	//enemyTestCode
 	var enemy;
 	*/
 
-	var items;
-	var rocks;
-	var bros;
+	var score, labelScore, health, labelHealth,
+		healthPos = [[0, 0], [10, 10], [-10, -10]],
+		currentLevel;
 
-	var score;
-	var labelScore;
-	var lives;
-	var labelLives;
 	
 	var world, bgWalls,
 		bgKeys = ['bg1', 'bg2', 'bg3',
 		          'bg4', 'bg5', 'bg6',
 		          'bg7', 'bg8', 'bg9'];
 
-	var BGMusic;
-	var goodSound;
-	var badSound;
+	var BGMusic, goodSound, badSound;
 
 	function preload () {
 		
@@ -94,7 +90,10 @@ window.onload = function() {
 		         .image ('rock', 'bullet.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
-		         .spritesheet ('dudeBroRaft', 'dude.png', 32, 48);
+		         .image ('pickup1', 'pickup1.png')
+		         .image ('pickup2', 'pickup2.png')
+		         .image ('pickup3', 'pickup3.png')
+		         .spritesheet ('dude', 'dude.png', 32, 48);
 
 		/*
 		//enemyTestCode
@@ -110,6 +109,7 @@ window.onload = function() {
 	}
 
 	function create () {
+		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -117,13 +117,17 @@ window.onload = function() {
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['item'], 20, 1000, bgWalls.minHeight);
-		rocks	= new Spawner(game, world, ['rock'], 20, 1000, bgWalls.minHeight);
-		bros 	= new Spawner(game, world, ['bro'], 3000, 5000, bgWalls.minHeight);
-
+		items   = new Spawner(game, world, ['pickup1'], 5000, 1000, bgWalls.minHeight);
+		rocks	= new Spawner(game, world, ['rock'], 900, 1000, bgWalls.minHeight);
+		bros 	= new Spawner(game, world, ['bro'], 7000, 5000, bgWalls.minHeight);
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
+
+		player.addChild(game.make.sprite( 0,  0, 'dude'));
+		player.addChild(game.make.sprite(10, 10, 'dude'));
+		player.addChild(game.make.sprite(20, 20, 'dude'));
+
 		game.physics.enable(player, Phaser.Physics.ARCADE);
 		player.anchor.setTo(0.5,0.5);
 		player.body.collideWorldBounds = true;
@@ -137,19 +141,23 @@ window.onload = function() {
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
 		enemy.body.collideWorldBounds = true;
-		*/
+	
 
 		enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
+		*/
 
 		//score label
 		var style = {font: "32px Arial", fill: "#500050", align: "center"};
 		var text = score;
 		game.add.text (100, 600, "Score:", style);
 		labelScore = game.add.text (200, 600, text, style);
-		text = lives;
-		game.add.text (100, 650, "Lives:", style);
-		labelLives = game.add.text (200, 650, text, style);
+		text = health;
+		game.add.text (100, 650, "Health:", style);
+		labelHealth = game.add.text (200, 650, text, style);
+
+		currentLevel = 1;
+		scrollSpeed = 5;
 
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
@@ -161,15 +169,20 @@ window.onload = function() {
 		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
 		
 		//set game life and score
-		lives = 3;
+		health = 3;
 		score = 0;
 	}
 
 
 	function update() {
 		
+		if (player.top < bgWalls.minHeight) {
+			player.top = bgWalls.minHeight;
+			player.body.velocity.y = 0;
+		}
+		
 		world.x -= scrollSpeed;
-		scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
+		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
 		rocks.update();
@@ -186,25 +199,31 @@ window.onload = function() {
 				)
 			);
 			
-		} else {
-			var velocityMagnitude = Math.sqrt(player.body.velocity.x * player.body.velocity.x + player.body.velocity.y * player.body.velocity.y);
-
-			//if boat is moving with some amount of speed
-			if(velocityMagnitude < 10) {
-				player.body.drag.x = Math.sqrt(2) * dragMagnitude;
-				player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-				//console.log('<10');
-			} else {
-				//vector stuff
-				player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
-				player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
-				//console.log('>=10');
-			}
 		}
-		
-		if (player.y < bgWalls.minHeight) {
-			player.y = bgWalls.minHeight;
-			player.body.velocity.y = 0;
+		var velocityMagnitude = player.body.velocity.getMagnitude();
+		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
+		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
+
+		if(score >= 5 && currentLevel == 1){
+			console.log("move to level 2");
+			//move to level 2
+			currentLevel = 2;
+
+			//change object that is spawned
+			items.keys = ['pickup2'];
+
+			//change the scroll speed
+			scrollSpeed = 7;
+		} else if(score >= 10 && currentLevel == 2){
+			console.log("move to level 3");
+			//move to level 2
+			currentLevel = 3;
+
+			//change object that is spawned
+			items.keys = ['pickup3'];
+
+			//change the scroll speed
+			scrollSpeed = 9;
 		}
 
 		//collectable code
@@ -222,31 +241,44 @@ window.onload = function() {
 
 
 		//update score
-		labelScore.text = score;
-		labelLives.text = lives;
-
+		labelScore.text = score + " fps: " + game.time.fps;
+	}
+	
+	function setHealth(h) {
+		if (h > healthPos.length) {
+			h = healthPos.length;
+		} else if (h <= 0) {
+			h = 0;
+			game.camera.fade('#000000');
+			game.camera.onFadeComplete.add(function(){
+				game.state.start("menu");
+			}, this);
+		}
+		
+		if (h > health) {
+			goodSound.play();
+		} else if (h < health) {
+			badSound.play();
+		}
+		
+		health = h;
+		
+		labelHealth.text = "Health: " + health;
 	}
 
 	function collectItem(thisPlayer, thisItem){
 		thisItem.kill();
 		score += 1;
-		goodSound.play();
 	}
 
 	function broPickup(thisPlayer, thisBro){
 		thisBro.kill();
-		lives += 1;
-		goodSound.play();
+		setHealth(health + 1);
 	}
 
 	function rockHit(thisPlayer, thisRock){
 		thisRock.kill();
-		lives -= 1;
-		badSound.play();
-
-		if (lives < 0){
-			this.game.state.start("menu");
-		}
+		setHealth(health - 1);
 	}
 
 	game.state.add("menu", menu);
