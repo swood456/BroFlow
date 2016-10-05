@@ -153,7 +153,7 @@ window.onload = function() {
 		game.add.text (100, 600, "Score:", style);
 		labelScore = game.add.text (200, 600, text, style);
 		text = health;
-		game.add.text (100, 650, "Health:", style);
+		game.add.text (100, 650, "", style);
 		labelHealth = game.add.text (200, 650, text, style);
 
 		currentLevel = 1;
