@@ -106,9 +106,9 @@ window.onload = function() {
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['pickup1'], 20, 1000, bgWalls.minHeight);
-		rocks	= new Spawner(game, world, ['rock'], 20, 1000, bgWalls.minHeight);
-		bros 	= new Spawner(game, world, ['bro'], 3000, 5000, bgWalls.minHeight);
+		items   = new Spawner(game, world, ['pickup1'], 5000, 1000, bgWalls.minHeight);
+		rocks	= new Spawner(game, world, ['rock'], 900, 1000, bgWalls.minHeight);
+		bros 	= new Spawner(game, world, ['bro'], 7000, 5000, bgWalls.minHeight);
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -182,7 +182,7 @@ window.onload = function() {
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 
-		if(score > 5 && currentLevel == 1){
+		if(score >= 5 && currentLevel == 1){
 			console.log("move to level 2");
 			//move to level 2
 			currentLevel = 2;
@@ -192,7 +192,7 @@ window.onload = function() {
 
 			//change the scroll speed
 			scrollSpeed = 7;
-		} else if(score > 10 && currentLevel == 2){
+		} else if(score >= 10 && currentLevel == 2){
 			console.log("move to level 3");
 			//move to level 2
 			currentLevel = 3;
