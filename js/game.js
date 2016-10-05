@@ -61,7 +61,7 @@ window.onload = function() {
 	var player, dragMagnitude, boatSpeed, slowDist = 200,
 		scrollSpeed;
 
-	var invulnerable = 0;
+	var invulnerable = false;
 	
 	var items, rocks, bros, powerups;
 
@@ -165,7 +165,7 @@ window.onload = function() {
 		scrollSpeed = 5;
 		dragMagnitude = 500;
 		boatSpeed = 500;
-		invulnerable = 0;
+		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
