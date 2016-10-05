@@ -65,9 +65,9 @@ window.onload = function() {
 	var rocks;
 	var bros;
 
-	var score=0;
+	var score;
 	var labelScore;
-	var lives=3;
+	var lives;
 	var labelLives;
 	
 	var world, bgWalls,
@@ -157,6 +157,10 @@ window.onload = function() {
 		//BGMusic.play();
 		BGMusic.loopFull(0.6); //Loops BG music at 60% Volume
 		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
+		
+		//set game life and score
+		lives = 3;
+		score = 0;
 	}
 
 
