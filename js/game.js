@@ -201,21 +201,10 @@ window.onload = function() {
 				)
 			);
 			
-		} else {
-			var velocityMagnitude = player.body.velocity.getMagnitude();
-
-			//if boat is moving with some amount of speed
-			if(velocityMagnitude < 10) {
-				player.body.drag.x = Math.sqrt(2) * dragMagnitude;
-				player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-				//console.log('<10');
-			} else {
-				//vector stuff
-				player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
-				player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
-				//console.log('>=10');
-			}
 		}
+		var velocityMagnitude = player.body.velocity.getMagnitude();
+		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
+		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 
 		if(score > 5 && currentLevel == 1){
 			console.log("move to level 2");
