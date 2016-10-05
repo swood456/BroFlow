@@ -61,6 +61,11 @@ window.onload = function() {
 	var player, dragMagnitude = 500, boatSpeed = 500, slowDist = 200,
 		scrollSpeed = 5;
 
+	/*
+	//enemyTestCode
+	var enemy;
+	*/
+
 	var items;
 	var rocks;
 	var bros;
@@ -91,6 +96,11 @@ window.onload = function() {
 		         .image ('bro', 'einstein.png')
 		         .spritesheet ('dudeBroRaft', 'dude.png', 32, 48);
 
+		/*
+		//enemyTestCode
+		game.load.image ('enemy', 'enemy.png');
+		*/
+
 		//Load in Sound effects and BG Music
 		game.load.path = 'assets/sounds/';
 
@@ -114,35 +124,23 @@ window.onload = function() {
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
-
 		game.physics.enable(player, Phaser.Physics.ARCADE);
-		
 		player.anchor.setTo(0.5,0.5);
-
 		player.body.collideWorldBounds = true;
 
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
-		//create rock
-		/*rocks = game.add.group(world);
-		rocks.enableBody = true;
-		
-		//create bro
-		bros = game.add.group(world);
-		bros.enableBody = true;
+		/*
+		//enemyTestCode
+		enemy = game.add.sprite(600,400, 'enemy');
+		game.physics.enable(enemy, Phaser.Physics.ARCADE);
+		enemy.anchor.setTo(0.5,0.5);
+		enemy.body.collideWorldBounds = true;
 		*/
 
-		//create all the objects
-		for(var i=0;i<12;i++){
-			//rocks
-			/*var rock = rocks.create(900,80+i*240,'rock');
-			rock.body.velocity.x = -100;
-		
-			//bros
-			var bro = bros.create(900,160+i*240,'bro')
-			bro.body.velocity.x = -100;*/
-		}
+		enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
+		enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
 		//score label
 		var style = {font: "32px Arial", fill: "#500050", align: "center"};
@@ -214,6 +212,14 @@ window.onload = function() {
 		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
 		game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
 		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
+
+		/*
+		//enemyTestCode
+		game.physics.arcade.collide (player, enemy);
+		game.physics.arcade.moveToObject(enemy, player, 10, 2000);
+		*/
+
+
 
 		//update score
 		labelScore.text = score;
