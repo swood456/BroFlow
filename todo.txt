@@ -5,16 +5,29 @@ Critical to function:
 			# Stationary sprite
 		* Water
 		* Basic obstacle (rock)
+		* Basic collectable
 	--Programming
 		* Implement win condition / Lose condition
+			# Life pickup
+			# Game over
 		* Add in how player makes progress
 		* Add in sprites and animations to game
+		* Make sure player cannot into top area
 	--Sound
 		* Create background music
 	--Design
-		* Decide what is end condition
-		* Decide how player makes progress
-		* Lose condition
+		* Decide what is end condition = get enough collectables in last area
+		* Decide how player makes progress = get X collecables in each area
+			# What are the collectables:
+				1 boom box
+				2 Red solo cup
+				3 bseball hats
+				4 glowsticks
+				5 sunglasses: shutter shades?
+				6 
+			# What are the lives:
+				% Dudebros
+		* Lose condition = out of dudebros 
 
 Nice to have:
 	--Art
@@ -22,15 +35,22 @@ Nice to have:
 		* Player sprite
 			# Pick up animation
 		* Title screen
+		* Opening "cutscene"
+		* Ending "cutscene"
 	--Programming
 		* Add in additional types of obstacles
 		* Implement additional animations and art assets
+		* Moving obstacles
+		* Firing obstacles
+		* Enemy raft?
 	--Sound
 		* Pickup sound effects
 	--Design
 		* Design other obstacles / powerups
 			# Currents
 			# Powerups (speed boost, invulnerability)
+		* Final race against other raft
+
 
 Stretch goals:
 	--Art
