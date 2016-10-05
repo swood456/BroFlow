@@ -85,7 +85,7 @@ window.onload = function() {
 		game.load.path = 'assets/sprites/';
 
 		//load images
-		game.load.image ('player', 'player.png')
+		game.load.image ('player', 'mattress.png')
 		         .images(bgKeys)
 		         .image ('rock', 'bullet.png')
 		         .image ('item', 'star.png')
