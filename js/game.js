@@ -21,8 +21,9 @@ window.onload = function() {
 	}
 	menu.prototype = {
 		preload: function(){
+			game.load.path = 'assets/sprites/';
 			//load a title image
-			game.load.image('title', 'assets/sprites/title.png');
+			game.load.image('title', 'title.png');
 		},
 
 		create: function(){
