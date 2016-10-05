@@ -104,6 +104,7 @@ window.onload = function() {
 	}
 
 	function create () {
+		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -245,7 +246,7 @@ window.onload = function() {
 		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
 
 		//update score
-		labelScore.text = score;
+		labelScore.text = score + " fps: " + game.time.fps;
 		labelLives.text = lives;
 
 	}
