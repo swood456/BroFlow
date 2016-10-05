@@ -109,6 +109,7 @@ window.onload = function() {
 		bgWalls = new BGWalls(game, world, bgKeys);
 		items   = new Spawner(game, world, ['item'], 20, 1000, bgWalls.minHeight);
 		rocks	= new Spawner(game, world, ['rock'], 20, 1000, bgWalls.minHeight);
+		bros 	= new Spawner(game, world, ['bro'], 3000, 5000, bgWalls.minHeight);
 
 
 		//make a player thing
@@ -126,20 +127,21 @@ window.onload = function() {
 		//create rock
 		/*rocks = game.add.group(world);
 		rocks.enableBody = true;
-		*/
+		
 		//create bro
 		bros = game.add.group(world);
 		bros.enableBody = true;
+		*/
 
 		//create all the objects
 		for(var i=0;i<12;i++){
 			//rocks
 			/*var rock = rocks.create(900,80+i*240,'rock');
 			rock.body.velocity.x = -100;
-			*/
+		
 			//bros
 			var bro = bros.create(900,160+i*240,'bro')
-			bro.body.velocity.x = -100;
+			bro.body.velocity.x = -100;*/
 		}
 
 		//score label
@@ -171,6 +173,7 @@ window.onload = function() {
 		bgWalls.update();
 		items.update();
 		rocks.update();
+		bros.update();
 		
 		if(game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
@@ -206,7 +209,7 @@ window.onload = function() {
 		//collectable code
 		//collisions
 		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
-		game.physics.arcade.overlap(player, bros, broPickup, null, this);
+		game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
 		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
 
 		//update score
