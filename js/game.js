@@ -92,7 +92,7 @@ window.onload = function() {
 		         .image ('pickup1', 'pickup1.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
-		         .image ('water', 'water 2.png')
+		         .image ('water', 'water 1.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48);
 
 		/*
@@ -183,7 +183,7 @@ window.onload = function() {
 		}
 		
 		world.x -= scrollSpeed;
-		water.tilePosition.x -= scrollSpeed;
+		water.tilePosition.x -= scrollSpeed*0.9;
 		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
