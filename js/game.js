@@ -69,6 +69,7 @@ window.onload = function() {
 	var labelScore;
 	var lives;
 	var labelLives;
+	var currentLevel;
 	
 	var world, bgWalls,
 		bgKeys = ['bg1', 'bg2', 'bg3',
@@ -110,7 +111,7 @@ window.onload = function() {
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['item'], 20, 1000, bgWalls.minHeight);
+		items   = new Spawner(game, world, ['pickup1'], 20, 1000, bgWalls.minHeight);
 		rocks	= new Spawner(game, world, ['rock'], 20, 1000, bgWalls.minHeight);
 		bros 	= new Spawner(game, world, ['bro'], 3000, 5000, bgWalls.minHeight);
 
@@ -156,6 +157,9 @@ window.onload = function() {
 		game.add.text (100, 650, "Lives:", style);
 		labelLives = game.add.text (200, 650, text, style);
 
+		currentLevel = 1;
+		scrollSpeed = 5;
+
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
 		goodSound = game.add.audio('goodSound');
@@ -179,7 +183,7 @@ window.onload = function() {
 		}
 		
 		world.x -= scrollSpeed;
-		scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
+		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
 		rocks.update();
@@ -210,6 +214,28 @@ window.onload = function() {
 				player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 				//console.log('>=10');
 			}
+		}
+
+		if(score > 5 && currentLevel == 1){
+			console.log("move to level 2");
+			//move to level 2
+			currentLevel = 2;
+
+			//change object that is spawned
+			items.keys = ['pickup2'];
+
+			//change the scroll speed
+			scrollSpeed = 7;
+		} else if(score > 10 && currentLevel == 2){
+			console.log("move to level 3");
+			//move to level 2
+			currentLevel = 3;
+
+			//change object that is spawned
+			items.keys = ['pickup3'];
+
+			//change the scroll speed
+			scrollSpeed = 9;
 		}
 
 		//collectable code
