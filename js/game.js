@@ -72,8 +72,7 @@ window.onload = function() {
 		healthPos = [[0, 0], [10, 10], [-10, -10]],
 		currentLevel;
 
-	
-	var world, bgWalls,
+	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
 		          'bg4', 'bg5', 'bg6',
 		          'bg7', 'bg8', 'bg9'];
@@ -93,6 +92,7 @@ window.onload = function() {
 		         .image ('pickup1', 'pickup1.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
+		         .image ('water', 'water 2.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48);
 
 		/*
@@ -113,7 +113,8 @@ window.onload = function() {
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
-		game.stage.backgroundColor = '#0072bc';
+		//game.stage.backgroundColor = '#0072bc';
+		water = game.add.tileSprite(0, 0, game.width, game.height, 'water');
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
@@ -182,6 +183,7 @@ window.onload = function() {
 		}
 		
 		world.x -= scrollSpeed;
+		water.tilePosition.x -= scrollSpeed;
 		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
