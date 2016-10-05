@@ -60,11 +60,12 @@ window.onload = function() {
 	
 	var player, dragMagnitude = 500, boatSpeed = 500, slowDist = 200,
 		scrollSpeed = 5;
-
+	
 	var items, rocks, bros;
 
 	var score, labelScore, health, labelHealth,
-		healthPos = [[0, 0], [10, 10], [-10, -10]];
+		healthPos = [[0, 0], [10, 10], [-10, -10]],
+		currentLevel;
 	
 	var world, bgWalls,
 		bgKeys = ['bg1', 'bg2', 'bg3',
@@ -83,6 +84,9 @@ window.onload = function() {
 		         .image ('rock', 'bullet.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
+		         .image ('pickup1', 'pickup1.png')
+		         .image ('pickup2', 'pickup2.png')
+		         .image ('pickup3', 'pickup3.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48);
 
 		//Load in Sound effects and BG Music
@@ -94,6 +98,7 @@ window.onload = function() {
 	}
 
 	function create () {
+		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -101,7 +106,7 @@ window.onload = function() {
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['item'], 20, 1000, bgWalls.minHeight);
+		items   = new Spawner(game, world, ['pickup1'], 20, 1000, bgWalls.minHeight);
 		rocks	= new Spawner(game, world, ['rock'], 20, 1000, bgWalls.minHeight);
 		bros 	= new Spawner(game, world, ['bro'], 3000, 5000, bgWalls.minHeight);
 
@@ -129,6 +134,9 @@ window.onload = function() {
 		game.add.text (100, 650, "Health:", style);
 		labelHealth = game.add.text (200, 650, text, style);
 
+		currentLevel = 1;
+		scrollSpeed = 5;
+
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
 		goodSound = game.add.audio('goodSound');
@@ -152,7 +160,7 @@ window.onload = function() {
 		}
 		
 		world.x -= scrollSpeed;
-		scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
+		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
 		rocks.update();
@@ -169,20 +177,31 @@ window.onload = function() {
 				)
 			);
 			
-		} else {
-			var velocityMagnitude = player.body.velocity.getMagnitude();
+		}
+		var velocityMagnitude = player.body.velocity.getMagnitude();
+		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
+		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 
-			//if boat is moving with some amount of speed
-			if(velocityMagnitude < 10) {
-				player.body.drag.x = Math.sqrt(2) * dragMagnitude;
-				player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-				//console.log('<10');
-			} else {
-				//vector stuff
-				player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
-				player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
-				//console.log('>=10');
-			}
+		if(score > 5 && currentLevel == 1){
+			console.log("move to level 2");
+			//move to level 2
+			currentLevel = 2;
+
+			//change object that is spawned
+			items.keys = ['pickup2'];
+
+			//change the scroll speed
+			scrollSpeed = 7;
+		} else if(score > 10 && currentLevel == 2){
+			console.log("move to level 3");
+			//move to level 2
+			currentLevel = 3;
+
+			//change object that is spawned
+			items.keys = ['pickup3'];
+
+			//change the scroll speed
+			scrollSpeed = 9;
 		}
 
 		//collectable code
@@ -192,7 +211,7 @@ window.onload = function() {
 		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
 
 		//update score
-		labelScore.text = score;
+		labelScore.text = score + " fps: " + game.time.fps;
 	}
 	
 	function setHealth(h) {
