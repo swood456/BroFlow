@@ -89,6 +89,9 @@ window.onload = function() {
 		         .image ('rock', 'bullet.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
+		         .image ('pickup1', 'pickup1.png')
+		         .image ('pickup2', 'pickup2.png')
+		         .image ('pickup3', 'pickup3.png')
 		         .spritesheet ('dudeBroRaft', 'dude.png', 32, 48);
 
 		//Load in Sound effects and BG Music
