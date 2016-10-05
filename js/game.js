@@ -157,10 +157,16 @@ window.onload = function() {
 		//BGMusic.play();
 		BGMusic.loopFull(0.6); //Loops BG music at 60% Volume
 		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
+		
 	}
 
 
 	function update() {
+		
+		if (player.top < bgWalls.minHeight) {
+			player.top = bgWalls.minHeight;
+			player.body.velocity.y = 0;
+		}
 		
 		world.x -= scrollSpeed;
 		scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
@@ -179,7 +185,7 @@ window.onload = function() {
 			);
 			
 		} else {
-			var velocityMagnitude = Math.sqrt(player.body.velocity.x * player.body.velocity.x + player.body.velocity.y * player.body.velocity.y);
+			var velocityMagnitude = player.body.velocity.getMagnitude();
 
 			//if boat is moving with some amount of speed
 			if(velocityMagnitude < 10) {
@@ -191,11 +197,6 @@ window.onload = function() {
 				player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 
 			}
-		}
-		
-		if (player.y < bgWalls.minHeight) {
-			player.y = bgWalls.minHeight;
-			player.body.velocity.y = 0;
 		}
 
 		//collectable code
