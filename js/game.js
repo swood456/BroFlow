@@ -292,8 +292,10 @@ window.onload = function() {
 	}
 
 	function rockHit(thisPlayer, thisRock){
-		if(invulnerable === 0){
+		if(!invulnerable){
 			thisRock.kill();
+			//invulnerable = true;
+
 			setHealth(health - 1);
 		}
 	}
@@ -303,9 +305,10 @@ window.onload = function() {
 
 		//temporarily make speed faster and invulnerable
 		boatSpeed = 1000;
-		invulnerable = 1;
+		invulnerable = true;
 
 		game.time.events.add(Phaser.Timer.SECOND * 5, slowDown, this);
+		game.time.events.add(Phaser.Timer.SECOND * 5, makeVulnerable, this);
 
 	}
 
@@ -314,7 +317,7 @@ window.onload = function() {
 	}
 
 	function makeVulnerable(){
-		invulnerable = 0;
+		invulnerable = false;
 	}
 
 	game.state.add("menu", menu);
