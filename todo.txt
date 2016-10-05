@@ -5,14 +5,14 @@ Critical to function:
 			# Stationary sprite
 		* Water
 		* Basic obstacle (rock)
-		* Basic collectable
+		* Basic collectable (see design)
 	--Programming
 		* Implement win condition / Lose condition
 			# Life pickup
 			# Game over
 		* Add in how player makes progress
 		* Add in sprites and animations to game
-		* Make sure player cannot into top area
+		* Make sure player cannot move into top area
 	--Sound
 		* Create background music
 	--Design
@@ -24,7 +24,6 @@ Critical to function:
 				3 bseball hats
 				4 glowsticks
 				5 sunglasses: shutter shades?
-				6 
 			# What are the lives:
 				% Dudebros
 		* Lose condition = out of dudebros 
