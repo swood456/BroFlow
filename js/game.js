@@ -181,6 +181,12 @@ window.onload = function() {
 			player.top = bgWalls.minHeight;
 			player.body.velocity.y = 0;
 		}
+
+		if(currentLevel == 2 && scrollSpeed < 7){
+			scrollSpeed += 0.1;
+		} else if(currentLevel == 3 && scrollSpeed < 9){
+			scrollSpeed += 0.1;
+		}
 		
 		world.x -= scrollSpeed;
 		water.tilePosition.x -= scrollSpeed*0.9;
@@ -214,8 +220,6 @@ window.onload = function() {
 			//change object that is spawned
 			items.keys = ['pickup2'];
 
-			//change the scroll speed
-			scrollSpeed = 7;
 		} else if(score >= 10 && currentLevel == 2){
 			console.log("move to level 3");
 			//move to level 2
