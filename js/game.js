@@ -145,11 +145,13 @@ window.onload = function() {
 		}
 
 		//score label
-		var style = {font: "32px Arial", fill: "#1100ff", align: "center"};
+		var style = {font: "32px Arial", fill: "#500050", align: "center"};
 		var text = score;
-		labelScore = game.add.text (100, 500, text, style);
+		game.add.text (100, 600, "Score:", style);
+		labelScore = game.add.text (200, 600, text, style);
 		text = lives;
-		labelLives = game.add.text (300, 500, text, style);
+		game.add.text (100, 650, "Lives:", style);
+		labelLives = game.add.text (200, 650, text, style);
 
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
@@ -193,11 +195,12 @@ window.onload = function() {
 			if(velocityMagnitude < 10) {
 				player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 				player.body.drag.y = Math.sqrt(2) * dragMagnitude;
+				//console.log('<10');
 			} else {
 				//vector stuff
 				player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 				player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
-
+				//console.log('>=10');
 			}
 		}
 		
