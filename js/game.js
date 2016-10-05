@@ -38,8 +38,6 @@ window.onload = function() {
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
 
-			
-
 		}		
 	}
 
@@ -47,6 +45,7 @@ window.onload = function() {
 		//make a callback to go to the game state when finished
 		this.game.state.start("gameplay");
 	}
+
 
 	var gameplay = function(game){
 		console.log("starting game");
@@ -105,7 +104,7 @@ window.onload = function() {
 
 		game.load.audio ('backgroundMusic', 'StockBGMusic.mp3')
 				 .audio ('goodSound', 'chimeSound.wav')
-				 .audio ('badSound', 'boingSound.wav');
+				 .audio ('badSound', 'WaterSplash2.wav')
 	}
 
 	function create () {
@@ -228,6 +227,14 @@ window.onload = function() {
 			scrollSpeed = 9;
 		}
 
+		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
+			console.log("Last Level done");
+
+			//Make Callback to final screen.
+			game.state.start("victory"); //Go to victory screen
+			
+		}
+
 		//collectable code
 		//collisions
 		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
@@ -253,7 +260,7 @@ window.onload = function() {
 			h = 0;
 			game.camera.fade('#000000');
 			game.camera.onFadeComplete.add(function(){
-				game.state.start("menu");
+				game.state.start("gameOver"); //Go to gameOver state if out of health
 			}, this);
 		}
 		
@@ -283,8 +290,79 @@ window.onload = function() {
 		setHealth(health - 1);
 	}
 
+
+
+	//State for the GameOver screen
+	var GameOver = function(game) {
+		console.log("Starting Game Over state");
+	}
+	GameOver.prototype = {
+		preload: function(){
+			game.load.path = 'assets/sprites/';
+			//Will Load a Game Over screen asset when said asset is available
+			//For now, use blank Title Screen again as placeholder
+			game.load.image('title', 'title.png');
+		},
+
+		create: function(){
+			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+
+    		//  Moves the image anchor to the middle, so it centers inside the game properly
+    		GOimage.anchor.set(0.5);
+
+    		//  Enables all kind of input actions on this image (click, etc)
+    		GOimage.inputEnabled = true;
+
+    		GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
+
+    		GOimage.events.onInputDown.add(RestartGame, this);
+
+			//create a text object
+			var GOtext = game.add.text(100,100,"Game Over!", {font: "bold 32px Arial", fill: "#fff"});
+		}
+	}
+	
+	function RestartGame() {
+		//For this callback, return to the menu/title screen
+		this.game.state.start("menu");
+	}
+
+	//State for the Victory screen
+	var Victory = function(game) {
+		console.log("Starting Victory state");
+	}
+	Victory.prototype = {
+		preload: function(){
+			game.load.path = 'assets/sprites/';
+			//Will Load a Game Over screen asset when said asset is available
+			//For now, use blank Title Screen again as placeholder
+			game.load.image('title', 'title.png');
+		},
+
+		create: function(){
+			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+
+    		//  Moves the image anchor to the middle, so it centers inside the game properly
+    		VicImage.anchor.set(0.5);
+
+    		//  Enables all kind of input actions on this image (click, etc)
+    		VicImage.inputEnabled = true;
+
+    		VicText = game.add.text(250, 16, '', { fill: '#ffffff' });
+
+    		VicImage.events.onInputDown.add(RestartGame, this);
+
+			//create a text object
+			var VicText = game.add.text(100,100,"You Win!", {font: "bold 32px Arial", fill: "#fff"});
+		}
+	}
+	
+	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
+	game.state.add("gameOver", GameOver);
+	game.state.add("victory", Victory);
+
 	game.state.start("menu");
 
 	//Fucntion to test that background music is looping. Mainly debugging function right now.

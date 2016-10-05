@@ -8,11 +8,11 @@ Critical to function:
 		* Basic collectable (see design)
 	--Programming
 		* Implement win condition / Lose condition
-			# Life pickup
-			# Game over
-		* Add in how player makes progress
+			# [X] Life pickup
+			# [X] Game over
+		* [X] Add in how player makes progress (Shifting Levels)
 		* Add in sprites and animations to game
-		* Make sure player cannot move into top area
+		* [X] Make sure player cannot move into top area
 	--Sound
 		* Create background music
 	--Design
