@@ -57,10 +57,12 @@ window.onload = function() {
 		update: update
 	}
 	
-	var player, dragMagnitude = 500, boatSpeed = 500, slowDist = 200,
-		scrollSpeed = 5;
+	var player, dragMagnitude, boatSpeed, slowDist = 200,
+		scrollSpeed;
+
+	var invulnerable = false;
 	
-	var items, rocks, bros;
+	var items, rocks, bros, powerups;
 
 	/*
 	//enemyTestCode
@@ -91,7 +93,8 @@ window.onload = function() {
 		         .image ('pickup1', 'pickup1.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
-		         .image ('water', 'water 2.png')
+		         .image ('water', 'water 1.png')
+		         .image ('powerup', 'soda bottle.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48);
 
 		/*
@@ -117,9 +120,10 @@ window.onload = function() {
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['pickup1'], 5000, 1000, bgWalls.minHeight);
+		items   = new Spawner(game, world, ['pickup1'], 5000, 10000, bgWalls.minHeight);
 		rocks	= new Spawner(game, world, ['rock'], 900, 1000, bgWalls.minHeight);
-		bros 	= new Spawner(game, world, ['bro'], 7000, 5000, bgWalls.minHeight);
+		bros 	= new Spawner(game, world, ['bro'], 7000, 9000, bgWalls.minHeight);
+		powerups = new Spawner(game, world, ['powerup'], 1000, 5000, bgWalls.minHeight);
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -158,6 +162,9 @@ window.onload = function() {
 
 		currentLevel = 1;
 		scrollSpeed = 5;
+		dragMagnitude = 500;
+		boatSpeed = 500;
+		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
@@ -180,14 +187,21 @@ window.onload = function() {
 			player.top = bgWalls.minHeight;
 			player.body.velocity.y = 0;
 		}
+
+		if(currentLevel === 2 && scrollSpeed < 7){
+			scrollSpeed += 0.1;
+		} else if(currentLevel === 3 && scrollSpeed < 9){
+			scrollSpeed += 0.1;
+		}
 		
 		world.x -= scrollSpeed;
-		water.tilePosition.x -= scrollSpeed;
+		water.tilePosition.x -= scrollSpeed*0.9;
 		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
 		rocks.update();
 		bros.update();
+		powerups.update();
 		
 		if(game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
@@ -205,7 +219,7 @@ window.onload = function() {
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 
-		if(score >= 5 && currentLevel == 1){
+		if(score >= 5 && currentLevel === 1){
 			console.log("move to level 2");
 			//move to level 2
 			currentLevel = 2;
@@ -213,9 +227,7 @@ window.onload = function() {
 			//change object that is spawned
 			items.keys = ['pickup2'];
 
-			//change the scroll speed
-			scrollSpeed = 7;
-		} else if(score >= 10 && currentLevel == 2){
+		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
 			//move to level 2
 			currentLevel = 3;
@@ -240,6 +252,7 @@ window.onload = function() {
 		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
 		game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
 		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
+		game.physics.arcade.overlap(player, powerups.group, powerupHit, null, this);
 
 		/*
 		//enemyTestCode
@@ -286,8 +299,32 @@ window.onload = function() {
 	}
 
 	function rockHit(thisPlayer, thisRock){
-		thisRock.kill();
-		setHealth(health - 1);
+		if(!invulnerable){
+			thisRock.kill();
+			//invulnerable = true;
+
+			setHealth(health - 1);
+		}
+	}
+
+	function powerupHit(thisplayer, thisPowerup){
+		thisPowerup.kill();
+
+		//temporarily make speed faster and invulnerable
+		boatSpeed = 1000;
+		invulnerable = true;
+
+		game.time.events.add(Phaser.Timer.SECOND * 5, slowDown, this);
+		game.time.events.add(Phaser.Timer.SECOND * 5, makeVulnerable, this);
+
+	}
+
+	function slowDown(){
+		boatSpeed = 500;
+	}
+
+	function makeVulnerable(){
+		invulnerable = false;
 	}
 
 
