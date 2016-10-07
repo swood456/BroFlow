@@ -38,8 +38,6 @@ window.onload = function() {
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
 
-			
-
 		}		
 	}
 
@@ -47,6 +45,7 @@ window.onload = function() {
 		//make a callback to go to the game state when finished
 		this.game.state.start("gameplay");
 	}
+
 
 	var gameplay = function(game){
 		console.log("starting game");
@@ -58,10 +57,17 @@ window.onload = function() {
 		update: update
 	}
 	
-	var player, dragMagnitude = 500, boatSpeed = 500, slowDist = 200,
-		scrollSpeed = 5;
+	var player, dragMagnitude, boatSpeed, slowDist = 200,
+		scrollSpeed;
+
+	var invulnerable = false;
 	
-	var items, rocks, bros;
+	var items, rocks, bros, powerups;
+
+	/*
+	//enemyTestCode
+	var enemy;
+	*/
 
 	var score, labelScore, health, labelHealth, healthPos = [
 			[  0,  15], // 1
@@ -73,8 +79,8 @@ window.onload = function() {
 			[ 50, -20]  // 7
 		],
 		currentLevel;
-	
-	var world, bgWalls,
+
+	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
 		          'bg4', 'bg5', 'bg6',
 		          'bg7', 'bg8', 'bg9'];
@@ -86,7 +92,7 @@ window.onload = function() {
 		game.load.path = 'assets/sprites/';
 
 		//load images
-		game.load.image ('player', 'player.png')
+		game.load.image ('player', 'mattress.png')
 		         .images(bgKeys)
 		         .image ('rock', 'bullet.png')
 		         .image ('item', 'star.png')
@@ -94,14 +100,21 @@ window.onload = function() {
 		         .image ('pickup1', 'pickup1.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
+		         .image ('water', 'water 1.png')
+		         .image ('powerup', 'soda bottle.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48);
+
+		/*
+		//enemyTestCode
+		game.load.image ('enemy', 'enemy.png');
+		*/
 
 		//Load in Sound effects and BG Music
 		game.load.path = 'assets/sounds/';
 
 		game.load.audio ('backgroundMusic', 'StockBGMusic.mp3')
 				 .audio ('goodSound', 'chimeSound.wav')
-				 .audio ('badSound', 'boingSound.wav');
+				 .audio ('badSound', 'WaterSplash2.wav')
 	}
 
 	function create () {
@@ -109,13 +122,15 @@ window.onload = function() {
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
-		game.stage.backgroundColor = '#0072bc';
+		//game.stage.backgroundColor = '#0072bc';
+		water = game.add.tileSprite(0, 0, game.width, game.height, 'water');
 		
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['pickup1'], 20, 1000, bgWalls.minHeight);
-		rocks	= new Spawner(game, world, ['rock'], 20, 1000, bgWalls.minHeight);
-		bros 	= new Spawner(game, world, ['bro'], 3000, 5000, bgWalls.minHeight);
+		items   = new Spawner(game, world, ['pickup1'], 5000, 10000, bgWalls.minHeight);
+		rocks	= new Spawner(game, world, ['rock'], 900, 1000, bgWalls.minHeight);
+		bros 	= new Spawner(game, world, ['bro'], 7000, 9000, bgWalls.minHeight);
+		powerups = new Spawner(game, world, ['powerup'], 1000, 5000, bgWalls.minHeight);
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -129,13 +144,23 @@ window.onload = function() {
 		}
 
 		game.physics.enable(player, Phaser.Physics.ARCADE);
-		
 		player.anchor.setTo(0.5,0.5);
-
 		player.body.collideWorldBounds = true;
 
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
+
+		/*
+		//enemyTestCode
+		enemy = game.add.sprite(600,400, 'enemy');
+		game.physics.enable(enemy, Phaser.Physics.ARCADE);
+		enemy.anchor.setTo(0.5,0.5);
+		enemy.body.collideWorldBounds = true;
+	
+
+		enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
+		enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
+		*/
 
 		//score label
 		var style = {font: "32px Arial", fill: "#500050", align: "center"};
@@ -143,11 +168,14 @@ window.onload = function() {
 		game.add.text (100, 600, "Score:", style);
 		labelScore = game.add.text (200, 600, text, style);
 		text = health;
-		//game.add.text (100, 650, "Health:", style);
+		
 		labelHealth = game.add.text (100, 650, text, style);
 
 		currentLevel = 1;
-		scrollSpeed  = 5;
+		scrollSpeed = 5;
+		dragMagnitude = 500;
+		boatSpeed = 500;
+		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
@@ -170,13 +198,21 @@ window.onload = function() {
 			player.top = bgWalls.minHeight;
 			player.body.velocity.y = 0;
 		}
+
+		if(currentLevel === 2 && scrollSpeed < 7){
+			scrollSpeed += 0.1;
+		} else if(currentLevel === 3 && scrollSpeed < 9){
+			scrollSpeed += 0.1;
+		}
 		
 		world.x -= scrollSpeed;
+		water.tilePosition.x -= scrollSpeed*0.9;
 		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
 		bgWalls.update();
 		items.update();
 		rocks.update();
 		bros.update();
+		powerups.update();
 		
 		if(game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
@@ -194,7 +230,7 @@ window.onload = function() {
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 
-		if(score > 5 && currentLevel == 1){
+		if(score >= 5 && currentLevel === 1){
 			console.log("move to level 2");
 			//move to level 2
 			currentLevel = 2;
@@ -202,9 +238,7 @@ window.onload = function() {
 			//change object that is spawned
 			items.keys = ['pickup2'];
 
-			//change the scroll speed
-			scrollSpeed = 7;
-		} else if(score > 10 && currentLevel == 2){
+		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
 			//move to level 2
 			currentLevel = 3;
@@ -216,11 +250,28 @@ window.onload = function() {
 			scrollSpeed = 9;
 		}
 
+		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
+			console.log("Last Level done");
+
+			//Make Callback to final screen.
+			game.state.start("victory"); //Go to victory screen
+			
+		}
+
 		//collectable code
 		//collisions
 		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
 		game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
 		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
+		game.physics.arcade.overlap(player, powerups.group, powerupHit, null, this);
+
+		/*
+		//enemyTestCode
+		game.physics.arcade.collide (player, enemy);
+		game.physics.arcade.moveToObject(enemy, player, 10, 2000);
+		*/
+
+
 
 		//update score
 		labelScore.text = score + " fps: " + game.time.fps;
@@ -233,7 +284,7 @@ window.onload = function() {
 			h = 0;
 			game.camera.fade('#000000', 1000, false);
 			game.camera.onFadeComplete.add(function(){
-				game.state.start("menu");
+				game.state.start("gameOver"); //Go to gameOver state if out of health
 			}, this);
 		}
 		
@@ -266,12 +317,107 @@ window.onload = function() {
 	}
 
 	function rockHit(thisPlayer, thisRock){
-		thisRock.kill();
-		setHealth(health - 1);
+		if(!invulnerable){
+			thisRock.kill();
+			//invulnerable = true;
+
+			setHealth(health - 1);
+		}
 	}
 
+	function powerupHit(thisplayer, thisPowerup){
+		thisPowerup.kill();
+
+		//temporarily make speed faster and invulnerable
+		boatSpeed = 1000;
+		invulnerable = true;
+
+		game.time.events.add(Phaser.Timer.SECOND * 5, slowDown, this);
+		game.time.events.add(Phaser.Timer.SECOND * 5, makeVulnerable, this);
+
+	}
+
+	function slowDown(){
+		boatSpeed = 500;
+	}
+
+	function makeVulnerable(){
+		invulnerable = false;
+	}
+
+
+
+	//State for the GameOver screen
+	var GameOver = function(game) {
+		console.log("Starting Game Over state");
+	}
+	GameOver.prototype = {
+		preload: function(){
+			game.load.path = 'assets/sprites/';
+			//Will Load a Game Over screen asset when said asset is available
+			//For now, use blank Title Screen again as placeholder
+			game.load.image('title', 'title.png');
+		},
+
+		create: function(){
+			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+
+    		//  Moves the image anchor to the middle, so it centers inside the game properly
+    		GOimage.anchor.set(0.5);
+
+    		//  Enables all kind of input actions on this image (click, etc)
+    		GOimage.inputEnabled = true;
+
+    		GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
+
+    		GOimage.events.onInputDown.add(RestartGame, this);
+
+			//create a text object
+			var GOtext = game.add.text(100,100,"Game Over!", {font: "bold 32px Arial", fill: "#fff"});
+		}
+	}
+	
+	function RestartGame() {
+		//For this callback, return to the menu/title screen
+		this.game.state.start("menu");
+	}
+
+	//State for the Victory screen
+	var Victory = function(game) {
+		console.log("Starting Victory state");
+	}
+	Victory.prototype = {
+		preload: function(){
+			game.load.path = 'assets/sprites/';
+			//Will Load a Game Over screen asset when said asset is available
+			//For now, use blank Title Screen again as placeholder
+			game.load.image('title', 'title.png');
+		},
+
+		create: function(){
+			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+
+    		//  Moves the image anchor to the middle, so it centers inside the game properly
+    		VicImage.anchor.set(0.5);
+
+    		//  Enables all kind of input actions on this image (click, etc)
+    		VicImage.inputEnabled = true;
+
+    		VicText = game.add.text(250, 16, '', { fill: '#ffffff' });
+
+    		VicImage.events.onInputDown.add(RestartGame, this);
+
+			//create a text object
+			var VicText = game.add.text(100,100,"You Win!", {font: "bold 32px Arial", fill: "#fff"});
+		}
+	}
+	
+	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
+	game.state.add("gameOver", GameOver);
+	game.state.add("victory", Victory);
+
 	game.state.start("menu");
 
 	//Fucntion to test that background music is looping. Mainly debugging function right now.
