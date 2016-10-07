@@ -63,8 +63,15 @@ window.onload = function() {
 	
 	var items, rocks, bros;
 
-	var score, labelScore, health, labelHealth,
-		healthPos = [[0, 0], [10, 10], [-10, -10]],
+	var score, labelScore, health, labelHealth, healthPos = [
+			[  0,  15], // 1
+			[-20, -26], // 2
+			[-40, -10], // 3
+			[-60,  40], // 4
+			[ 50, -20], // 5
+			[ 50, -20], // 6
+			[ 50, -20]  // 7
+		],
 		currentLevel;
 	
 	var world, bgWalls,
@@ -112,9 +119,14 @@ window.onload = function() {
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
-		player.addChild(game.make.sprite( 0,  0, 'dude'));
-		player.addChild(game.make.sprite(10, 10, 'dude'));
-		player.addChild(game.make.sprite(20, 20, 'dude'));
+		player.bros = [];
+		for (var i = 0; i < healthPos.length; i++) {
+			var pos = healthPos[i],
+				bro = player.addChild(game.make.sprite(pos[0], pos[1], 'dude'));
+			player.bros.push(bro);
+			bro.anchor.set(0.5, 1);
+			bro.kill();
+		}
 
 		game.physics.enable(player, Phaser.Physics.ARCADE);
 		
@@ -131,11 +143,11 @@ window.onload = function() {
 		game.add.text (100, 600, "Score:", style);
 		labelScore = game.add.text (200, 600, text, style);
 		text = health;
-		game.add.text (100, 650, "Health:", style);
-		labelHealth = game.add.text (200, 650, text, style);
+		//game.add.text (100, 650, "Health:", style);
+		labelHealth = game.add.text (100, 650, text, style);
 
 		currentLevel = 1;
-		scrollSpeed = 5;
+		scrollSpeed  = 5;
 
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
@@ -147,8 +159,8 @@ window.onload = function() {
 		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
 		
 		//set game life and score
-		health = 3;
-		score = 0;
+		health = score = 0;
+		setHealth(1, true);
 	}
 
 
@@ -214,24 +226,31 @@ window.onload = function() {
 		labelScore.text = score + " fps: " + game.time.fps;
 	}
 	
-	function setHealth(h) {
-		if (h > healthPos.length) {
-			h = healthPos.length;
+	function setHealth(h, noSound) {
+		if (h > player.bros.length) {
+			h = player.bros.length;
 		} else if (h <= 0) {
 			h = 0;
-			game.camera.fade('#000000');
+			game.camera.fade('#000000', 1000, false);
 			game.camera.onFadeComplete.add(function(){
 				game.state.start("menu");
 			}, this);
 		}
 		
-		if (h > health) {
+		if (noSound) {
+			// No sound, dummy
+		} else if (h > health) {
 			goodSound.play();
 		} else if (h < health) {
 			badSound.play();
 		}
 		
-		health = h;
+		while (h > health) {
+			player.bros[health++].revive();
+		}
+		while (h < health) {
+			player.bros[--health].kill();
+		}
 		
 		labelHealth.text = "Health: " + health;
 	}
