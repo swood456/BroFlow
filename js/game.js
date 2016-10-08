@@ -60,7 +60,7 @@ window.onload = function() {
 	var player, dragMagnitude, boatSpeed, slowDist = 200,
 		scrollSpeed;
 
-	var invulnerable = false;
+	var invulnerable = false, invulTween;
 	
 	var items, rocks, bros, powerups;
 
@@ -187,6 +187,7 @@ window.onload = function() {
 		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
 		
 		//set game life and score
+		invulnerable = false;
 		health = score = 0;
 		setHealth(1, true);
 	}
@@ -214,7 +215,7 @@ window.onload = function() {
 		bros.update();
 		powerups.update();
 		
-		if(game.input.activePointer.leftButton.isDown) {
+		if(health > 0 && game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
 			game.physics.arcade.moveToPointer(player,
 				game.math.bezierInterpolation(
@@ -260,10 +261,12 @@ window.onload = function() {
 
 		//collectable code
 		//collisions
-		game.physics.arcade.overlap(player, items.group, collectItem, null, this);
-		game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
-		game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
-		game.physics.arcade.overlap(player, powerups.group, powerupHit, null, this);
+		if (health > 0) {
+			game.physics.arcade.overlap(player, items.group, collectItem, null, this);
+			game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
+			game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
+			game.physics.arcade.overlap(player, powerups.group, powerupHit, null, this);
+		}
 
 		/*
 		//enemyTestCode
@@ -277,7 +280,7 @@ window.onload = function() {
 		labelScore.text = score + " fps: " + game.time.fps;
 	}
 	
-	function setHealth(h, noSound) {
+	function setHealth(h, noEffect, noInvul) {
 		if (h > player.bros.length) {
 			h = player.bros.length;
 		} else if (h <= 0) {
@@ -288,12 +291,24 @@ window.onload = function() {
 			}, this);
 		}
 		
-		if (noSound) {
-			// No sound, dummy
+		if (noEffect) {
+			// No effect, dummy
 		} else if (h > health) {
 			goodSound.play();
 		} else if (h < health) {
 			badSound.play();
+			
+			// Tint the raft red
+			var tintObj = {color: 0x00};
+			game.add.tween(tintObj).to({color: 0xFF}, 500, "Linear", true)
+				.onUpdateCallback(function(){
+					player.tint = 0xFF0000 | tintObj.color << 8 | tintObj.color;
+				}).onComplete.add(function(){
+					player.tint = 0xFFFFFF;
+					// TODO: Fix for speed tint
+				});
+			
+			if (!noInvul) setInvulnerable(2000);
 		}
 		
 		while (h > health) {
@@ -330,22 +345,42 @@ window.onload = function() {
 
 		//temporarily make speed faster and invulnerable
 		boatSpeed = 1000;
-		invulnerable = true;
+		// TODO: Speed tint
+		setInvulnerable(5000);
 
 		game.time.events.add(Phaser.Timer.SECOND * 5, slowDown, this);
-		game.time.events.add(Phaser.Timer.SECOND * 5, makeVulnerable, this);
 
 	}
 
 	function slowDown(){
 		boatSpeed = 500;
 	}
+	
+	function setInvulnerable(time) {
+		if (time === 0) {
+			invulnerable = false;
+			invulTween.stop();
+			player.alpha = 1;
+			return;
+		}
+		time = time || 1000;
+		
+		if (!invulTween || invulTween.totalDuration < time) {
+			invulnerable = true;
+			if(invulTween) {
+				invulTween.stop();
+				player.alpha = 1;
+			}
+			
+			invulTween = game.add.tween(player).from({alpha: 0.5},
+				200, "Linear", true, 0, time / 200, true);
+			invulTween.onComplete.add(makeVulnerable);
+		}
+	}
 
 	function makeVulnerable(){
 		invulnerable = false;
 	}
-
-
 
 	//State for the GameOver screen
 	var GameOver = function(game) {
