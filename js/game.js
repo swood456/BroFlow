@@ -127,10 +127,12 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
-		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2) );
-		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2) );
-		bros     = new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2) );
-		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2) );
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2));
+		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
+		bros     = new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2));
+		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2));
+
+
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -350,7 +352,7 @@ window.onload = function() {
 		}
 
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-			console.log("Last Level done");
+			//console.log("Last Level done");
 
 			//Make Callback to final screen.
 			game.state.start("victory"); //Go to victory screen
@@ -423,11 +425,11 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
 			//For now, use blank Title Screen again as placeholder
-			game.load.image('title', 'title.png');
+			game.load.image('gameLost', 'title.png');
 		},
 
 		create: function(){
-			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'title'); //add an image to the game to serve as the backdrop.
+			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameLost'); //add an image to the game to serve as the backdrop.
 
     		//  Moves the image anchor to the middle, so it centers inside the game properly
     		GOimage.anchor.set(0.5);
@@ -460,11 +462,11 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
 			//For now, use blank Title Screen again as placeholder
-			game.load.image('title', 'title.png');
+			game.load.image('gameWon', 'title.png');
 		},
 
 		create: function(){
-			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
 
     		//  Moves the image anchor to the middle, so it centers inside the game properly
     		VicImage.anchor.set(0.5);
