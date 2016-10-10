@@ -409,6 +409,8 @@ window.onload = function() {
 
 			//create a text object
 			var GOtext = game.add.text(100,100,"Game Over!", {font: "bold 32px Arial", fill: "#fff"});
+
+			BGMusic.stop();
 		}
 	}
 	
