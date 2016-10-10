@@ -310,6 +310,19 @@ window.onload = function() {
 			console.log("play high five");
 		}
 
+		//add item to top of screen
+		if(currentLevel === 1){
+			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), 20, 'pickup1');
+			pickupIndicator.alpha = 0.9;
+		} else if(currentLevel === 2){
+			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), 20, 'pickup2');
+			pickupIndicator.alpha = 0.9;
+		} else{
+			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), 20, 'pickup3');
+			pickupIndicator.alpha = 0.9;
+		}
+		
+
 		//change levels
 		if(score >= 5 && currentLevel === 1){
 			console.log("move to level 2");
@@ -321,14 +334,14 @@ window.onload = function() {
 			items.keys = ['pickup2'];
 
 			//change spawner properties
-			items.minInt += 1000;
-			items.maxInt += 500;
-			rocks.minInt -= 600;
+			items.minInt += 1250;
+			items.maxInt += 550;
+			rocks.minInt -= 650;
 			rocks.maxInt -= 650;
 			bros.minInt += 500;
 			bros.maxInt += 500;
-			powerups.minInt += 1000;
-			powerups.maxInt += 500;
+			powerups.minInt += 1250;
+			powerups.maxInt += 1000;
 
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
