@@ -419,7 +419,7 @@ window.onload = function() {
 			}
 			
 			invulTween = game.add.tween(player).from({alpha: 0.5},
-				200, "Linear", true, 0, time / 200, true);
+				200, "Linear", true, 0, Math.round(time / 400), true);
 			invulTween.onComplete.add(makeVulnerable);
 		}
 	}
