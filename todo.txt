@@ -7,7 +7,7 @@ Critical to function:
 		* Basic obstacle (rock)
 		* Basic collectable (see design)
 	--Programming
-		* Implement win condition / Lose condition
+		* [X] Implement win condition / Lose condition
 			# [X] Life pickup
 			# [X] Game over
 		* [X] Add in how player makes progress (Shifting Levels)
