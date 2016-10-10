@@ -272,6 +272,9 @@ window.onload = function() {
 			// No effect, dummy
 		} else if (h > health) {
 			goodSound.play();
+			if(h >= player.bros.length){
+				bros.active = false;
+			}
 		} else if (h < health) {
 			badSound.play();
 			
@@ -286,6 +289,7 @@ window.onload = function() {
 				});
 			
 			if (!noInvul) setInvulnerable(1000);
+			bros.active = true;
 		}
 		
 		while (h > health) {
