@@ -103,7 +103,7 @@ window.onload = function() {
 		         .image ('water', 'water 1.png')
 		         .image ('powerup', 'soda bottle 2.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48)
-		         .spritesheet ('dudebro1', 'Paddle_SpriteSheet_12fps_52pixelsWide.png', 52, 90)
+		         .spritesheet ('dudebro1', 'dudebro_PaddleSpriteSheet_12fps_120pixelsWide.png', 120, 140)
 		         .spritesheet ('dudebro2', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
 		         .spritesheet ('dudebro3', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74)
 		         .spritesheet ('dudebro4', 'Stripes_animation_10fps_42pixelswide.png', 42, 85)
