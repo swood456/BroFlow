@@ -357,11 +357,11 @@ window.onload = function() {
 			pickupIndicator.alpha = 0.9;
 			pickupIndicator.anchor.set(0.5, 0.5);
 		} else if(currentLevel === 2){
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight, 'pickup2');
+			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup2');
 			pickupIndicator.alpha = 0.9;
 			pickupIndicator.anchor.set(0.5, 0.5);
 		} else{
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight, 'pickup3');
+			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup3');
 			pickupIndicator.alpha = 0.9;
 			pickupIndicator.anchor.set(0.5, 0.5);
 		}
