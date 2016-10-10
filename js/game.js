@@ -94,7 +94,7 @@ window.onload = function() {
 		//load images
 		game.load.image ('player', 'mattress.png')
 		         .images(bgKeys)
-		         .image ('rock', 'bullet.png')
+		         .image ('rock', 'boulder.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
 		         .image ('pickup1', 'pickup1.png')
