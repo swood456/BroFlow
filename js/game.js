@@ -315,7 +315,12 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt = 7000;
 			items.maxInt = 10500;
-			rocks.minInt = 1750
+			rocks.minInt = 1700;
+			rocks.maxInt = 1950;
+			bros.minInt = 5500;
+			bros.maxInt = 9500;
+			powerups.minInt = 9500;
+			powerups.maxInt = 14500;
 
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
