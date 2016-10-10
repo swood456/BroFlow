@@ -94,7 +94,8 @@ window.onload = function() {
 		//load images
 		game.load.image ('player', 'mattress.png')
 		         .images(bgKeys)
-		         .image ('rock', 'bullet.png')
+		         .image ('bricks', 'bricks.png')
+		         .image ('boulder', 'boulder.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
 		         .image ('pickup1', 'pickup1.png')
@@ -128,7 +129,7 @@ window.onload = function() {
 		world   = game.add.group();
 		bgWalls = new BGWalls(game, world, bgKeys);
 		items   = new Spawner(game, world, ['pickup1'], 5000, 10000, bgWalls.minHeight);
-		rocks	= new Spawner(game, world, ['rock'], 900, 1000, bgWalls.minHeight);
+		rocks	= new Spawner(game, world, ['boulder', 'bricks'], 900, 1000, bgWalls.minHeight);
 		bros 	= new Spawner(game, world, ['bro'], 7000, 9000, bgWalls.minHeight);
 		powerups = new Spawner(game, world, ['powerup'], 1000, 5000, bgWalls.minHeight);
 
@@ -144,6 +145,7 @@ window.onload = function() {
 		}
 
 		game.physics.enable(player, Phaser.Physics.ARCADE);
+		player.body.setSize(164, 85, 33, 3);
 		player.anchor.setTo(0.5,0.5);
 		player.body.collideWorldBounds = true;
 
