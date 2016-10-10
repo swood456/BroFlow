@@ -306,6 +306,12 @@ window.onload = function() {
 		thisItem.kill();
 		score += 1;
 
+		//play high five if enough dudes
+		if(health >= 3){
+			//play high five
+			console.log("play high five");
+		}
+
 		//change levels
 		if(score >= 5 && currentLevel === 1){
 			console.log("move to level 2");
@@ -319,8 +325,8 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt += 1000;
 			items.maxInt += 500;
-			rocks.minInt -= 500;
-			rocks.maxInt -= 550;
+			rocks.minInt -= 600;
+			rocks.maxInt -= 650;
 			bros.minInt += 500;
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
@@ -334,6 +340,15 @@ window.onload = function() {
 			//change object that is spawned
 			items.keys = ['pickup3'];
 
+			//change spawner properties
+			items.minInt += 1000;
+			items.maxInt += 1500;
+			rocks.minInt -= 700;
+			rocks.maxInt -= 750;
+			bros.minInt += 500;
+			bros.maxInt += 500;
+			powerups.minInt += 1000;
+			powerups.maxInt += 500;
 		}
 
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
