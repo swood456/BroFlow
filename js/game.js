@@ -76,7 +76,6 @@ window.onload = function() {
 			[-60,  40], // 4
 			[ 50, -20], // 5
 			[ 50, -20], // 6
-			[ 50, -20]  // 7
 		],
 		currentLevel;
 
@@ -258,6 +257,7 @@ window.onload = function() {
 	}
 	
 	function setHealth(h, noEffect, noInvul) {
+		console.log("bros len: " + player.bros.length);
 		if (h > player.bros.length) {
 			h = player.bros.length;
 		} else if (h <= 0) {
