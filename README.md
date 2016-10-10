@@ -13,3 +13,11 @@ Thematic constraint:
 
 	some dudebros pull a parnk that goes terribly wrong
 
+
+Attributions
+- Background Techno music from: http://www.orangefreesounds.com/electro-punk-action-background-music/
+	Artist: Alexander Blu
+	Title: Electro Punk - Action Background Music
+	Used under "Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)" license
+	Created by Alexander Blu, distributed and obtained through http://www.orangefreesounds.com
+	No Modifications made

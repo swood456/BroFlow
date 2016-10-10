@@ -112,7 +112,7 @@ window.onload = function() {
 		//Load in Sound effects and BG Music
 		game.load.path = 'assets/sounds/';
 
-		game.load.audio ('backgroundMusic', 'StockBGMusic.mp3')
+		game.load.audio ('backgroundMusic', 'StockBGMusic.mp3') //BG Music from http://www.orangefreesounds.com/electro-punk-action-background-music/, permitted for non-commercial use
 				 .audio ('goodSound', 'chimeSound.wav')
 				 .audio ('badSound', 'WaterSplash2.wav')
 	}
@@ -183,9 +183,7 @@ window.onload = function() {
 		goodSound = game.add.audio('goodSound');
 		badSound = game.add.audio('badSound');
 
-		//BGMusic.play();
 		BGMusic.loopFull(0.6); //Loops BG music at 60% Volume
-		BGMusic.onLoop.add(hasLooped, this); //Debug function. "hasLooped" should output a console.log() message when called on a loop
 		
 		//set game life and score
 		invulnerable = false;
@@ -410,7 +408,7 @@ window.onload = function() {
 		},
 
 		create: function(){
-			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'title'); //add an image to the game to serve as the backdrop.
 
     		//  Moves the image anchor to the middle, so it centers inside the game properly
     		GOimage.anchor.set(0.5);
@@ -472,10 +470,5 @@ window.onload = function() {
 
 	game.state.start("menu");
 
-	//Fucntion to test that background music is looping. Mainly debugging function right now.
-	function hasLooped(sound) {
-
-    	console.log("Song looping");
-
-	}
+	
 };
