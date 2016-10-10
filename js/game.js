@@ -101,7 +101,7 @@ window.onload = function() {
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
 		         .image ('water', 'water 1.png')
-		         .image ('powerup', 'soda bottle.png')
+		         .image ('powerup', 'soda bottle 2.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48);
 
 		/*
@@ -127,10 +127,10 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
-		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight);
-		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight);
-		bros     = new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight);
-		powerups = new Spawner(game, world, ['powerup'], 10000, 15000, bgWalls.minHeight);
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2) );
+		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2) );
+		bros     = new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2) );
+		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2) );
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -200,9 +200,9 @@ window.onload = function() {
 		}
 
 		if(currentLevel === 2 && scrollSpeed < 7){
-			scrollSpeed += 0.1;
+			scrollSpeed += 0.05;
 		} else if(currentLevel === 3 && scrollSpeed < 9){
-			scrollSpeed += 0.1;
+			scrollSpeed += 0.05;
 		}
 		
 		world.x -= scrollSpeed;
@@ -255,7 +255,7 @@ window.onload = function() {
 	}
 	
 	function setHealth(h, noEffect, noInvul) {
-		console.log("bros len: " + player.bros.length);
+		
 		if (h > player.bros.length) {
 			h = player.bros.length;
 		} else if (h <= 0) {
@@ -270,6 +270,9 @@ window.onload = function() {
 			// No effect, dummy
 		} else if (h > health) {
 			goodSound.play();
+			if(h >= player.bros.length){
+				bros.active = false;
+			}
 		} else if (h < health) {
 			badSound.play();
 			
@@ -284,6 +287,7 @@ window.onload = function() {
 				});
 			
 			if (!noInvul) setInvulnerable(1000);
+			bros.active = true;
 		}
 		
 		while (h > health) {
@@ -300,6 +304,12 @@ window.onload = function() {
 		thisItem.kill();
 		score += 1;
 
+		//play high five if enough dudes
+		if(health >= 3){
+			//play high five
+			console.log("play high five");
+		}
+
 		//change levels
 		if(score >= 5 && currentLevel === 1){
 			console.log("move to level 2");
@@ -311,14 +321,14 @@ window.onload = function() {
 			items.keys = ['pickup2'];
 
 			//change spawner properties
-			items.minInt = 7000;
-			items.maxInt = 10500;
-			rocks.minInt = 1700;
-			rocks.maxInt = 1950;
-			bros.minInt = 5500;
-			bros.maxInt = 9500;
-			powerups.minInt = 9500;
-			powerups.maxInt = 14500;
+			items.minInt += 1000;
+			items.maxInt += 500;
+			rocks.minInt -= 600;
+			rocks.maxInt -= 650;
+			bros.minInt += 500;
+			bros.maxInt += 500;
+			powerups.minInt += 1000;
+			powerups.maxInt += 500;
 
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
@@ -328,6 +338,15 @@ window.onload = function() {
 			//change object that is spawned
 			items.keys = ['pickup3'];
 
+			//change spawner properties
+			items.minInt += 1000;
+			items.maxInt += 1500;
+			rocks.minInt -= 700;
+			rocks.maxInt -= 750;
+			bros.minInt += 500;
+			bros.maxInt += 500;
+			powerups.minInt += 1000;
+			powerups.maxInt += 500;
 		}
 
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
