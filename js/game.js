@@ -126,12 +126,12 @@ window.onload = function() {
 		//game.stage.backgroundColor = '#0072bc';
 		water = game.add.tileSprite(0, 0, game.width, game.height, 'water');
 		
-		world   = game.add.group();
-		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['pickup1'], 5000, 10000, bgWalls.minHeight);
-		rocks	= new Spawner(game, world, ['boulder', 'bricks'], 900, 1000, bgWalls.minHeight);
-		bros 	= new Spawner(game, world, ['bro'], 7000, 9000, bgWalls.minHeight);
-		powerups = new Spawner(game, world, ['powerup'], 1000, 5000, bgWalls.minHeight);
+		world    = game.add.group();
+		bgWalls  = new BGWalls(game, world, bgKeys);
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight);
+		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight);
+		bros     = new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight);
+		powerups = new Spawner(game, world, ['powerup'], 10000, 15000, bgWalls.minHeight);
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -233,33 +233,8 @@ window.onload = function() {
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
 
-		if(score >= 5 && currentLevel === 1){
-			console.log("move to level 2");
-			//move to level 2
-			currentLevel = 2;
 
-			//change object that is spawned
-			items.keys = ['pickup2'];
 
-		} else if(score >= 10 && currentLevel === 2){
-			console.log("move to level 3");
-			//move to level 2
-			currentLevel = 3;
-
-			//change object that is spawned
-			items.keys = ['pickup3'];
-
-			//change the scroll speed
-			scrollSpeed = 9;
-		}
-
-		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-			console.log("Last Level done");
-
-			//Make Callback to final screen.
-			game.state.start("victory"); //Go to victory screen
-			
-		}
 
 		//collectable code
 		//collisions
@@ -310,7 +285,7 @@ window.onload = function() {
 					// TODO: Fix for speed tint
 				});
 			
-			if (!noInvul) setInvulnerable(2000);
+			if (!noInvul) setInvulnerable(1000);
 		}
 		
 		while (h > health) {
@@ -326,6 +301,39 @@ window.onload = function() {
 	function collectItem(thisPlayer, thisItem){
 		thisItem.kill();
 		score += 1;
+
+		//change levels
+		if(score >= 5 && currentLevel === 1){
+			console.log("move to level 2");
+
+			//move to level 2
+			currentLevel = 2;
+
+			//change object that is spawned
+			items.keys = ['pickup2'];
+
+			//change spawner properties
+			items.minInt = 7000;
+			items.maxInt = 10500;
+			rocks.minInt = 1750
+
+		} else if(score >= 10 && currentLevel === 2){
+			console.log("move to level 3");
+			//move to level 2
+			currentLevel = 3;
+
+			//change object that is spawned
+			items.keys = ['pickup3'];
+
+		}
+
+		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
+			console.log("Last Level done");
+
+			//Make Callback to final screen.
+			game.state.start("victory"); //Go to victory screen
+			
+		}
 	}
 
 	function broPickup(thisPlayer, thisBro){
@@ -335,7 +343,7 @@ window.onload = function() {
 
 	function rockHit(thisPlayer, thisRock){
 		if(!invulnerable){
-			thisRock.kill();
+			//thisRock.kill();
 			//invulnerable = true;
 
 			setHealth(health - 1);
