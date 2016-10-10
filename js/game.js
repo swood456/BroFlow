@@ -76,7 +76,6 @@ window.onload = function() {
 			[-60,  40], // 4
 			[ 50, -20], // 5
 			[ 50, -20], // 6
-			[ 50, -20]  // 7
 		],
 		currentLevel;
 
@@ -94,7 +93,8 @@ window.onload = function() {
 		//load images
 		game.load.image ('player', 'mattress.png')
 		         .images(bgKeys)
-		         .image ('rock', 'boulder.png')
+		         .image ('bricks', 'bricks.png')
+		         .image ('boulder', 'boulder.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
 		         .image ('pickup1', 'pickup1.png')
@@ -125,11 +125,11 @@ window.onload = function() {
 		//game.stage.backgroundColor = '#0072bc';
 		water = game.add.tileSprite(0, 0, game.width, game.height, 'water');
 		
-		world   = game.add.group();
-		bgWalls = new BGWalls(game, world, bgKeys);
-		items   = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight);
-		rocks	= new Spawner(game, world, ['rock'], 1800, 2000, bgWalls.minHeight);
-		bros 	= new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight);
+		world    = game.add.group();
+		bgWalls  = new BGWalls(game, world, bgKeys);
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight);
+		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight);
+		bros     = new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight);
 		powerups = new Spawner(game, world, ['powerup'], 10000, 15000, bgWalls.minHeight);
 
 		//make a player thing
@@ -144,6 +144,7 @@ window.onload = function() {
 		}
 
 		game.physics.enable(player, Phaser.Physics.ARCADE);
+		player.body.setSize(164, 85, 33, 3);
 		player.anchor.setTo(0.5,0.5);
 		player.body.collideWorldBounds = true;
 
@@ -256,6 +257,7 @@ window.onload = function() {
 	}
 	
 	function setHealth(h, noEffect, noInvul) {
+		console.log("bros len: " + player.bros.length);
 		if (h > player.bros.length) {
 			h = player.bros.length;
 		} else if (h <= 0) {
@@ -313,7 +315,12 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt = 7000;
 			items.maxInt = 10500;
-			rocks.minInt = 1750
+			rocks.minInt = 1700;
+			rocks.maxInt = 1950;
+			bros.minInt = 5500;
+			bros.maxInt = 9500;
+			powerups.minInt = 9500;
+			powerups.maxInt = 14500;
 
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
