@@ -539,7 +539,7 @@ window.onload = function() {
 
 		//temporarily make speed faster and invulnerable
 		speedUp(2, 5000);
-		setInvulnerable(1000);
+		setInvulnerable(4800);
 	}
 	
 	function speedUp(mult, time) {
