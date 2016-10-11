@@ -194,7 +194,7 @@ window.onload = function() {
 		pos = healthPos[0];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
 		broSprite.animations.add('idle', [0], 7, true);
-		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
+		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, false);
 		broSprite.animations.play('idle');
 		var bro1 = player.addChild(broSprite);
 		
@@ -337,22 +337,12 @@ window.onload = function() {
 					))
 				)
 			);
+			player.bros[0].animations.play('row');
 			
 		}
 		var velocityMagnitude = player.body.velocity.getMagnitude();
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
-
-		if(velocityMagnitude > 0){
-			//play moving animation
-			player.bros[0].animations.play('row');
-		} else{
-			//play idle animation
-			player.bros[0].animations.play('idle');
-		}
-
-
-
 
 		//collectable code
 		//collisions
