@@ -136,10 +136,10 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
-		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2) );
+		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2) );
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2) );
-		bros     = new Spawner(game, world, ['bro'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2) );
-		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2) );
+		bros     = new Spawner(game, world, ['bro'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2) );
+		powerups = new Spawner(game, world, ['powerup'], 1500, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2) );
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -283,16 +283,27 @@ window.onload = function() {
 			game.physics.arcade.overlap(player, powerups.group, powerupHit, null, this);
 		}
 
+		game.physics.arcade.overlap(items.group, rocks.group, collisionHandler, null, this);
+		game.physics.arcade.overlap(powerups.group, rocks.group, collisionHandler, null, this);
+		game.physics.arcade.overlap(bros.group, rocks.group, collisionHandler, null, this);
+		game.physics.arcade.overlap(items.group, bros.group, collisionHandler, null, this);
+		game.physics.arcade.overlap(items.group, powerups.group, collisionHandler, null, this);
+		game.physics.arcade.overlap(bros.group, powerups.group, collisionHandler, null, this);
+
 		/*
 		//enemyTestCode
 		game.physics.arcade.collide (player, enemy);
 		game.physics.arcade.moveToObject(enemy, player, 10, 2000);
 		*/
 
-
-
 		//update score
 		labelScore.text = score + " fps: " + game.time.fps;
+	}
+
+	function collisionHandler(item1, item2){
+		console.log("COLLISION DETECTED: "+ item1.y);
+		item1.y = this.game.rnd.between(bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
+		console.log("Moved to:  "+ item1.y);
 	}
 	
 	function setHealth(h, noEffect, noInvul) {
