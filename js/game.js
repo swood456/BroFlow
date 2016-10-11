@@ -375,7 +375,7 @@ window.onload = function() {
 	}
 
 	function collisionHandler(item1, item2){
-		console.log("COLLISION DETECTED: "+ item1.y);
+		console.log("Collision Detected At: "+ item1.y);
 		item1.y = this.game.rnd.between(bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		console.log("Moved to:  "+ item1.y);
 	}
