@@ -165,8 +165,8 @@ window.onload = function() {
 		bgWalls  = new BGWalls(game, world, bgKeys);
 		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height));
-		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
+		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height));
+		powerups = new Spawner(game, world, ['powerup'], 1500, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -215,8 +215,11 @@ window.onload = function() {
 		//bro 1
 		pos = healthPos[0];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
-		broSprite.animations.add('idle', [0], 7, true);
-		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, false);
+		broSprite.animations.add('idle', [0,1,2,3,4,5,6,7,8,9,10], 8, true);
+		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, false).onComplete.add(function(){
+			broSprite.animations.play('idle');
+		})
+		broSprite.animations.add('speedRow', [0,1,2,3,4,5,6,7,8,9,10], 36, true);
 		broSprite.animations.play('idle');
 		var bro1 = player.addChild(broSprite);
 		
@@ -417,6 +420,17 @@ window.onload = function() {
 			
 			if (!noInvul) setInvulnerable(1000);
 			bros.active = true;
+
+
+			//spawn bro in water
+			//here
+			
+			bros.spawn(
+				screenToWorldX(player.x) - 200,
+				player.y,
+				'broLife2'
+			);
+
 		}
 		
 		while (h > health) {
@@ -546,12 +560,15 @@ window.onload = function() {
 	function speedUp(mult, time) {
 		speedMult = mult;
 		player.tint = getBaseTint();
+		player.bros[0].animations.play('speedRow');
 		game.time.events.add(time, slowDown, this);
+
 	}
 
 	function slowDown() {
 		speedMult = 1;
 		player.tint = getBaseTint();
+		player.bros[0].animations.play('row');
 	}
 	
 	function getBaseTint() {
