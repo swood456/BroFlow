@@ -141,19 +141,10 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
-<<<<<<< HEAD
-		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2) );
-		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2) );
-		bros     = new Spawner(game, world, ['bro'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2) );
-		powerups = new Spawner(game, world, ['powerup'], 1500, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2) );
-=======
 		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2));
-
-
->>>>>>> origin/development
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
