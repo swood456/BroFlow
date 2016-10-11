@@ -103,9 +103,11 @@ window.onload = function() {
 		         .image ('broLife5', 'green_floating.png')
 		         .image ('broLife6', 'pink_floating.png')
 		         .image ('pickup1', 'cup.png')
-		         .image ('pickup2', 'pickup2.png')
+		         .image ('pickup2', 'glowsticks.png')
 		         .image ('pickup3', 'pickup3.png')
 		         .image ('pickup1Icon', 'cup icon.png')
+		         .image ('pickup2Icon', 'glowsticks icon.png')
+		         .image ('pickup3Icon', 'pickup3.png')
 		         .image ('water', 'water 1.png')
 		         .image ('powerup', 'soda bottle 2.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48)
@@ -445,20 +447,9 @@ window.onload = function() {
 			player.bros[2].animations.currentAnim.onComplete.add(function () {	player.bros[2].animations.play('idle');}, this);
 		}
 
-		//add item to top of screen
-		if(currentLevel === 1){
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup1Icon');
-			pickupIndicator.alpha = 0.9;
-			pickupIndicator.anchor.set(0.5, 0.5);
-		} else if(currentLevel === 2){
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup2');
-			pickupIndicator.alpha = 0.9;
-			pickupIndicator.anchor.set(0.5, 0.5);
-		} else{
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup3');
-			pickupIndicator.alpha = 0.9;
-			pickupIndicator.anchor.set(0.5, 0.5);
-		}
+		var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup' + currentLevel +'Icon');
+		pickupIndicator.alpha = 0.9;
+		pickupIndicator.anchor.set(0.5, 0.5);
 		
 
 		//change levels
