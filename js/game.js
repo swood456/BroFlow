@@ -425,6 +425,13 @@ window.onload = function() {
 		if(health >= 3){
 			//play high five
 			console.log("play high five");
+
+			//make bros 2 and 3 play high five animation
+			var highFiveAnimation = player.bros[1].animations.play('highfive');
+			player.bros[1].animations.currentAnim.onComplete.add(function () {	player.bros[1].animations.play('idle');}, this);
+
+			highFiveAnimation = player.bros[2].animations.play('highfive');
+			player.bros[2].animations.currentAnim.onComplete.add(function () {	player.bros[2].animations.play('idle');}, this);
 		}
 
 		//add item to top of screen
