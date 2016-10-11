@@ -105,6 +105,7 @@ window.onload = function() {
 		         .image ('pickup1', 'cup.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
+		         .image ('pickup1Icon', 'cup icon.png')
 		         .image ('water', 'water 1.png')
 		         .image ('powerup', 'soda bottle 2.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48)
@@ -130,7 +131,7 @@ window.onload = function() {
 
 	function create () {
 
-
+		invulnerable = false;
 
 		game.time.advancedTiming = true;
 		//load arcade physics
@@ -143,9 +144,6 @@ window.onload = function() {
 		bgWalls  = new BGWalls(game, world, bgKeys);
 		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-
-		rocks2   = new Spawner(game, world, ['boulder', 'bricks'], 1500, 1900, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		rocks2.active = false;
 		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2));
 
@@ -327,7 +325,6 @@ window.onload = function() {
 		bgWalls.update();
 		items.update();
 		rocks.update();
-		rocks2.update();
 		bros.update();
 		powerups.update();
 		
@@ -450,7 +447,7 @@ window.onload = function() {
 
 		//add item to top of screen
 		if(currentLevel === 1){
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup1');
+			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup1Icon');
 			pickupIndicator.alpha = 0.9;
 			pickupIndicator.anchor.set(0.5, 0.5);
 		} else if(currentLevel === 2){
@@ -495,22 +492,31 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt += 1000;
 			items.maxInt += 1500;
-			rocks.minInt -= 700;
+			rocks.minInt -= 900;
 			rocks.maxInt -= 750;
 			bros.minInt += 500;
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
 			powerups.maxInt += 500;
 
-			rocks2.active = true;
 		}
 
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-			//console.log("Last Level done");
-
-			//Make Callback to final screen.
-			game.state.start("victory"); //Go to victory screen
+		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
+			//do some nice stuff to make people happy
+			/*items.active = false;
+			rocks.active = false;
+			bros.active = false;
+			powerups.active = false;
+			*/
+			invulnerable = true;
 			
+
+			game.camera.fade('#000000', 1000, false);
+			game.camera.onFadeComplete.add(function(){
+				game.state.start("victory"); //Go to gameOver state if out of health
+			}, this);
+
 		}
 	}
 
