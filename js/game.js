@@ -171,7 +171,7 @@ window.onload = function() {
 		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		deadbros = game.add.group(world, undefined, false, true, Phaser.Physics.ARCADE);
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height));
+		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
 		//make a player thing
