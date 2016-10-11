@@ -70,12 +70,12 @@ window.onload = function() {
 	*/
 
 	var score, labelScore, health, labelHealth, healthPos = [
-			[  0,  15], // 1
-			[-20, -26], // 2
-			[-40, -10], // 3
-			[-60,  40], // 4
-			[ 50, -20], // 5
-			[ 50, -20] // 6
+			[-10,  100], // 1
+			[-47, -22], // 2
+			[-8, -20], // 3
+			[50,  0], // 4
+			[ 70, -20], // 5
+			[ 30, -10] // 6
 		],
 		currentLevel;
 
@@ -97,6 +97,11 @@ window.onload = function() {
 		         .image ('boulder', 'boulder.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
+		         .image ('broLife2', 'bropickup2.png')
+		         .image ('broLife3', 'bropickup3.png')
+		         .image ('broLife4', 'bropickup4.png')
+		         .image ('broLife5', 'bropickup5.png')
+		         .image ('broLife6', 'bropickup6.png')
 		         .image ('pickup1', 'pickup1.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
@@ -105,10 +110,10 @@ window.onload = function() {
 		         .spritesheet ('dude', 'dude.png', 32, 48)
 		         .spritesheet ('dudebro1', 'dudebro_PaddleSpriteSheet_12fps_120pixelsWide.png', 120, 140)
 		         .spritesheet ('dudebro2', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
-		         .spritesheet ('dudebro3', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74)
+		         .spritesheet ('dudebro3', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80)
 		         .spritesheet ('dudebro4', 'Stripes_animation_10fps_42pixelswide.png', 42, 85)
 		         .spritesheet ('dudebro5', 'Green_SpriteSheet_10fps_42pixelsWide.png', 42, 74)
-		         .spritesheet ('dudebro6', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80);
+		         .spritesheet ('dudebro6', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74);
 
 		/*
 		//enemyTestCode
@@ -136,22 +141,96 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
+<<<<<<< HEAD
 		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2) );
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2) );
 		bros     = new Spawner(game, world, ['bro'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2) );
 		powerups = new Spawner(game, world, ['powerup'], 1500, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2) );
+=======
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2));
+		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
+		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2));
+		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2));
+
+
+>>>>>>> origin/development
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
 		player.bros = [];
 		
-		for (var i = 0; i < healthPos.length; i++) {
-			var pos = healthPos[i],
-				bro = player.addChild(game.make.sprite(pos[0], pos[1], 'dudebro' + (i + 1)));
-			player.bros.push(bro);
-			bro.anchor.set(0.5, 1);
-			bro.kill();
-		}
+		//load the bros into the game
+		var pos, broSprite;
+
+		//bro 3
+		pos = healthPos[2];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro3');
+		broSprite.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
+		broSprite.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
+		broSprite.animations.play('idle');
+		var bro3 = player.addChild(broSprite);
+
+		//bro 2
+		pos = healthPos[1];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro2');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
+		broSprite.animations.add('highfive', [6,7,8,9,10,11,12,13], 7, false);
+		broSprite.animations.play('idle');
+		var bro2 = player.addChild(broSprite);
+
+		//bro 5
+		pos = healthPos[4];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro5');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		broSprite.animations.play('idle');
+		var bro5 = player.addChild(broSprite);
+
+		//bro 6
+		pos = healthPos[5];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro6');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		broSprite.animations.play('idle');
+		var bro6 = player.addChild(broSprite);
+
+		//bro 4
+		pos = healthPos[3];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro4');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		broSprite.animations.play('idle');
+		var bro4 = player.addChild(broSprite);
+		
+		//bro 1
+		pos = healthPos[0];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
+		broSprite.animations.add('idle', [0], 7, true);
+		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
+		broSprite.animations.play('idle');
+		var bro1 = player.addChild(broSprite);
+		
+		//add the bros to the list of bros
+		player.bros.push(bro1);
+		bro1.anchor.set(0.5, 1);
+		bro1.kill();
+
+		player.bros.push(bro2);
+		bro2.anchor.set(0.5, 1);
+		bro2.kill();
+
+		player.bros.push(bro3);
+		bro3.anchor.set(0.5, 1);
+		bro3.kill();
+
+		player.bros.push(bro4);
+		bro4.anchor.set(0.5, 1);
+		bro4.kill();
+
+		player.bros.push(bro5);
+		bro5.anchor.set(0.5, 1);
+		bro5.kill();
+
+		player.bros.push(bro6);
+		bro6.anchor.set(0.5, 1);
+		bro6.kill();
 
 		
 		game.physics.enable(player, Phaser.Physics.ARCADE);
@@ -200,10 +279,11 @@ window.onload = function() {
 		invulnerable = false;
 		health = score = 0;
 		setHealth(1, true);
+		//setHealth(6, true);
 
 
 		//test adding in a dudebro
-		var dudebro1 = game.add.sprite(200, 200, 'dudebro1');
+		/*var dudebro1 = game.add.sprite(200, 200, 'dudebro1');
 		dudebro1.animations.add('idle', [0], 7, true);
 		dudebro1.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
 		dudebro1.animations.play('idle');
@@ -214,7 +294,8 @@ window.onload = function() {
 		dudebro2.animations.play('idle');
 
 		var dudebro3 = game.add.sprite(400, 200, 'dudebro3');
-		dudebro3.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		dudebro3.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
+		dudebro3.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
 		dudebro3.animations.play('idle');
 
 		var dudebro4 = game.add.sprite(500, 200, 'dudebro4');
@@ -226,9 +307,8 @@ window.onload = function() {
 		dudebro5.animations.play('idle');
 
 		var dudebro6 = game.add.sprite(700, 200, 'dudebro6');
-		dudebro6.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
-		dudebro6.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
-		dudebro6.animations.play('idle');
+		dudebro6.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		dudebro6.animations.play('idle');*/
 
 	}
 
@@ -270,6 +350,14 @@ window.onload = function() {
 		var velocityMagnitude = player.body.velocity.getMagnitude();
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
+
+		if(velocityMagnitude > 0){
+			//play moving animation
+			player.bros[0].animations.play('row');
+		} else{
+			//play idle animation
+			player.bros[0].animations.play('idle');
+		}
 
 
 
@@ -321,11 +409,13 @@ window.onload = function() {
 		if (noEffect) {
 			// No effect, dummy
 		} else if (h > health) {
+			bros.keys = [('broLife' + (h + 1))];
 			goodSound.play();
 			if(h >= player.bros.length){
 				bros.active = false;
 			}
 		} else if (h < health) {
+			bros.keys = [('broLife' + (h + 1))];
 			badSound.play();
 			
 			// Tint the raft red
@@ -349,6 +439,8 @@ window.onload = function() {
 			player.bros[--health].kill();
 		}
 		
+		//bros.keys = [('broLife' + (h + 1))];
+		
 		labelHealth.text = "Health: " + health;
 	}
 
@@ -360,6 +452,13 @@ window.onload = function() {
 		if(health >= 3){
 			//play high five
 			console.log("play high five");
+
+			//make bros 2 and 3 play high five animation
+			var highFiveAnimation = player.bros[1].animations.play('highfive');
+			player.bros[1].animations.currentAnim.onComplete.add(function () {	player.bros[1].animations.play('idle');}, this);
+
+			highFiveAnimation = player.bros[2].animations.play('highfive');
+			player.bros[2].animations.currentAnim.onComplete.add(function () {	player.bros[2].animations.play('idle');}, this);
 		}
 
 		//add item to top of screen
@@ -418,7 +517,7 @@ window.onload = function() {
 		}
 
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-			console.log("Last Level done");
+			//console.log("Last Level done");
 
 			//Make Callback to final screen.
 			game.state.start("victory"); //Go to victory screen
@@ -491,11 +590,11 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
 			//For now, use blank Title Screen again as placeholder
-			game.load.image('title', 'title.png');
+			game.load.image('gameLost', 'title.png');
 		},
 
 		create: function(){
-			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'title'); //add an image to the game to serve as the backdrop.
+			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameLost'); //add an image to the game to serve as the backdrop.
 
     		//  Moves the image anchor to the middle, so it centers inside the game properly
     		GOimage.anchor.set(0.5);
@@ -528,11 +627,11 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
 			//For now, use blank Title Screen again as placeholder
-			game.load.image('title', 'title.png');
+			game.load.image('gameWon', 'title.png');
 		},
 
 		create: function(){
-			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
 
     		//  Moves the image anchor to the middle, so it centers inside the game properly
     		VicImage.anchor.set(0.5);
