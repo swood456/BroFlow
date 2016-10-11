@@ -321,26 +321,31 @@ window.onload = function() {
 
 	function update() {
 		
+		//make sure player cannot enter top area of the screen
 		if (player.top < bgWalls.minHeight) {
 			player.top = bgWalls.minHeight;
 			player.body.velocity.y = 0;
 		}
 
+		//gradually speed up the world when moving between levels
 		if(currentLevel === 2 && scrollSpeed < 7){
 			scrollSpeed += 0.05;
 		} else if(currentLevel === 3 && scrollSpeed < 9){
 			scrollSpeed += 0.05;
 		}
 		
+		//make the objects and water scroll
 		world.x -= scrollSpeed;
 		water.tilePosition.x -= scrollSpeed*0.9;
-		//scrollSpeed = Math.min(scrollSpeed * 1.0001, 50);
+
+		//call the update function for all the spawners
 		bgWalls.update();
 		items.update();
 		rocks.update();
 		bros.update();
 		powerups.update();
 		
+		//check if the player is alive and player is "tapping"
 		if(health > 0 && game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
 			game.physics.arcade.moveToPointer(player,
@@ -522,20 +527,39 @@ window.onload = function() {
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
 		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
 			//do some nice stuff to make people happy
-			/*items.active = false;
+			items.active = false;
 			rocks.active = false;
 			bros.active = false;
 			powerups.active = false;
-			*/
-			invulnerable = true;
+			
+			//wait for all the objects to be off the screen
+			game.time.events.add(4000, moveOffscreen, this);
+
+			//invulnerable = true;
 			
 
-			game.camera.fade('#000000', 1000, false);
+			
+
+		}
+	}
+
+	function moveOffscreen(){
+		//remove player's ability to move
+		boatSpeed = 0;
+
+		//move the boat
+		var moveTween = game.add.tween(player);
+		console.log("attmept to tween to " + (world.x + player.width));
+		moveTween.to({x:(world.x + player.width)}, 3000);
+		moveTween.onComplete.add(moveToEndGameScreen, this);
+		moveTween.start;
+	}
+
+	function moveToEndGameScreen(){
+		game.camera.fade('#000000', 1000, false);
 			game.camera.onFadeComplete.add(function(){
 				game.state.start("victory"); //Go to gameOver state if out of health
 			}, this);
-
-		}
 	}
 
 	function broPickup(thisPlayer, thisBro){
