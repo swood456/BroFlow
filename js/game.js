@@ -57,7 +57,7 @@ window.onload = function() {
 		update: update
 	}
 	
-	var player, dragMagnitude, boatSpeed, slowDist = 200,
+	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
 		scrollSpeed;
 
 	var invulnerable = false, invulTween;
@@ -266,6 +266,7 @@ window.onload = function() {
 		scrollSpeed = 5;
 		dragMagnitude = 500;
 		boatSpeed = 500;
+		speedMult = 1;
 		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
@@ -339,7 +340,7 @@ window.onload = function() {
 			//move player towards mouse button
 			game.physics.arcade.moveToPointer(player,
 				game.math.bezierInterpolation(
-					[0, boatSpeed],
+					[0, boatSpeed * speedMult],
 					Math.max(0, Math.min(1, // Constrain to range [0, 1]
 						game.physics.arcade.distanceToPointer(player) / slowDist
 					))
@@ -419,13 +420,14 @@ window.onload = function() {
 			badSound.play();
 			
 			// Tint the raft red
-			var tintObj = {color: 0x00};
-			game.add.tween(tintObj).to({color: 0xFF}, 500, "Linear", true)
+			var tintObj = {step: 0};
+			game.add.tween(tintObj).to({step: 1}, 500, "Linear", true)
 				.onUpdateCallback(function(){
-					player.tint = 0xFF0000 | tintObj.color << 8 | tintObj.color;
+					player.tint = Phaser.Color.interpolateColor(
+						0xFF0000, getBaseTint(), 1, tintObj.step
+					);
 				}).onComplete.add(function(){
-					player.tint = 0xFFFFFF;
-					// TODO: Fix for speed tint
+					player.tint = getBaseTint();
 				});
 			
 			if (!noInvul) setInvulnerable(1000);
@@ -543,16 +545,25 @@ window.onload = function() {
 		thisPowerup.kill();
 
 		//temporarily make speed faster and invulnerable
-		boatSpeed = 1000;
-		// TODO: Speed tint
-		setInvulnerable(5000);
-
-		game.time.events.add(Phaser.Timer.SECOND * 5, slowDown, this);
-
+		speedUp(2, 5000);
+		setInvulnerable(1000);
+	}
+	
+	function speedUp(mult, time) {
+		speedMult = mult;
+		player.tint = getBaseTint();
+		game.time.events.add(time, slowDown, this);
 	}
 
-	function slowDown(){
-		boatSpeed = 500;
+	function slowDown() {
+		speedMult = 1;
+		player.tint = getBaseTint();
+	}
+	
+	function getBaseTint() {
+		if (speedMult > 1) return 0x66FF66;
+		if (speedMult < 1) return 0x6666FF;
+		return 0xFFFFFF;
 	}
 	
 	function setInvulnerable(time) {
