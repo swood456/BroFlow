@@ -69,6 +69,7 @@ window.onload = function() {
 	var enemy;
 	*/
 
+/*ORIGINAL DUDE BRO POSITIONS
 	var score, labelScore, health, labelHealth, healthPos = [
 			[-10,  100], // 1
 			[-47, -22], // 2
@@ -78,6 +79,19 @@ window.onload = function() {
 			[ 30, -10] // 6
 		],
 		currentLevel;
+*/
+//JORDAN SUGGESTED DUDE BRO POSITIONS
+	var score, labelScore, health, labelHealth, healthPos = [
+			[-10,  95], // 1 - paddler
+			[-42, -22], // 2 - red swag
+			[-3 , -20], // 3 - blue yolo
+			[ 40, -10], // 4 - orange
+			[ 60,  10], // 5 - green
+			[-25,  15]  // 6 - pink
+		],
+		currentLevel;
+	//ends here
+
 
 	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
@@ -97,14 +111,17 @@ window.onload = function() {
 		         .image ('boulder', 'boulder.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
-		         .image ('broLife2', 'bropickup2.png')
-		         .image ('broLife3', 'bropickup3.png')
-		         .image ('broLife4', 'bropickup4.png')
-		         .image ('broLife5', 'bropickup5.png')
-		         .image ('broLife6', 'bropickup6.png')
-		         .image ('pickup1', 'pickup1.png')
-		         .image ('pickup2', 'pickup2.png')
-		         .image ('pickup3', 'pickup3.png')
+		         .image ('broLife2', 'swag_floating.png')
+		         .image ('broLife3', 'yolo_floating.png')
+		         .image ('broLife4', 'stripes_floating.png')
+		         .image ('broLife5', 'green_floating.png')
+		         .image ('broLife6', 'pink_floating.png')
+		         .image ('pickup1', 'cup.png')
+		         .image ('pickup2', 'glowsticks.png')
+		         .image ('pickup3', 'tshirt.png')
+		         .image ('pickup1Icon', 'cup icon.png')
+		         .image ('pickup2Icon', 'glowsticks icon.png')
+		         .image ('pickup3Icon', 'tshirt icon.png')
 		         .image ('water', 'water 1.png')
 		         .image ('powerup', 'soda bottle 2.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48)
@@ -135,7 +152,8 @@ window.onload = function() {
 	}
 
 	function create () {
-
+		invulnerable = false;
+		
 		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -145,10 +163,10 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
-		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2));
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2));
-		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2));
+		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height));
+		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -358,7 +376,7 @@ window.onload = function() {
 	}
 
 	function collisionHandler(item1, item2){
-		console.log("COLLISION DETECTED: "+ item1.y);
+		console.log("Collision Detected At: "+ item1.y);
 		item1.y = this.game.rnd.between(bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		console.log("Moved to:  "+ item1.y);
 	}
@@ -438,20 +456,9 @@ window.onload = function() {
 			game.rnd.pick(happySounds).play();
 		}
 
-		//add item to top of screen
-		if(currentLevel === 1){
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup1');
-			pickupIndicator.alpha = 0.9;
-			pickupIndicator.anchor.set(0.5, 0.5);
-		} else if(currentLevel === 2){
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup2');
-			pickupIndicator.alpha = 0.9;
-			pickupIndicator.anchor.set(0.5, 0.5);
-		} else{
-			var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup3');
-			pickupIndicator.alpha = 0.9;
-			pickupIndicator.anchor.set(0.5, 0.5);
-		}
+		var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup' + currentLevel +'Icon');
+		pickupIndicator.alpha = 0.9;
+		pickupIndicator.anchor.set(0.5, 0.5);
 		
 
 		//change levels
@@ -485,20 +492,31 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt += 1000;
 			items.maxInt += 1500;
-			rocks.minInt -= 700;
+			rocks.minInt -= 900;
 			rocks.maxInt -= 750;
 			bros.minInt += 500;
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
 			powerups.maxInt += 500;
+
 		}
 
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-			//console.log("Last Level done");
-
-			//Make Callback to final screen.
-			game.state.start("victory"); //Go to victory screen
+		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
+			//do some nice stuff to make people happy
+			/*items.active = false;
+			rocks.active = false;
+			bros.active = false;
+			powerups.active = false;
+			*/
+			invulnerable = true;
 			
+
+			game.camera.fade('#000000', 1000, false);
+			game.camera.onFadeComplete.add(function(){
+				game.state.start("victory"); //Go to gameOver state if out of health
+			}, this);
+
 		}
 	}
 
@@ -522,7 +540,7 @@ window.onload = function() {
 
 		//temporarily make speed faster and invulnerable
 		speedUp(2, 5000);
-		setInvulnerable(1000);
+		setInvulnerable(4800);
 	}
 	
 	function speedUp(mult, time) {
