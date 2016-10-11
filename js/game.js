@@ -105,10 +105,10 @@ window.onload = function() {
 		         .spritesheet ('dude', 'dude.png', 32, 48)
 		         .spritesheet ('dudebro1', 'dudebro_PaddleSpriteSheet_12fps_120pixelsWide.png', 120, 140)
 		         .spritesheet ('dudebro2', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
-		         .spritesheet ('dudebro6', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74)
+		         .spritesheet ('dudebro3', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80)
 		         .spritesheet ('dudebro4', 'Stripes_animation_10fps_42pixelswide.png', 42, 85)
 		         .spritesheet ('dudebro5', 'Green_SpriteSheet_10fps_42pixelsWide.png', 42, 74)
-		         .spritesheet ('dudebro3', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80);
+		         .spritesheet ('dudebro6', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74);
 
 		/*
 		//enemyTestCode
@@ -148,28 +148,7 @@ window.onload = function() {
 		player.bros = [];
 		
 		//load the bros into the game
-		
-		//bro 1
-		var pos = healthPos[0];
-		var broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
-		broSprite.animations.add('idle', [0], 7, true);
-		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
-		broSprite.animations.play('row');
-		var bro1 = player.addChild(broSprite);
-		player.bros.push(bro1);
-		bro1.anchor.set(0.5, 1);
-		bro1.kill();
-
-		//bro 2
-		pos = healthPos[1];
-		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro2');
-		broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
-		broSprite.animations.add('highfive', [6,7,8,9,10,11,12,13], 7, false);
-		broSprite.animations.play('idle');
-		var bro2 = player.addChild(broSprite);
-		player.bros.push(bro2);
-		bro2.anchor.set(0.5, 1);
-		bro2.kill();
+		var pos, broSprite;
 
 		//bro 3
 		pos = healthPos[2];
@@ -178,19 +157,14 @@ window.onload = function() {
 		broSprite.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
 		broSprite.animations.play('idle');
 		var bro3 = player.addChild(broSprite);
-		player.bros.push(bro3);
-		bro3.anchor.set(0.5, 1);
-		bro3.kill();
 
-		//bro 4
-		pos = healthPos[3];
-		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro4');
-		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		//bro 2
+		pos = healthPos[1];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro2');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
+		broSprite.animations.add('highfive', [6,7,8,9,10,11,12,13], 7, false);
 		broSprite.animations.play('idle');
-		var bro4 = player.addChild(broSprite);
-		player.bros.push(bro4);
-		bro4.anchor.set(0.5, 1);
-		bro4.kill();
+		var bro2 = player.addChild(broSprite);
 
 		//bro 5
 		pos = healthPos[4];
@@ -198,9 +172,6 @@ window.onload = function() {
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro5 = player.addChild(broSprite);
-		player.bros.push(bro5);
-		bro5.anchor.set(0.5, 1);
-		bro5.kill();
 
 		//bro 6
 		pos = healthPos[5];
@@ -208,19 +179,46 @@ window.onload = function() {
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro6 = player.addChild(broSprite);
+
+		//bro 4
+		pos = healthPos[3];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro4');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		broSprite.animations.play('idle');
+		var bro4 = player.addChild(broSprite);
+		
+		//bro 1
+		pos = healthPos[0];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
+		broSprite.animations.add('idle', [0], 7, true);
+		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
+		broSprite.animations.play('row');
+		var bro1 = player.addChild(broSprite);
+		
+		//add the bros to the list of bros
+		player.bros.push(bro1);
+		bro1.anchor.set(0.5, 1);
+		bro1.kill();
+
+		player.bros.push(bro2);
+		bro2.anchor.set(0.5, 1);
+		bro2.kill();
+
+		player.bros.push(bro3);
+		bro3.anchor.set(0.5, 1);
+		bro3.kill();
+
+		player.bros.push(bro4);
+		bro4.anchor.set(0.5, 1);
+		bro4.kill();
+
+		player.bros.push(bro5);
+		bro5.anchor.set(0.5, 1);
+		bro5.kill();
+
 		player.bros.push(bro6);
 		bro6.anchor.set(0.5, 1);
 		bro6.kill();
-
-
-
-		/*for (var i = 2; i < healthPos.length; i++) {
-			var pos = healthPos[i],
-				bro = player.addChild(game.make.sprite(pos[0], pos[1], 'dudebro' + (i + 1)));
-			player.bros.push(bro);
-			bro.anchor.set(0.5, 1);
-			bro.kill();
-		}*/
 
 		
 		game.physics.enable(player, Phaser.Physics.ARCADE);
@@ -268,8 +266,8 @@ window.onload = function() {
 		//set game life and score
 		invulnerable = false;
 		health = score = 0;
-		//setHealth(1, true);
-		setHealth(6, true);
+		setHealth(1, true);
+		//setHealth(6, true);
 
 
 		//test adding in a dudebro
