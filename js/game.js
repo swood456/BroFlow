@@ -84,7 +84,7 @@ window.onload = function() {
 		          'bg4', 'bg5', 'bg6',
 		          'bg7', 'bg8', 'bg9'];
 
-	var BGMusic, goodSound, badSound;
+	var BGMusic, goodSound, badSound, whipSound, broSounds, happySounds;
 
 	function preload () {
 		
@@ -126,11 +126,15 @@ window.onload = function() {
 		game.load.audio ('backgroundMusic', 'StockBGMusic.mp3') //BG Music from http://www.orangefreesounds.com/electro-punk-action-background-music/, permitted for non-commercial use
 				 .audio ('goodSound', 'chimeSound.wav')
 				 .audio ('badSound', 'WaterSplash2.wav')
+				 .audio ('whipcrack', 'whipcrack.mp3')
+				 .audio ('ohyeah', 'ohyeah.mp3')
+				 .audio ('radical', 'radical.mp3')
+				 .audio ('broshout1', 'bro1.mp3')
+				 .audio ('broshout2', 'bro2.mp3')
+				 .audio ('broshout3', 'bro3.mp3');
 	}
 
 	function create () {
-
-
 
 		game.time.advancedTiming = true;
 		//load arcade physics
@@ -264,6 +268,19 @@ window.onload = function() {
 		BGMusic = game.add.audio('backgroundMusic');
 		goodSound = game.add.audio('goodSound');
 		badSound = game.add.audio('badSound');
+		whipSound = game.add.audio('whipcrack');
+		whipSound.onStop.add(function(){
+			game.rnd.pick(happySounds).play();
+		});
+		broSounds = [
+			game.add.audio('broshout1'),
+			game.add.audio('broshout2'),
+			game.add.audio('broshout3')
+		];
+		happySounds = [
+			game.add.audio('radical'),
+			game.add.audio('ohyeah')
+		];
 
 		BGMusic.loopFull(0.6); //Loops BG music at 60% Volume
 		
@@ -271,36 +288,6 @@ window.onload = function() {
 		invulnerable = false;
 		health = score = 0;
 		setHealth(1, true);
-		//setHealth(6, true);
-
-
-		//test adding in a dudebro
-		/*var dudebro1 = game.add.sprite(200, 200, 'dudebro1');
-		dudebro1.animations.add('idle', [0], 7, true);
-		dudebro1.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
-		dudebro1.animations.play('idle');
-
-		var dudebro2 = game.add.sprite(300, 200, 'dudebro2');
-		dudebro2.animations.add('idle', [0,1,2,3,4,5], 7, true);
-		dudebro2.animations.add('highfive', [6,7,8,9,10,11,12,13], 7, false);
-		dudebro2.animations.play('idle');
-
-		var dudebro3 = game.add.sprite(400, 200, 'dudebro3');
-		dudebro3.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
-		dudebro3.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
-		dudebro3.animations.play('idle');
-
-		var dudebro4 = game.add.sprite(500, 200, 'dudebro4');
-		dudebro4.animations.add('idle', [0,1,2,3,4,5], 10, true);
-		dudebro4.animations.play('idle');
-
-		var dudebro5 = game.add.sprite(600, 200, 'dudebro5');
-		dudebro5.animations.add('idle', [0,1,2,3,4,5], 10, true);
-		dudebro5.animations.play('idle');
-
-		var dudebro6 = game.add.sprite(700, 200, 'dudebro6');
-		dudebro6.animations.add('idle', [0,1,2,3,4,5], 10, true);
-		dudebro6.animations.play('idle');*/
 
 	}
 
@@ -391,13 +378,12 @@ window.onload = function() {
 		if (noEffect) {
 			// No effect, dummy
 		} else if (h > health) {
-			bros.keys = [('broLife' + (h + 1))];
-			goodSound.play();
+			bros.keys = ['broLife' + (h + 1)];
 			if(h >= player.bros.length){
 				bros.active = false;
 			}
 		} else if (h < health) {
-			bros.keys = [('broLife' + (h + 1))];
+			bros.keys = ['broLife' + (h + 1)];
 			badSound.play();
 			
 			// Tint the raft red
@@ -438,10 +424,18 @@ window.onload = function() {
 
 			//make bros 2 and 3 play high five animation
 			var highFiveAnimation = player.bros[1].animations.play('highfive');
-			player.bros[1].animations.currentAnim.onComplete.add(function () {	player.bros[1].animations.play('idle');}, this);
+			player.bros[1].animations.currentAnim.onComplete.add(function () {
+				player.bros[1].animations.play('idle');
+			}, this);
 
 			highFiveAnimation = player.bros[2].animations.play('highfive');
-			player.bros[2].animations.currentAnim.onComplete.add(function () {	player.bros[2].animations.play('idle');}, this);
+			player.bros[2].animations.currentAnim.onComplete.add(function () {
+				player.bros[2].animations.play('idle');
+			}, this);
+			
+			whipSound.play();
+		}else{
+			game.rnd.pick(happySounds).play();
 		}
 
 		//add item to top of screen
@@ -511,6 +505,7 @@ window.onload = function() {
 	function broPickup(thisPlayer, thisBro){
 		thisBro.kill();
 		setHealth(health + 1);
+		game.rnd.pick(broSounds).play();
 	}
 
 	function rockHit(thisPlayer, thisRock){
