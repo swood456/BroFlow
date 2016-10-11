@@ -102,7 +102,7 @@ window.onload = function() {
 		         .image ('broLife4', 'bropickup4.png')
 		         .image ('broLife5', 'bropickup5.png')
 		         .image ('broLife6', 'bropickup6.png')
-		         .image ('pickup1', 'pickup1.png')
+		         .image ('pickup1', 'cup.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
 		         .image ('water', 'water 1.png')
