@@ -105,10 +105,10 @@ window.onload = function() {
 		         .spritesheet ('dude', 'dude.png', 32, 48)
 		         .spritesheet ('dudebro1', 'dudebro_PaddleSpriteSheet_12fps_120pixelsWide.png', 120, 140)
 		         .spritesheet ('dudebro2', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
-		         .spritesheet ('dudebro3', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74)
+		         .spritesheet ('dudebro6', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74)
 		         .spritesheet ('dudebro4', 'Stripes_animation_10fps_42pixelswide.png', 42, 85)
 		         .spritesheet ('dudebro5', 'Green_SpriteSheet_10fps_42pixelsWide.png', 42, 74)
-		         .spritesheet ('dudebro6', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80);
+		         .spritesheet ('dudebro3', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80);
 
 		/*
 		//enemyTestCode
@@ -147,7 +147,19 @@ window.onload = function() {
 		player = game.add.sprite(200,200, 'player');
 		player.bros = [];
 		
-		for (var i = 0; i < healthPos.length; i++) {
+		//load the bros into the game
+		var pos = healthPos[0];
+		var broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
+		broSprite.animations.add('idle', [0], 7, true);
+		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
+		broSprite.animations.play('row');
+		var bro = player.addChild(broSprite);
+		player.bros.push(bro);
+		bro.anchor.set(0.5, 1);
+		bro.kill();
+
+
+		for (var i = 1; i < healthPos.length; i++) {
 			var pos = healthPos[i],
 				bro = player.addChild(game.make.sprite(pos[0], pos[1], 'dudebro' + (i + 1)));
 			player.bros.push(bro);
