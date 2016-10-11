@@ -62,7 +62,7 @@ window.onload = function() {
 
 	var invulnerable = false, invulTween, powerupActive = false;
 	
-	var items, rocks, bros, powerups;
+	var items, rocks, bros, deadbros, powerups;
 
 	/*
 	//enemyTestCode
@@ -98,7 +98,7 @@ window.onload = function() {
 		          'bg4', 'bg5', 'bg6',
 		          'bg7', 'bg8', 'bg9'];
 
-	var BGMusic, goodSound, badSound, whipSound, broSounds, happySounds;
+	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
 
 	function preload () {
 		
@@ -110,12 +110,17 @@ window.onload = function() {
 		         .image ('bricks', 'bricks.png')
 		         .image ('boulder', 'boulder.png')
 		         .image ('item', 'star.png')
-		         .image ('bro', 'einstein.png')
 		         .image ('broLife2', 'swag_floating.png')
 		         .image ('broLife3', 'yolo_floating.png')
 		         .image ('broLife4', 'stripes_floating.png')
 		         .image ('broLife5', 'green_floating.png')
 		         .image ('broLife6', 'pink_floating.png')
+		         .image ('broDeath1', 'paddle_sink.png')
+		         .image ('broDeath2', 'swag_sink.png')
+		         .image ('broDeath3', 'yolo_sink.png')
+		         .image ('broDeath4', 'stripes_sink.png')
+		         .image ('broDeath5', 'green_sink.png')
+		         .image ('broDeath6', 'pink_sink.png')
 		         .image ('pickup1', 'cup.png')
 		         .image ('pickup2', 'glowsticks.png')
 		         .image ('pickup3', 'tshirt.png')
@@ -141,14 +146,14 @@ window.onload = function() {
 		game.load.path = 'assets/sounds/';
 
 		game.load.audio ('backgroundMusic', 'StockBGMusic.mp3') //BG Music from http://www.orangefreesounds.com/electro-punk-action-background-music/, permitted for non-commercial use
-				 .audio ('goodSound', 'chimeSound.wav')
 				 .audio ('badSound', 'WaterSplash2.wav')
 				 .audio ('whipcrack', 'whipcrack.mp3')
 				 .audio ('ohyeah', 'ohyeah.mp3')
 				 .audio ('radical', 'radical.mp3')
 				 .audio ('broshout1', 'bro1.mp3')
 				 .audio ('broshout2', 'bro2.mp3')
-				 .audio ('broshout3', 'bro3.mp3');
+				 .audio ('broshout3', 'bro3.mp3')
+				 .audio ('awwno', 'awwno.mp3');
 	}
 
 	function create () {
@@ -164,6 +169,7 @@ window.onload = function() {
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
 		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
+		deadbros = game.add.group(world, undefined, false, true, Phaser.Physics.ARCADE);
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
@@ -287,7 +293,7 @@ window.onload = function() {
 
 		//Add Sound and Music Vars to scene
 		BGMusic = game.add.audio('backgroundMusic');
-		goodSound = game.add.audio('goodSound');
+		gameoverSound = game.add.audio('awwno');
 		badSound = game.add.audio('badSound');
 		whipSound = game.add.audio('whipcrack');
 		whipSound.onStop.add(function(){
@@ -392,10 +398,11 @@ window.onload = function() {
 			h = player.bros.length;
 		} else if (h <= 0) {
 			h = 0;
-			game.camera.fade('#000000', 1000, false);
+			game.camera.fade('#000000', 1500, false);
 			game.camera.onFadeComplete.add(function(){
 				game.state.start("gameOver"); //Go to gameOver state if out of health
 			}, this);
+			gameoverSound.play();
 		}
 		
 		if (noEffect) {
@@ -439,6 +446,11 @@ window.onload = function() {
 			player.bros[health++].revive();
 		}
 		while (h < health) {
+			var s = deadbros.getFirstDead(true,
+				screenToWorldX(player.x) - 100, player.y,
+				'broDeath' + health);
+			s.autoCull = true;
+			s.outOfCameraBoundsKill = true;
 			player.bros[--health].kill();
 		}
 		
