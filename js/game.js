@@ -143,6 +143,9 @@ window.onload = function() {
 		bgWalls  = new BGWalls(game, world, bgKeys);
 		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
+
+		rocks2   = new Spawner(game, world, ['boulder', 'bricks'], 1500, 1900, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
+		rocks2.active = false;
 		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2));
 
@@ -324,6 +327,7 @@ window.onload = function() {
 		bgWalls.update();
 		items.update();
 		rocks.update();
+		rocks2.update();
 		bros.update();
 		powerups.update();
 		
@@ -497,6 +501,8 @@ window.onload = function() {
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
 			powerups.maxInt += 500;
+
+			rocks2.active = true;
 		}
 
 		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
