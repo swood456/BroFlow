@@ -118,7 +118,7 @@ window.onload = function() {
 		         .image ('broLife6', 'pink_floating.png')
 		         .image ('pickup1', 'cup.png')
 		         .image ('pickup2', 'glowsticks.png')
-		         .image ('pickup3', 'pickup3.png')
+		         .image ('pickup3', 'tshirt.png')
 		         .image ('pickup1Icon', 'cup icon.png')
 		         .image ('pickup2Icon', 'glowsticks icon.png')
 		         .image ('pickup3Icon', 'pickup3.png')
