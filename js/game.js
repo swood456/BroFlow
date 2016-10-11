@@ -97,11 +97,11 @@ window.onload = function() {
 		         .image ('boulder', 'boulder.png')
 		         .image ('item', 'star.png')
 		         .image ('bro', 'einstein.png')
-		         .image ('broLife2', 'bropickup2.png')
-		         .image ('broLife3', 'bropickup3.png')
-		         .image ('broLife4', 'bropickup4.png')
-		         .image ('broLife5', 'bropickup5.png')
-		         .image ('broLife6', 'bropickup6.png')
+		         .image ('broLife2', 'swag_floating.png')
+		         .image ('broLife3', 'yolo_floating.png')
+		         .image ('broLife4', 'stripes_floating.png')
+		         .image ('broLife5', 'green_floating.png')
+		         .image ('broLife6', 'pink_floating.png')
 		         .image ('pickup1', 'cup.png')
 		         .image ('pickup2', 'pickup2.png')
 		         .image ('pickup3', 'pickup3.png')
@@ -142,10 +142,10 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
-		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height / 2));
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height / 2));
-		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height / 2));
+		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height));
+		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
