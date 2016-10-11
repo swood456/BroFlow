@@ -430,16 +430,6 @@ window.onload = function() {
 			if (!noInvul) setInvulnerable(1000);
 			bros.active = true;
 
-
-			//spawn bro in water
-			//here
-			
-			bros.spawn(
-				screenToWorldX(player.x) - 200,
-				player.y,
-				'broLife2'
-			);
-
 		}
 		
 		while (h > health) {
