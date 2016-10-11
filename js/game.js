@@ -273,7 +273,7 @@ window.onload = function() {
 
 
 		//test adding in a dudebro
-		var dudebro1 = game.add.sprite(200, 200, 'dudebro1');
+		/*var dudebro1 = game.add.sprite(200, 200, 'dudebro1');
 		dudebro1.animations.add('idle', [0], 7, true);
 		dudebro1.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
 		dudebro1.animations.play('idle');
@@ -298,7 +298,7 @@ window.onload = function() {
 
 		var dudebro6 = game.add.sprite(700, 200, 'dudebro6');
 		dudebro6.animations.add('idle', [0,1,2,3,4,5], 10, true);
-		dudebro6.animations.play('idle');
+		dudebro6.animations.play('idle');*/
 
 	}
 
