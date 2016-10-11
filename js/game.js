@@ -70,12 +70,12 @@ window.onload = function() {
 	*/
 
 	var score, labelScore, health, labelHealth, healthPos = [
-			[  0,  15], // 1
-			[-20, -26], // 2
-			[-40, -10], // 3
-			[-60,  40], // 4
-			[ 50, -20], // 5
-			[ 50, -20] // 6
+			[-10,  100], // 1
+			[-47, -22], // 2
+			[-8, -20], // 3
+			[50,  0], // 4
+			[ 70, -20], // 5
+			[ 30, -10] // 6
 		],
 		currentLevel;
 
@@ -148,24 +148,79 @@ window.onload = function() {
 		player.bros = [];
 		
 		//load the bros into the game
+		
+		//bro 1
 		var pos = healthPos[0];
 		var broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
 		broSprite.animations.add('idle', [0], 7, true);
 		broSprite.animations.add('row', [0,1,2,3,4,5,6,7,8,9,10], 12, true);
 		broSprite.animations.play('row');
-		var bro = player.addChild(broSprite);
-		player.bros.push(bro);
-		bro.anchor.set(0.5, 1);
-		bro.kill();
+		var bro1 = player.addChild(broSprite);
+		player.bros.push(bro1);
+		bro1.anchor.set(0.5, 1);
+		bro1.kill();
+
+		//bro 2
+		pos = healthPos[1];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro2');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
+		broSprite.animations.add('highfive', [6,7,8,9,10,11,12,13], 7, false);
+		broSprite.animations.play('idle');
+		var bro2 = player.addChild(broSprite);
+		player.bros.push(bro2);
+		bro2.anchor.set(0.5, 1);
+		bro2.kill();
+
+		//bro 3
+		pos = healthPos[2];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro3');
+		broSprite.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
+		broSprite.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
+		broSprite.animations.play('idle');
+		var bro3 = player.addChild(broSprite);
+		player.bros.push(bro3);
+		bro3.anchor.set(0.5, 1);
+		bro3.kill();
+
+		//bro 4
+		pos = healthPos[3];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro4');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		broSprite.animations.play('idle');
+		var bro4 = player.addChild(broSprite);
+		player.bros.push(bro4);
+		bro4.anchor.set(0.5, 1);
+		bro4.kill();
+
+		//bro 5
+		pos = healthPos[4];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro5');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		broSprite.animations.play('idle');
+		var bro5 = player.addChild(broSprite);
+		player.bros.push(bro5);
+		bro5.anchor.set(0.5, 1);
+		bro5.kill();
+
+		//bro 6
+		pos = healthPos[5];
+		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro6');
+		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		broSprite.animations.play('idle');
+		var bro6 = player.addChild(broSprite);
+		player.bros.push(bro6);
+		bro6.anchor.set(0.5, 1);
+		bro6.kill();
 
 
-		for (var i = 1; i < healthPos.length; i++) {
+
+		/*for (var i = 2; i < healthPos.length; i++) {
 			var pos = healthPos[i],
 				bro = player.addChild(game.make.sprite(pos[0], pos[1], 'dudebro' + (i + 1)));
 			player.bros.push(bro);
 			bro.anchor.set(0.5, 1);
 			bro.kill();
-		}
+		}*/
 
 		
 		game.physics.enable(player, Phaser.Physics.ARCADE);
@@ -213,7 +268,8 @@ window.onload = function() {
 		//set game life and score
 		invulnerable = false;
 		health = score = 0;
-		setHealth(1, true);
+		//setHealth(1, true);
+		setHealth(6, true);
 
 
 		//test adding in a dudebro
@@ -228,7 +284,8 @@ window.onload = function() {
 		dudebro2.animations.play('idle');
 
 		var dudebro3 = game.add.sprite(400, 200, 'dudebro3');
-		dudebro3.animations.add('idle', [0,1,2,3,4,5], 10, true);
+		dudebro3.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
+		dudebro3.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
 		dudebro3.animations.play('idle');
 
 		var dudebro4 = game.add.sprite(500, 200, 'dudebro4');
@@ -240,8 +297,7 @@ window.onload = function() {
 		dudebro5.animations.play('idle');
 
 		var dudebro6 = game.add.sprite(700, 200, 'dudebro6');
-		dudebro6.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
-		dudebro6.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
+		dudebro6.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		dudebro6.animations.play('idle');
 
 	}
