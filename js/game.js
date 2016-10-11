@@ -309,7 +309,7 @@ window.onload = function() {
 			game.add.audio('ohyeah')
 		];
 
-		BGMusic.loopFull(0.6); //Loops BG music at 60% Volume
+		BGMusic.loopFull(0.08); //Loops BG music at 60% Volume
 		
 		//set game life and score
 		invulnerable = false;
