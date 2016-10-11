@@ -69,6 +69,7 @@ window.onload = function() {
 	var enemy;
 	*/
 
+/*ORIGINAL DUDE BRO POSITIONS
 	var score, labelScore, health, labelHealth, healthPos = [
 			[-10,  100], // 1
 			[-47, -22], // 2
@@ -78,6 +79,19 @@ window.onload = function() {
 			[ 30, -10] // 6
 		],
 		currentLevel;
+*/
+//JORDAN SUGGESTED DUDE BRO POSITIONS
+	var score, labelScore, health, labelHealth, healthPos = [
+			[-10,  95], // 1 - paddler
+			[-42, -22], // 2 - red swag
+			[-3 , -20], // 3 - blue yolo
+			[ 40, -10], // 4 - orange
+			[ 60,  10], // 5 - green
+			[-25,  15]  // 6 - pink
+		],
+		currentLevel;
+	//ends here
+
 
 	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
