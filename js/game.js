@@ -121,7 +121,7 @@ window.onload = function() {
 		         .image ('pickup3', 'tshirt.png')
 		         .image ('pickup1Icon', 'cup icon.png')
 		         .image ('pickup2Icon', 'glowsticks icon.png')
-		         .image ('pickup3Icon', 'pickup3.png')
+		         .image ('pickup3Icon', 'tshirt icon.png')
 		         .image ('water', 'water 1.png')
 		         .image ('powerup', 'soda bottle 2.png')
 		         .spritesheet ('dude', 'dude.png', 32, 48)
