@@ -60,7 +60,7 @@ window.onload = function() {
 	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
 		scrollSpeed;
 
-	var invulnerable = false, invulTween;
+	var invulnerable = false, invulTween, powerupActive = false;
 	
 	var items, rocks, bros, powerups;
 
@@ -166,7 +166,7 @@ window.onload = function() {
 		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('bro').height));
-		powerups = new Spawner(game, world, ['powerup'], 1500, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
+		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -345,7 +345,9 @@ window.onload = function() {
 					))
 				)
 			);
-			player.bros[0].animations.play('row');
+			if(!powerupActive){
+				player.bros[0].animations.play('row');
+			}
 			
 		}
 		var velocityMagnitude = player.body.velocity.getMagnitude();
@@ -561,14 +563,15 @@ window.onload = function() {
 		speedMult = mult;
 		player.tint = getBaseTint();
 		player.bros[0].animations.play('speedRow');
+		powerupActive = true;
 		game.time.events.add(time, slowDown, this);
-
 	}
 
 	function slowDown() {
 		speedMult = 1;
 		player.tint = getBaseTint();
 		player.bros[0].animations.play('row');
+		powerupActive = false;
 	}
 	
 	function getBaseTint() {
