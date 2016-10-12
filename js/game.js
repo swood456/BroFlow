@@ -102,7 +102,8 @@ window.onload = function() {
 				   'sky3', 'sky3', 'sky4'];
 
 	//sound variables
-	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
+	var BGMusic, gameoverSound, badSound, whipSound, chugSound,
+	broSounds, happySounds;
 
 
 	function preload () {
@@ -157,7 +158,8 @@ window.onload = function() {
 				 .audio ('broshout1', 'bro1.mp3')
 				 .audio ('broshout2', 'bro2.mp3')
 				 .audio ('broshout3', 'bro3.mp3')
-				 .audio ('awwno', 'awwno.mp3');
+				 .audio ('awwno', 'awwno.mp3')
+				 .audio ('chug', 'chug.mp3');
 	}
 
 	function create () {
@@ -317,6 +319,7 @@ window.onload = function() {
 		BGMusic = game.add.audio('backgroundMusic');
 		gameoverSound = game.add.audio('awwno');
 		badSound = game.add.audio('badSound');
+		chugSound = game.add.audio('chug');
 		whipSound = game.add.audio('whipcrack');
 		whipSound.onStop.add(function(){
 			game.rnd.pick(happySounds).play();
@@ -678,7 +681,7 @@ window.onload = function() {
 
 	function powerupHit(thisplayer, thisPowerup){
 		thisPowerup.kill();
-
+		chugSound.play();
 		//temporarily make speed faster and invulnerable
 		speedUp(2, 5000);
 		setInvulnerable(4800);
