@@ -36,18 +36,18 @@ window.onload = function() {
 			image.inputEnabled = true;
 			
 			//create a text object
-			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
+			var text = game.add.text(100,100,'SAVE THE DUDEBROS', {font: 'bold 32px Arial', fill: '#fff'});
 
 			//add in play button
 			game.add.button(game.world.centerX - 50, 600, 'playButton', function(){
 				//make a callback to go to the game state when finished
-				this.game.state.start("gameplay");
+				this.game.state.start('gameplay');
 			}).anchor.set(1, 0);
 			
 			//add in instruction button
 			game.add.button(game.world.centerX + 50, 600, 'instructionButton', function(){
 				//make a callback to go to the game state when finished
-				this.game.state.start("instructions");
+				this.game.state.start('instructions');
 			}).anchor.set(0, 0);
 
 		}		
@@ -328,7 +328,7 @@ window.onload = function() {
 			game.add.audio('ohyeah')
 		];
 
-		BGMusic.loopFull(0.08); //Loops BG music at 60% Volume
+		BGMusic.loopFull(0.08); //Loops BG music at 8% Volume
 		
 		//set game life and score
 		invulnerable = false;
