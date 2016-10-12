@@ -13,6 +13,8 @@ window.onload = function() {
 	//instantiate the game
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, ''), bubbleScreen;
 
+	var BGMusic;
+
 	//create the object the menu game state uses
 	var menu = {
 		preload: function(){
@@ -20,10 +22,18 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 
 			//load a title image
-			game.load.image('title', 'title 2.png')
+			game.load.image('title', 'title 3.png')
 			         .image('instructionButton', 'instructions_button.png')
-			         .image('playButton', 'play_button.png')
-			         .image('bubbles', 'bubbles.png');
+			         .image('playButton', 'play_button.png');
+			
+			if (!bubbleScreen) {
+				game.load.image('bubbles', 'bubbles.png');
+			}
+
+			game.load.path = 'assets/sounds/';
+
+			game.load.audio ('backgroundMusic', 'StockBGMusic.mp3');
+
 		},
 
 		create: function(){
@@ -35,22 +45,53 @@ window.onload = function() {
 			image.inputEnabled = true;
 			
 			//create a text object
-			var text = game.add.text(100,100,'SAVE THE DUDEBROS', {font: 'bold 32px Arial', fill: '#fff'});
+			//var text = game.add.text(100,100,'SAVE THE DUDEBROS', {font: 'bold 32px Arial', fill: '#fff'});
 
 			//add in play button
 			game.add.button(game.world.centerX - 50, 600, 'playButton', function(){
 				//make a callback to go to the game state when finished
-				this.game.state.start('gameplay');
+				startBubbleScreen('gameplay');
 			}).anchor.set(1, 0);
 			
 			//add in instruction button
 			game.add.button(game.world.centerX + 50, 600, 'instructionButton', function(){
 				//make a callback to go to the game state when finished
-				this.game.state.start('instructions');
+				startBubbleScreen('instructions');
 			}).anchor.set(0, 0);
 			
+			//background music
+			if (!BGMusic) BGMusic = game.add.audio('backgroundMusic');
+			if (!BGMusic.isPlaying) BGMusic.loopFull(0.08);
 			
-		}		
+			setupBubbleScreen();
+		}
+	}
+	
+	function setupBubbleScreen(){
+		if (!bubbleScreen) {
+			bubbleScreen = game.stage.addChild(game.make.image(0, 0, 'bubbles'));
+			bubbleScreen.kill();
+		} else if (bubbleScreen.alive) {
+			bubbleScreen.outTween =
+				game.add.tween(bubbleScreen).to({bottom: 0}, 500, Phaser.Easing.Sinusoidal.Out, true)
+				.onComplete.add(function(){
+					bubbleScreen.kill();
+				});
+		}
+		//bubbleScreen.bringToTop();
+	}
+	
+	function startBubbleScreen(stage){
+		bubbleScreen.y = game.height;
+		bubbleScreen.alive = true;
+		bubbleScreen.exists = true;
+		if (bubbleScreen.outTween && bubbleScreen.outTween.stop) {
+			bubbleScreen.outTween.stop();
+		}
+		game.add.tween(bubbleScreen).to({y: -127}, 500, Phaser.Easing.Sinusoidal.In, true)
+			.onComplete.add(function(){
+				game.state.start(stage);
+			});
 	}
 
 	//create object to be used for gameplay state
@@ -173,7 +214,7 @@ window.onload = function() {
 
 		//add in spawners
 		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
-		items    = new Spawner(game, world, ['pickup1'], 60, 100, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
@@ -310,7 +351,7 @@ window.onload = function() {
 		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
-		BGMusic = game.add.audio('backgroundMusic');
+		
 		gameoverSound = game.add.audio('awwno');
 		badSound = game.add.audio('badSound');
 		chugSound = game.add.audio('chug');
@@ -328,13 +369,14 @@ window.onload = function() {
 			game.add.audio('ohyeah')
 		];
 
-		BGMusic.loopFull(0.08); //Loops BG music at 8% Volume
+		//BGMusic.loopFull(0.08); //Loops BG music at 8% Volume
 		
 		//set game life and score
 		invulnerable = false;
 		health = score = 0;
 		setHealth(1, true);
 
+		setupBubbleScreen();
 	}
 
 
@@ -519,10 +561,9 @@ window.onload = function() {
 				game.state.start("gameOver"); //Go to gameOver state if out of health
 			}, this);
 			*/
-			game.time.events.add(1500, function(){
-				game.state.start("lineup"); //Go to gameOver state if out of health
-				//TODO add bubbles
-			}, this);
+			BGMusic.stop();
+
+			startBubbleScreen('lineup');
 			gameoverSound.play();
 		}
 		
@@ -635,18 +676,15 @@ window.onload = function() {
 
 		}
 
-		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
-			//do some nice stuff to make people happy
+		else if(score >= 15 && currentLevel == 3){
+			//deactivate spawners
 			items.active = false;
 			rocks.active = false;
 			bros.active = false;
 			powerups.active = false;
 			
 			//wait for all the objects to be off the screen
-			//game.time.events.add(4000, moveOffscreen, this);
 			game.time.events.add(3000, moveOffscreen, this);
-
 		}
 	}
 
@@ -656,18 +694,14 @@ window.onload = function() {
 		allowControl = player.body.collideWorldBounds = false;
 		player.bros[0].animations.play('speedRow');
 
-		//game.add.tween(player).to({ x: 2000 }, 3000, Phaser.Easing.Sinusoidal.InOut, true, 0, 0, false);
+		//move the player off the screen
 		var moveTween = game.add.tween(player).to({ x: game.width + player.width }, 3000, Phaser.Easing.Sinusoidal.InOut, false, 0, 0, false);
 		moveTween.onComplete.add(moveToEndGameScreen, this);
 		moveTween.start();
-
-		/*var moveTween = game.add.tween(player);
-		moveTween.to({x:2000}, 3000,Phaser.Easing.Bounce.In);
-		moveTween.onComplete.add(moveToEndGameScreen, this);
-		moveTween.start;*/
 	}
 
 	function moveToEndGameScreen(){
+		//fade the camera and go to end game screen
 		game.camera.fade('#000000', 1000, false);
 			game.camera.onFadeComplete.add(function(){
 				game.state.start("victory"); //Go to gameOver state if out of health
@@ -722,7 +756,7 @@ window.onload = function() {
 	
 	function RestartGame() {
 		//For this callback, return to the menu/title screen
-		this.game.state.start('menu');
+		startBubbleScreen('menu');
 	}
 
 	//State for the Victory screen
@@ -751,7 +785,7 @@ window.onload = function() {
 			winSound.onStop.add(function(){
 				whipSound.play();
 				VicImage.events.onInputDown.add(function(){
-					game.state.start("lineup");
+					startBubbleScreen('lineup');
 				}, this);
 			});
 			
@@ -781,6 +815,8 @@ window.onload = function() {
 
 			//  Enables all kind of input actions on this image (click, etc)
 			VicImage.inputEnabled = true;
+			
+			setupBubbleScreen();
 		},
 		
 		update: function(){
@@ -807,6 +843,7 @@ window.onload = function() {
 			for (var i = broNames.length - 1; i >= 0; --i) {
 				game.load.image('bro' + (i + 1),
 					broNames[i] + (health > i ? '_static.png' : '_sink.png'));
+				game.load.image('bro_' + i + '_text', broNames[i] + '_nameTxt.png');
 			}
 		},
 
@@ -823,9 +860,13 @@ window.onload = function() {
 				var x = (game.width * (i + 1.5) / 8)|0;
 				game.add.sprite(x, game.world.centerY - 50,
 					'bro' + (i + 1)).anchor.set(0.5);
-				game.add.text(0, 0, broNames[i], style).setTextBounds(
-					x, game.world.centerY + 20);
+				var tempSprite = game.add.sprite(x, game.world.centerY + 30, 'bro_' + i +'_text');
+				tempSprite.anchor.set(0.5);
+				/*game.add.text(0, 0, broNames[i], style).setTextBounds(
+					x, game.world.centerY + 20);*/
 			}
+			
+			setupBubbleScreen();
 		}
 	}
 
@@ -837,52 +878,59 @@ window.onload = function() {
 			         .image ('bricks', 'bricks.png')
 			         .image ('cup', 'cup.png')
 			         .image ('glowsticks', 'glowsticks.png')
-			         .image ('tshirts', 'tshirt.png');
+			         .image ('tshirts', 'tshirt.png')
+			         .image ('tapText', 'tapscreenText.png')
+			         .image ('avoidRocksText','avoidRocksText.png')
+			         .image ('collectItemsText', 'collectItemsText.png')
+			         .image ('collectDudesText', 'collectDudesText.png')
+			         .image ('tapToGoBack', 'tapToGoBacktext.png')
+			         .spritesheet ('swag', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
+		         	 .spritesheet ('yolo', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80);
 
 		},
 		create: function(){
 			game.stage.backgroundColor = '#299ED1';
-			var textStyle = {
-				font: 'bold 32px Comic Sans MS',
-				fill: '#fff',
-				boundsAlignH: 'center',
-				boundsAlignV: 'middle'
-			};
 
-			var textStyleSmall = {
-				font: 'bold 20px Comic Sans MS',
-				fill: '#fff',
-				boundsAlignH: 'center',
-				boundsAlignV: 'middle'
-			};
-			//put text to convey how to play the game
-			var tempText = game.add.text(game.width / 2, 150, 'Tap the screen to move towards that point', textStyle);
-			tempText.anchor.set(0.5);
+			//use the images stuff
+			var textSprite = game.add.sprite(game.width / 2, 100, 'tapText');
+			textSprite.anchor.set(0.5);
 
-			tempText = game.add.text(game.width / 2, 325, 'Avoid rocks and bricks', textStyle);
-			tempText.anchor.set(0.5);
+			textSprite = game.add.sprite(game.width / 2, 250, 'avoidRocksText');
+			textSprite.anchor.set(0.5);
 
-			tempText = game.add.text(game.width / 2, 500, 'Collect the cups, glowsticks, and t-shirts to advance', textStyle);
-			tempText.anchor.set(0.5);
+			textSprite = game.add.sprite(game.width / 2, 400, 'collectItemsText');
+			textSprite.anchor.set(0.5);
 
-			tempText = game.add.text(game.width / 2, 700, 'tap to go back', textStyleSmall);
-			tempText.anchor.set(0.5);
+			textSprite = game.add.sprite(game.width / 2, 550, 'collectDudesText');
+			textSprite.anchor.set(0.5);
+
+			textSprite = game.add.sprite(game.width / 2, 700, 'tapToGoBack');
+			textSprite.anchor.set(0.5);
 
 
 			//add in objects to screen
-			var rockSprite = game.add.sprite(350,275, 'rock');
+			var rockSprite = game.add.sprite(350,200, 'rock');
 			//rockSprite.scale.setTo(0.5, 0.5);
 
-			var brickSprite = game.add.sprite(875,275, 'bricks');
+			var brickSprite = game.add.sprite(875,200, 'bricks');
 			//brickSprite.scale.set(0.5,0.5);
 
-			game.add.sprite(445, 515, 'cup');
-			game.add.sprite(585, 515, 'glowsticks');
-			game.add.sprite(825, 515, 'tshirts');
+			game.add.sprite(495, 340, 'cup');
+			game.add.sprite(605, 340, 'glowsticks');
+			game.add.sprite(755, 340, 'tshirts');
 
+			//load in the dudebros
+			var broSprite = game.add.sprite(435, 510, 'swag');
+			broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
+			broSprite.animations.play('idle');
+
+			broSprite = game.add.sprite(860, 505, 'yolo');
+			broSprite.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
+			broSprite.animations.play('idle');
 
 			game.input.onDown.add(RestartGame, this);
 
+			setupBubbleScreen();
 		}
 	}
 	
