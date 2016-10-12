@@ -60,7 +60,7 @@ window.onload = function() {
 	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
 		scrollSpeed;
 
-	var invulnerable = false, invulTween, powerupActive = false;
+	var invulnerable = false, invulTween, powerupActive = false, enemyInvulnerable = false, enemyInvulTween;
 	
 	var items, rocks, bros, deadbros, powerups;
 
@@ -409,6 +409,32 @@ window.onload = function() {
 		enemyHealth -= 1;
 		if(enemyHealth <= 0){
 			enemy.kill();
+		}
+		setEnemyInvulnerable(1000); //Give enemy one second of invincibility
+	}
+
+	//Enemy Invulnerability function in progress
+	function setEnemyInvulnerable(time) {
+		if (time === 0) {
+			enemyInvulnerable = false;
+			enemyInvulTween.stop();
+			enemy.alpha = 1;
+			return;
+		}
+		time = time || 1000;
+		
+		if (!enemyInvulTween || enemyInvulTween.totalDuration < time) {
+			enemyInvulnerable = true;
+			if(enemyInvulTween) {
+				enemyInvulTween.stop();
+				enemy.alpha = 1;
+			}
+			
+			enemyInvulTween = game.add.tween(enemy).from({alpha: 0.5},
+				200, "Linear", true, 0, Math.round(time / 400), true);
+			enemyInvulTween.onComplete.add(function(){
+				enemyInvulnerable = false;
+			} );
 		}
 	}
 	
