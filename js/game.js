@@ -82,9 +82,6 @@ window.onload = function() {
 	var enemySpawned = false;
 	var enemyHealth = 3;
 	*/
-	
-	//text variables
-	var labelScore, labelHealth;
 
 	//various global variables
 	var score, health, currentLevel;
@@ -298,16 +295,6 @@ window.onload = function() {
 		//initialize the drag
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-				
-
-		//score label
-		var style = {font: "32px Arial", fill: "#500050", align: "center"};
-		var text = score;
-		game.add.text (100, 600, "Score:", style);
-		labelScore = game.add.text (200, 600, text, style);
-		text = health;
-		
-		labelHealth = game.add.text (100, 650, text, style);
 
 		//set the current level to be 1
 		currentLevel = 1;
@@ -437,9 +424,6 @@ window.onload = function() {
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
 		*/
-
-		//update score
-		labelScore.text = score + " fps: " + game.time.fps;
 	}
 
 	function collisionHandler(item1, item2){
@@ -567,10 +551,6 @@ window.onload = function() {
 			s.outOfCameraBoundsKill = true;
 			player.bros[--health].kill();
 		}
-		
-		//bros.keys = [('broLife' + (h + 1))];
-		
-		labelHealth.text = "Health: " + health;
 	}
 
 	function collectItem(thisPlayer, thisItem){
