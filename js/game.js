@@ -14,10 +14,7 @@ window.onload = function() {
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '');
 
 	//create the object the menu game state uses
-	var menu = function(game){
-		console.log("starting menu");
-	}
-	menu.prototype = {
+	var menu = {
 		preload: function(){
 			//set the file path for loading images
 			game.load.path = 'assets/sprites/';
@@ -63,11 +60,7 @@ window.onload = function() {
 	}
 
 	//create object to be used for gameplay state
-	var gameplay = function(game){
-		console.log("starting game");
-	}
-
-	gameplay.prototype ={
+	var gameplay = {
 		preload: preload,
 		create: create,
 		update: update
@@ -774,10 +767,7 @@ window.onload = function() {
 	}
 
 	//State for the GameOver screen
-	var GameOver = function(game) {
-		console.log("Starting Game Over state");
-	}
-	GameOver.prototype = {
+	var GameOver = {
 		preload: function(){
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
@@ -813,10 +803,7 @@ window.onload = function() {
 	}
 
 	//State for the Victory screen
-	var Victory = function(game) {
-		console.log("Starting Victory state");
-	}
-	Victory.prototype = {
+	var Victory = {
 		preload: function(){
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
@@ -859,10 +846,7 @@ window.onload = function() {
 	
 	var broNames = ['paddle', 'swag', 'yolo', 'stripes', 'green', 'pink'];
 	
-	var Lineup = function(game) {
-		console.log("Starting Lineup state");
-	}
-	Lineup.prototype = {
+	var Lineup = {
 		preload: function(){
 			game.load.path = 'assets/sprites/';
 			
