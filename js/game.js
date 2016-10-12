@@ -72,7 +72,7 @@ window.onload = function() {
 	//var enemyInvulnerable = false, enemyInvulTween;
 	
 	//spawner variables
-	var items, rocks, bros, deadbros, powerups;
+	var items, rocks, bros, deadbros, powerups, bgWalls;
 
 	/*
 	//enemyTestCode
@@ -93,12 +93,14 @@ window.onload = function() {
 			[ 40, -10], // 4 - orange
 			[ 60,  10], // 5 - green
 			[-25,  15]  // 6 - pink
-		]
+		];
 
-	var world, bgWalls, water,
-		bgKeys  = ['bg1', 'bg2', 'bg3',
+	//other object variables
+	var world, water;
+	var bgKeys  = ['bg1', 'bg2', 'bg3',
 		           'bg5', 'bg6'];
-		skyKeys = ['sky1', 'sky2', 'sky2', 'sky3', 'sky3', 'sky4'];
+	var skyKeys = ['sky1', 'sky2', 'sky2',
+				   'sky3', 'sky3', 'sky4'];
 
 	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
 
