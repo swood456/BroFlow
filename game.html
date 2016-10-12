@@ -1,71 +1,22 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>Game Dev 1 Project 2</title>
-        
-        <script type="text/javascript" src="js/phaser.js"></script>
-
-        <script type="text/javascript" src="js/RandomSpawn.js"></script>
-
-    </head>
-    <body>
-
-    <script type="text/javascript">
-
-    window.onload = function() {
-
-        var game = new Phaser.Game(1334, 750, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
-
-        var player;
-
-        function preload () {
-
-            //load images
-            game.load.image('player', 'assets/sprites/player.png');
-        }
-
-        function create () {
-            //load arcade phsycis
-            game.physics.startSystem(Phaser.Physics.ARCADE);
-
-
-            game.stage.backgroundColor = '#0072bc';
-
-            //make a player thing
-            player = game.add.sprite(200,200, 'player');
-
-            game.physics.enable(player, Phaser.Physics.ARCADE);
-            
-            player.anchor.setTo(0.5,0.5);
-
-            player.body.collideWorldBounds = true;
-
-            player.body.drag.x = 750;
-            player.body.drag.y = 750;
-
-
-
-
-        }
-
-
-        function update(){
-            
-            if(game.input.activePointer.leftButton.isDown){
-
-
-                //move player towards mouse button
-                game.physics.arcade.moveToPointer(player, 500);
-                //game.physics.accelerateToPointer(player, this.game.input.activePointer, 600, 100, 100);
-            }
-
-        }
-
-    };
-
-    </script>
-
-    </body>
+<head>
+	<meta charset="UTF-8" />
+	<title>Game Dev 1 Project 2</title>
+	
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+	<script type="text/javascript" src="js/bgwalls.js"></script>
+	<script type="text/javascript" src="js/spawner.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
+</head>
+<body style="
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    ">
+	
+</body>
 </html>

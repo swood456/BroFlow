@@ -1,0 +1,31 @@
+function Spawner(game, parent, keys, minInt, maxInt, minY, maxY) {
+	this.game   = game;
+	this.group  = game.add.group(parent, undefined, false,
+		true, Phaser.Physics.ARCADE);
+	this.keys   = keys;
+	this.minInt = minInt;
+	this.maxInt = maxInt;
+	this.minY   = minY || 0;
+	this.maxY   = (maxY !== undefined) ? maxY : game.height;
+	this.timer  = game.rnd.between(minInt, maxInt);
+
+	this.active = true;
+}
+Spawner.prototype.update = function() {
+	if(this.active){
+		this.timer -= this.game.time.elapsedMS;
+		if (this.timer <= 0) {
+			this.spawn(
+				screenToWorldX(this.game.width),
+				this.game.rnd.between(this.minY, this.maxY),
+				this.game.rnd.pick(this.keys)
+			);
+			this.timer = this.game.rnd.between(this.minInt, this.maxInt);
+		}
+	}
+}
+Spawner.prototype.spawn = function(x, y, key) {
+	var s = this.group.getFirstDead(true, x, y, key);
+	s.autoCull = true;
+	s.outOfCameraBoundsKill = true;
+}
