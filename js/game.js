@@ -10,14 +10,18 @@ window.onload = function() {
 		return x + world.x;
 	}
 
+	//instantiate the game
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '');
 
+	//create the object the menu game state uses
 	var menu = function(game){
 		console.log("starting menu");
 	}
 	menu.prototype = {
 		preload: function(){
+			//set the file path for loading images
 			game.load.path = 'assets/sprites/';
+
 			//load a title image
 			game.load.image('title', 'title.png');
 		},
@@ -49,7 +53,7 @@ window.onload = function() {
 		this.game.state.start("gameplay");
 	}
 
-	//load game state
+	//create object to be used for gameplay state
 	var gameplay = function(game){
 		console.log("starting game");
 	}
@@ -60,6 +64,7 @@ window.onload = function() {
 		update: update
 	}
 	
+	//player variables	
 	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
 		scrollSpeed;
 
