@@ -97,9 +97,10 @@ window.onload = function() {
 
 	var infoText;
 	var world, bgWalls, water,
-		bgKeys = ['bg1', 'bg2', 'bg3',
-		          'bg4', 'bg5', 'bg6',
-		          'bg7', 'bg8', 'bg9'];
+		bgKeys  = ['bg1', 'bg2', 'bg3',
+		           'bg4', 'bg5', 'bg6',
+		           'bg7', 'bg8'];
+		skyKeys = ['sky1', 'sky2', 'sky2', 'sky3', 'sky3', 'sky4'];
 
 	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
 
@@ -109,7 +110,7 @@ window.onload = function() {
 
 		//load images
 		game.load.image ('player', 'mattress.png')
-		         .images(bgKeys)
+		         .images(bgKeys).images(skyKeys)
 		         .image ('bricks', 'bricks.png')
 		         .image ('boulder', 'boulder.png')
 		         .image ('item', 'star.png')
@@ -170,7 +171,7 @@ window.onload = function() {
 		water = game.add.tileSprite(0, 0, game.width, game.height, 'water');
 		
 		world    = game.add.group();
-		bgWalls  = new BGWalls(game, world, bgKeys);
+		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
 		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		deadbros = game.add.group(world, undefined, false, true, Phaser.Physics.ARCADE);
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
@@ -832,7 +833,7 @@ window.onload = function() {
 				boundsAlignV: "middle"
 			};
 			for (var i = 5; i >= 0; --i) {
-				var x = game.width * (i + 1.5) / 8;
+				var x = (game.width * (i + 1.5) / 8)|0;
 				game.add.sprite(x, game.world.centerY - 50,
 					'bro' + (i + 1)).anchor.set(0.5);
 				game.add.text(0, 0, broNames[i], style).setTextBounds(
