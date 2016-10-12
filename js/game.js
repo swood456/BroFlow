@@ -520,7 +520,7 @@ window.onload = function() {
 			}, this);
 			*/
 			game.time.events.add(1500, function(){
-				game.state.start("gameOver"); //Go to gameOver state if out of health
+				game.state.start("lineup"); //Go to gameOver state if out of health
 				//TODO add bubbles
 			}, this);
 			gameoverSound.play();
@@ -719,37 +719,6 @@ window.onload = function() {
 			});
 		}
 	}
-
-	//State for the GameOver screen
-	var GameOver = {
-		preload: function(){
-			game.load.path = 'assets/sprites/';
-			//Will Load a Game Over screen asset when said asset is available
-			//For now, use blank Title Screen again as placeholder
-			game.load.image('gameLost', 'title.png');
-		},
-
-		create: function(){
-			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameLost'); //add an image to the game to serve as the backdrop.
-
-			//  Moves the image anchor to the middle, so it centers inside the game properly
-			GOimage.anchor.set(0.5);
-
-			//  Enables all kind of input actions on this image (click, etc)
-			GOimage.inputEnabled = true;
-
-			GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
-
-			GOimage.events.onInputDown.add(function(){
-				game.state.start("lineup");
-			}, this);
-
-			//create a text object
-			var GOtext = game.add.text(100,100,"Game Over!", {font: "bold 32px Arial", fill: "#fff"});
-
-			BGMusic.stop();
-		}
-	}
 	
 	function RestartGame() {
 		//For this callback, return to the menu/title screen
@@ -911,7 +880,6 @@ window.onload = function() {
 	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
-	game.state.add("gameOver", GameOver);
 	game.state.add("victory", Victory);
 	game.state.add("lineup", Lineup);
 	game.state.add("instructions", Instructions);
