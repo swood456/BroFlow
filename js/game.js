@@ -430,9 +430,7 @@ window.onload = function() {
 	}
 
 	function collisionHandler(item1, item2){
-		console.log("Collision Detected At: "+ item1.y);
 		item1.y = this.game.rnd.between(bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		console.log("Moved to:  "+ item1.y);
 	}
 
 	/*
@@ -562,9 +560,6 @@ window.onload = function() {
 
 		//play high five if enough dudes
 		if(health >= 3){
-			//play high five
-			console.log("play high five");
-
 			//make bros 2 and 3 play high five animation
 			var highFiveAnimation = player.bros[1].animations.play('highfive');
 			player.bros[1].animations.currentAnim.onComplete.add(function () {
@@ -884,8 +879,6 @@ window.onload = function() {
 			         .image ('cup', 'cup.png')
 			         .image ('glowsticks', 'glowsticks.png')
 			         .image ('tshirts', 'tshirt.png');
-
-
 
 		},
 		create: function(){
