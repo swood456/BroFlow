@@ -629,7 +629,7 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt += 1250;
 			items.maxInt += 550;
-			rocks.minInt -= 750;
+			rocks.minInt -= 1100;
 			rocks.maxInt -= 850;
 			bros.minInt += 500;
 			bros.maxInt += 500;
@@ -651,7 +651,7 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt += 1000;
 			items.maxInt += 1500;
-			rocks.minInt -= 800;
+			rocks.minInt -= 400;
 			rocks.maxInt -= 550;
 			bros.minInt += 500;
 			bros.maxInt += 500;
