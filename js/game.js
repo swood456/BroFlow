@@ -520,9 +520,15 @@ window.onload = function() {
 			h = player.bros.length;
 		} else if (h <= 0) {
 			h = 0;
+			/*
 			game.camera.fade('#000000', 1500, false);
 			game.camera.onFadeComplete.add(function(){
 				game.state.start("gameOver"); //Go to gameOver state if out of health
+			}, this);
+			*/
+			game.time.events.add(1500, function(){
+				game.state.start("gameOver"); //Go to gameOver state if out of health
+				//TODO add bubbles
 			}, this);
 			gameoverSound.play();
 		}
