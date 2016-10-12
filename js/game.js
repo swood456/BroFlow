@@ -10,29 +10,36 @@ window.onload = function() {
 		return x + world.x;
 	}
 
+	//instantiate the game
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '');
 
+	//create the object the menu game state uses
 	var menu = function(game){
 		console.log("starting menu");
 	}
 	menu.prototype = {
 		preload: function(){
+			//set the file path for loading images
 			game.load.path = 'assets/sprites/';
+
 			//load a title image
 			game.load.image('title', 'title.png');
 		},
 
 		create: function(){
+			//load in title screen image
 			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
 
-			//  Moves the image anchor to the middle, so it centers inside the game properly
+			//Moves the image anchor to the middle, so it centers inside the game properly
 			image.anchor.set(0.5);
 
-			//  Enables all kind of input actions on this image (click, etc)
+			//Enables all kind of input actions on this image (click, etc)
 			image.inputEnabled = true;
 
+			//add in title screen text
 			text = game.add.text(250, 16, '', { fill: '#ffffff' });
 
+			//allow player to go to next level
 			image.events.onInputDown.add(listener, this);
 
 			//create a text object
@@ -46,7 +53,7 @@ window.onload = function() {
 		this.game.state.start("gameplay");
 	}
 
-
+	//create object to be used for gameplay state
 	var gameplay = function(game){
 		console.log("starting game");
 	}
@@ -57,32 +64,22 @@ window.onload = function() {
 		update: update
 	}
 	
+	//player variables	
 	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
-		scrollSpeed;
+		scrollSpeed, invulnerable = false, invulTween,
+		powerupActive = false;
 
-	var invulnerable = false, invulTween, powerupActive = false, enemyInvulnerable = false, enemyInvulTween;
+	//var enemyInvulnerable = false, enemyInvulTween;
 	
+	//spawner variables
 	var items, rocks, bros, deadbros, powerups;
 
-
+	/*
 	//enemyTestCode
 	var enemy;
 	var enemySpawned = false;
 	var enemyHealth = 3;
-	
-
-/*ORIGINAL DUDE BRO POSITIONS
-	var score, labelScore, health, labelHealth, healthPos = [
-			[-10,  100], // 1
-			[-47, -22], // 2
-			[-8, -20], // 3
-			[50,  0], // 4
-			[ 70, -20], // 5
-			[ 30, -10] // 6
-		],
-		currentLevel;
-*/
-//JORDAN SUGGESTED DUDE BRO POSITIONS
+	*/
 	var score, labelScore, health, labelHealth, healthPos = [
 			[-10,  95], // 1 - paddler
 			[-42, -22], // 2 - red swag
@@ -92,14 +89,11 @@ window.onload = function() {
 			[-25,  15]  // 6 - pink
 		],
 		currentLevel;
-	//ends here
-
 
 	var infoText;
 	var world, bgWalls, water,
 		bgKeys  = ['bg1', 'bg2', 'bg3',
-		           'bg4', 'bg5', 'bg6',
-		           'bg7', 'bg8'];
+		           'bg5', 'bg6'];
 		skyKeys = ['sky1', 'sky2', 'sky2', 'sky3', 'sky3', 'sky4'];
 
 	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
@@ -142,7 +136,7 @@ window.onload = function() {
 
 		
 		//enemyTestCode
-		game.load.image ('enemy', 'enemy.png');
+		//game.load.image ('enemy', 'enemy.png');
 		
 
 		//Load in Sound effects and BG Music
@@ -161,7 +155,7 @@ window.onload = function() {
 
 	function create () {
 		invulnerable = false;
-		enemyInvulnerable = false;
+		//enemyInvulnerable = false;
 		
 		game.time.advancedTiming = true;
 		//load arcade physics
@@ -178,12 +172,14 @@ window.onload = function() {
 		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
-
-		//make the enemy object to be spawned later
+		/*
+		//make the enemy object to be spawned later enemyTestCode
 		enemy = game.add.sprite(-100, game.world.centerY, 'enemy');
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
 		enemy.kill();
+
+		*/
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -335,7 +331,14 @@ window.onload = function() {
 			player.top = bgWalls.minHeight;
 			player.body.velocity.y = 0;
 		}
-
+		/*
+		//Code for enemy collision with Walls
+		if (enemy.top < bgWalls.minHeight) {
+			enemy.top = bgWalls.minHeight;
+			enemy.body.velocity.y = 0;
+			player.top = enemy.top + enemy.height; //Don't let the player continue up either to prevent overlapping with enemy
+		}
+		*/
 		//gradually speed up the world when moving between levels
 		if(currentLevel === 2 && scrollSpeed < 7){
 			scrollSpeed += 0.05;
@@ -390,13 +393,14 @@ window.onload = function() {
 		game.physics.arcade.overlap(items.group, powerups.group, collisionHandler, null, this);
 		game.physics.arcade.overlap(bros.group, powerups.group, collisionHandler, null, this);
 
-		
+		/*
 		//enemyTestCode
 		if(enemySpawned){
 			game.physics.arcade.moveToObject(enemy, player, 100);
 			game.physics.arcade.collide (player, enemy);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
+		*/
 
 		//update score
 		labelScore.text = score + " fps: " + game.time.fps;
@@ -412,13 +416,10 @@ window.onload = function() {
 		console.log("Moved to:  "+ item1.y);
 	}
 
+	/*
 	//enemyTestCode
 	function spawnEnemy(){
-		/*
-		enemy = game.add.sprite(200,400, 'enemy');
-		game.physics.enable(enemy, Phaser.Physics.ARCADE);
-		enemy.anchor.setTo(0.5,0.5);
-		*/
+		
 		//enemy.body.collideWorldBounds = true;
 
 		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
@@ -426,11 +427,14 @@ window.onload = function() {
 
 		enemy.alive = enemy.exists = true;
 		enemyHealth = 3;
-		setEnemyInvulnerable(3000);
+		setEnemyInvulnerable(3000); //Enemy is given 3 seconds of invincibility to make its way on screen
+
 
 		enemySpawned = true;
 	}
+	*/
 
+	/*
 	function enemyHitRock(enemy){
 		if(!enemyInvulnerable){ 
 			enemyHealth -= 1;
@@ -472,6 +476,7 @@ window.onload = function() {
 			} );
 		}
 	}
+	*/
 	
 	function setHealth(h, noEffect, noInvul) {
 		
@@ -567,7 +572,7 @@ window.onload = function() {
 			currentLevel = 2;
 
 			//enemyTestCode
-			spawnEnemy();
+			//spawnEnemy();
 
 			//change object that is spawned
 			items.keys = ['pickup2'];
