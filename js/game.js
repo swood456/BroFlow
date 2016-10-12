@@ -877,18 +877,28 @@ window.onload = function() {
 		preload: function(){
 			//load in objects for info
 			game.load.path = 'assets/sprites/';
+			game.load.image ('rock', 'boulder.png')
+			         .image ('bricks', 'bricks.png')
+			         .image ('cup', 'cup.png')
+			         .image ('glowsticks', 'glowsticks.png')
+			         .image ('tshirts', 'tshirt.png');
 
 		},
 		create: function(){
 			game.stage.backgroundColor = '#2D2D2D';
-			var textStyle = {font: "32px Arial", fill: "#500050", align: "center"};
+			var textStyle = {font: "32px Arial", fill: "#DEE4ED", align: "center"};
 
 			//put text to convey how to play the game
-			game.add.text(100,100, "Tap the screen to move towards that point", textStyle);
-
-
+			game.add.text(75,50, "Tap the screen to move towards that point", textStyle);
 			game.add.text(700, 300, "Avoid rocks and bricks", textStyle);
-			game.add.text(200, 450, "Collect the cups, glowsticks, and shirts to advance", textStyle);
+			game.add.text(200, 500, "Collect the cups, glowsticks, and t-shirts to advance", textStyle);
+
+			//add in objects to screen
+			game.add.sprite(770,200, 'rock');
+			game.add.sprite(925,200, 'bricks');
+			game.add.sprite(365, 450, 'cup');
+			game.add.sprite(500, 450, 'glowsticks');
+			game.add.sprite(690, 450, 'tshirts');
 
 
 			game.input.onDown.add(RestartGame, this);
