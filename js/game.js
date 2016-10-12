@@ -23,16 +23,19 @@ window.onload = function() {
 		},
 
 		create: function(){
+			//load in title screen image
 			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
 
-			//  Moves the image anchor to the middle, so it centers inside the game properly
+			//Moves the image anchor to the middle, so it centers inside the game properly
 			image.anchor.set(0.5);
 
-			//  Enables all kind of input actions on this image (click, etc)
+			//Enables all kind of input actions on this image (click, etc)
 			image.inputEnabled = true;
 
+			//add in title screen text
 			text = game.add.text(250, 16, '', { fill: '#ffffff' });
 
+			//allow player to go to next level
 			image.events.onInputDown.add(listener, this);
 
 			//create a text object
@@ -46,7 +49,7 @@ window.onload = function() {
 		this.game.state.start("gameplay");
 	}
 
-
+	//load game state
 	var gameplay = function(game){
 		console.log("starting game");
 	}
