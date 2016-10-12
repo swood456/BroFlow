@@ -798,7 +798,7 @@ window.onload = function() {
 				}, this);
 			});
 			
-			BGMusic.fadeOut(2000);
+			BGMusic.fadeOut(990);
 			BGMusic.onFadeComplete.add(function(){
 				winSound.play();
 			});
@@ -813,7 +813,7 @@ window.onload = function() {
 			///game.add.sprite(game.world.centerX, game.world.centerY, 'endBoys');
 
 			//add in animations
-			endBroSprite.animations.add('highFive', [0,1,2,3,4], 2, false).onComplete.add(function(){
+			endBroSprite.animations.add('highFive', [0,1,2,3,4], 4, false).onComplete.add(function(){
 				endBroSprite.animations.play('idleBros');
 			});
 			endBroSprite.animations.add('idleBros', [4], 1, true);
@@ -824,11 +824,8 @@ window.onload = function() {
 
 			//  Enables all kind of input actions on this image (click, etc)
 			VicImage.inputEnabled = true;
-
-			//create a text object
-			var VicText = game.add.text(100,100,"You Win!", {font: "bold 32px Arial", fill: "#fff"});
 		},
-
+		
 		update: function(){
 			if(endBroSprite.scale.x > 0){
 				endBroSprite.scale.x -= 0.002;
