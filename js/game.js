@@ -379,7 +379,7 @@ window.onload = function() {
 		//enemyTestCode
 		if(enemySpawned){
 			game.physics.arcade.collide (player, enemy);
-			game.physics.arcade.moveToObject(enemy, player, 10);
+			game.physics.arcade.moveToObject(enemy, player, 100);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
 
@@ -398,7 +398,7 @@ window.onload = function() {
 		enemy = game.add.sprite(-300,400, 'enemy');
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
-		enemy.body.collideWorldBounds = true;
+		//enemy.body.collideWorldBounds = true;
 
 		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		//enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
