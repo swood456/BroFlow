@@ -11,7 +11,7 @@ window.onload = function() {
 	}
 
 	//instantiate the game
-	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '');
+	var game = new Phaser.Game(1334, 750, Phaser.AUTO, ''), bubbleScreen;
 
 	//create the object the menu game state uses
 	var menu = {
@@ -22,16 +22,15 @@ window.onload = function() {
 			//load a title image
 			game.load.image('title', 'title 2.png')
 			         .image('instructionButton', 'instructions_button.png')
-			         .image('playButton', 'play_button.png');
+			         .image('playButton', 'play_button.png')
+			         .image('bubbles', 'bubbles.png');
 		},
 
 		create: function(){
 			//load in title screen image
 			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
-
 			//Moves the image anchor to the middle, so it centers inside the game properly
 			image.anchor.set(0.5);
-
 			//Enables all kind of input actions on this image (click, etc)
 			image.inputEnabled = true;
 			
@@ -49,7 +48,8 @@ window.onload = function() {
 				//make a callback to go to the game state when finished
 				this.game.state.start('instructions');
 			}).anchor.set(0, 0);
-
+			
+			
 		}		
 	}
 
