@@ -65,9 +65,9 @@ window.onload = function() {
 	}
 	
 	//player variables	
-	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
-		scrollSpeed, invulnerable = false, invulTween,
-		powerupActive = false;
+	var player, allowControl, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
+		scrollSpeed, invulnerable, invulTween,
+		powerupActive;
 
 	//var enemyInvulnerable = false, enemyInvulTween;
 	
@@ -158,7 +158,8 @@ window.onload = function() {
 	}
 
 	function create () {
-		invulnerable = false;
+		invulnerable = powerupActive = false;
+		allowControl = true;
 		//enemyInvulnerable = false;
 		
 		game.time.advancedTiming = true;
@@ -362,7 +363,7 @@ window.onload = function() {
 		powerups.update();
 		
 		//check if the player is alive and player is "tapping"
-		if(health > 0 && game.input.activePointer.leftButton.isDown) {
+		if(allowControl && health > 0 && game.input.activePointer.leftButton.isDown) {
 			//move player towards mouse button
 			game.physics.arcade.moveToPointer(player,
 				game.math.bezierInterpolation(
@@ -636,17 +637,13 @@ window.onload = function() {
 	function moveOffscreen(){
 		//remove player's ability to move
 		boatSpeed = 0;
-		player.body.collideWorldBounds = false;
+		allowControl = player.body.collideWorldBounds = false;
 		player.bros[0].animations.play('speedRow');
-
-		//move the boat
-		console.log("attmept to tween");
 
 		//game.add.tween(player).to({ x: 2000 }, 3000, Phaser.Easing.Sinusoidal.InOut, true, 0, 0, false);
 		var moveTween = game.add.tween(player).to({ x: game.width + player.width }, 3000, Phaser.Easing.Sinusoidal.InOut, false, 0, 0, false);
 		moveTween.onComplete.add(moveToEndGameScreen, this);
 		moveTween.start();
-
 
 		/*var moveTween = game.add.tween(player);
 		moveTween.to({x:2000}, 3000,Phaser.Easing.Bounce.In);
