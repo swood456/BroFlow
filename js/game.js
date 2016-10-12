@@ -80,17 +80,21 @@ window.onload = function() {
 	var enemySpawned = false;
 	var enemyHealth = 3;
 	*/
-	var score, labelScore, health, labelHealth, healthPos = [
+	
+	//text variables
+	var labelScore, labelHealth, infoText;
+
+	//various global variables
+	var score, health, currentLevel;
+	var healthPos = [
 			[-10,  95], // 1 - paddler
 			[-42, -22], // 2 - red swag
 			[-3 , -20], // 3 - blue yolo
 			[ 40, -10], // 4 - orange
 			[ 60,  10], // 5 - green
 			[-25,  15]  // 6 - pink
-		],
-		currentLevel;
+		]
 
-	var infoText;
 	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
 		          'bg4', 'bg5', 'bg6'];
