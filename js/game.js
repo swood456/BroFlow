@@ -44,12 +44,11 @@ window.onload = function() {
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
 
-			var button;
 			//add in instruction button
-
+			game.add.button(game.world.centerX - 95, 500, 'instructionButton', instructionListener);
 
 			//add in play button
-			button = game.add.button(game.world.centerX - 95, 400, 'playButton', listener);
+			game.add.button(game.world.centerX - 95, 400, 'playButton', listener);
 
 		}		
 	}
@@ -57,6 +56,11 @@ window.onload = function() {
 	function listener(){
 		//make a callback to go to the game state when finished
 		this.game.state.start("gameplay");
+	}
+
+	function instructionListener(){
+		//make a callback to go to the game state when finished
+		this.game.state.start("instructions");
 	}
 
 	//create object to be used for gameplay state
@@ -876,28 +880,25 @@ window.onload = function() {
 		}
 	}
 
-	/*var Instructions = function(game){
-		console.log("starting instructions menu");
-	}
-	Instructions.prototype = {
+	var Instructions = {
 		preload: function(){
 			//load in objects for info
 			game.load.path = 'assets/sprites/';
 
-		}
+		},
 		create: function(){
 			game.stage.backgroundColor = '#2D2D2D';
 			game.input.onDown.add(RestartGame, this);
 
 		}
-	}*/
+	}
 	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
 	game.state.add("gameOver", GameOver);
 	game.state.add("victory", Victory);
 	game.state.add("lineup", Lineup);
-	//game.state.add("instructions", Instructions);
+	game.state.add("instructions", Instructions);
 	
 	game.state.start("menu");
 };
