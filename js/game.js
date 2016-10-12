@@ -101,8 +101,7 @@ window.onload = function() {
 	var infoText;
 	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
-		          'bg4', 'bg5', 'bg6',
-		          'bg7', 'bg8', 'bg9'];
+		          'bg4', 'bg5', 'bg6'];
 
 	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
 
