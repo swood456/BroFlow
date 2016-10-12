@@ -25,15 +25,15 @@ window.onload = function() {
 		create: function(){
 			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
 
-    		//  Moves the image anchor to the middle, so it centers inside the game properly
-    		image.anchor.set(0.5);
+			//  Moves the image anchor to the middle, so it centers inside the game properly
+			image.anchor.set(0.5);
 
-    		//  Enables all kind of input actions on this image (click, etc)
-    		image.inputEnabled = true;
+			//  Enables all kind of input actions on this image (click, etc)
+			image.inputEnabled = true;
 
-    		text = game.add.text(250, 16, '', { fill: '#ffffff' });
+			text = game.add.text(250, 16, '', { fill: '#ffffff' });
 
-    		image.events.onInputDown.add(listener, this);
+			image.events.onInputDown.add(listener, this);
 
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
@@ -132,7 +132,6 @@ window.onload = function() {
 		         .image ('pickup3Icon', 'tshirt icon.png')
 		         .image ('water', 'water 1.png')
 		         .image ('powerup', 'soda bottle 2.png')
-		         .spritesheet ('dude', 'dude.png', 32, 48)
 		         .spritesheet ('dudebro1', 'dudebro_PaddleSpriteSheet_12fps_120pixelsWide.png', 120, 140)
 		         .spritesheet ('dudebro2', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
 		         .spritesheet ('dudebro3', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80)
@@ -738,15 +737,17 @@ window.onload = function() {
 		create: function(){
 			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameLost'); //add an image to the game to serve as the backdrop.
 
-    		//  Moves the image anchor to the middle, so it centers inside the game properly
-    		GOimage.anchor.set(0.5);
+			//  Moves the image anchor to the middle, so it centers inside the game properly
+			GOimage.anchor.set(0.5);
 
-    		//  Enables all kind of input actions on this image (click, etc)
-    		GOimage.inputEnabled = true;
+			//  Enables all kind of input actions on this image (click, etc)
+			GOimage.inputEnabled = true;
 
-    		GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
+			GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
 
-    		GOimage.events.onInputDown.add(RestartGame, this);
+			GOimage.events.onInputDown.add(function(){
+				game.state.start("lineup");
+			}, this);
 
 			//create a text object
 			var GOtext = game.add.text(100,100,"Game Over!", {font: "bold 32px Arial", fill: "#fff"});
@@ -782,6 +783,9 @@ window.onload = function() {
 			    whipSound = game.add.audio('whipcrack');
 			winSound.onStop.add(function(){
 				whipSound.play();
+				VicImage.events.onInputDown.add(function(){
+					game.state.start("lineup");
+				}, this);
 			});
 			
 			BGMusic.fadeOut(2000);
@@ -791,26 +795,57 @@ window.onload = function() {
 			
 			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
 
-    		//  Moves the image anchor to the middle, so it centers inside the game properly
-    		VicImage.anchor.set(0.5);
+			//  Moves the image anchor to the middle, so it centers inside the game properly
+			VicImage.anchor.set(0.5);
 
-    		//  Enables all kind of input actions on this image (click, etc)
-    		VicImage.inputEnabled = true;
-
-    		VicText = game.add.text(250, 16, '', { fill: '#ffffff' });
-
-    		VicImage.events.onInputDown.add(RestartGame, this);
+			//  Enables all kind of input actions on this image (click, etc)
+			VicImage.inputEnabled = true;
 
 			//create a text object
 			var VicText = game.add.text(100,100,"You Win!", {font: "bold 32px Arial", fill: "#fff"});
 		}
 	}
 	
+	var broNames = ['paddle', 'swag', 'yolo', 'stripes', 'green', 'pink'];
+	
+	var Lineup = function(game) {
+		console.log("Starting Lineup state");
+	}
+	Lineup.prototype = {
+		preload: function(){
+			game.load.path = 'assets/sprites/';
+			
+			for (var i = broNames.length - 1; i >= 0; --i) {
+				game.load.image('bro' + (i + 1),
+					broNames[i] + (health > i ? '_static.png' : '_sink.png'));
+			}
+		},
+
+		create: function(){
+			game.stage.backgroundColor = '#2D2D2D';
+			game.input.onDown.add(RestartGame, this);
+			
+			var style = {
+				font: "bold 32px Comic Sans MS",
+				fill: "#fff",
+				boundsAlignH: "center",
+				boundsAlignV: "middle"
+			};
+			for (var i = 5; i >= 0; --i) {
+				var x = game.width * (i + 1.5) / 8;
+				game.add.sprite(x, game.world.centerY - 50,
+					'bro' + (i + 1)).anchor.set(0.5);
+				game.add.text(0, 0, broNames[i], style).setTextBounds(
+					x, game.world.centerY + 20);
+			}
+		}
+	}
 	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
 	game.state.add("gameOver", GameOver);
 	game.state.add("victory", Victory);
+	game.state.add("lineup", Lineup);
 	
 	game.state.start("menu");
 };
