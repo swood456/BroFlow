@@ -60,15 +60,18 @@ window.onload = function() {
 	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
 		scrollSpeed;
 
-	var invulnerable = false, invulTween, powerupActive = false, enemyInvulnerable = false, enemyInvulTween;
+	var invulnerable = false, invulTween, powerupActive = false;
+
+	//var enemyInvulnerable = false, enemyInvulTween;
 	
 	var items, rocks, bros, deadbros, powerups;
 
-
+	/*
 	//enemyTestCode
 	var enemy;
 	var enemySpawned = false;
 	var enemyHealth = 3;
+	*/
 	
 
 /*ORIGINAL DUDE BRO POSITIONS
@@ -141,7 +144,7 @@ window.onload = function() {
 
 		
 		//enemyTestCode
-		game.load.image ('enemy', 'enemy.png');
+		//game.load.image ('enemy', 'enemy.png');
 		
 
 		//Load in Sound effects and BG Music
@@ -160,7 +163,7 @@ window.onload = function() {
 
 	function create () {
 		invulnerable = false;
-		enemyInvulnerable = false;
+		//enemyInvulnerable = false;
 		
 		game.time.advancedTiming = true;
 		//load arcade physics
@@ -177,12 +180,14 @@ window.onload = function() {
 		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
-
-		//make the enemy object to be spawned later
+		/*
+		//make the enemy object to be spawned later enemyTestCode
 		enemy = game.add.sprite(-100, game.world.centerY, 'enemy');
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
 		enemy.kill();
+
+		*/
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -328,7 +333,14 @@ window.onload = function() {
 			player.top = bgWalls.minHeight;
 			player.body.velocity.y = 0;
 		}
-
+		/*
+		//Code for enemy collision with Walls
+		if (enemy.top < bgWalls.minHeight) {
+			enemy.top = bgWalls.minHeight;
+			enemy.body.velocity.y = 0;
+			player.top = enemy.top + enemy.height; //Don't let the player continue up either to prevent overlapping with enemy
+		}
+		*/
 		//gradually speed up the world when moving between levels
 		if(currentLevel === 2 && scrollSpeed < 7){
 			scrollSpeed += 0.05;
@@ -383,13 +395,14 @@ window.onload = function() {
 		game.physics.arcade.overlap(items.group, powerups.group, collisionHandler, null, this);
 		game.physics.arcade.overlap(bros.group, powerups.group, collisionHandler, null, this);
 
-		
+		/*
 		//enemyTestCode
 		if(enemySpawned){
 			game.physics.arcade.moveToObject(enemy, player, 100);
 			game.physics.arcade.collide (player, enemy);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
+		*/
 
 		//update score
 		labelScore.text = score + " fps: " + game.time.fps;
@@ -401,13 +414,10 @@ window.onload = function() {
 		console.log("Moved to:  "+ item1.y);
 	}
 
+	/*
 	//enemyTestCode
 	function spawnEnemy(){
-		/*
-		enemy = game.add.sprite(200,400, 'enemy');
-		game.physics.enable(enemy, Phaser.Physics.ARCADE);
-		enemy.anchor.setTo(0.5,0.5);
-		*/
+		
 		//enemy.body.collideWorldBounds = true;
 
 		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
@@ -415,11 +425,14 @@ window.onload = function() {
 
 		enemy.alive = enemy.exists = true;
 		enemyHealth = 3;
-		setEnemyInvulnerable(3000);
+		setEnemyInvulnerable(3000); //Enemy is given 3 seconds of invincibility to make its way on screen
+
 
 		enemySpawned = true;
 	}
+	*/
 
+	/*
 	function enemyHitRock(enemy){
 		if(!enemyInvulnerable){ 
 			enemyHealth -= 1;
@@ -461,6 +474,7 @@ window.onload = function() {
 			} );
 		}
 	}
+	*/
 	
 	function setHealth(h, noEffect, noInvul) {
 		
@@ -557,7 +571,7 @@ window.onload = function() {
 			currentLevel = 2;
 
 			//enemyTestCode
-			spawnEnemy();
+			//spawnEnemy();
 
 			//change object that is spawned
 			items.keys = ['pickup2'];
