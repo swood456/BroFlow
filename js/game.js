@@ -20,9 +20,9 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 
 			//load a title image
-			game.load.image('title', 'title.png');
-			game.load.image('instructionButton', 'instructionButton.png');
-			game.load.image('playButton', 'playButton.png');
+			game.load.image('title', 'title 2.png');
+			game.load.image('instructionButton', 'instructions_button.png');
+			game.load.image('playButton', 'play_button.png');
 		},
 
 		create: function(){
@@ -34,21 +34,17 @@ window.onload = function() {
 
 			//Enables all kind of input actions on this image (click, etc)
 			image.inputEnabled = true;
-
-			//add in title screen text
-			text = game.add.text(250, 16, '', { fill: '#ffffff' });
-
-			//allow player to go to next level
-			//image.events.onInputDown.add(listener, this);
-
+			
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
 
-			//add in instruction button
-			game.add.button(game.world.centerX - 95, 500, 'instructionButton', instructionListener);
-
 			//add in play button
-			game.add.button(game.world.centerX - 95, 400, 'playButton', listener);
+			game.add.button(game.world.centerX - 50, 600, 'playButton',
+				listener).anchor.set(1, 0);
+			
+			//add in instruction button
+			game.add.button(game.world.centerX + 50, 600, 'instructionButton',
+				instructionListener).anchor.set(0, 0);
 
 		}		
 	}
