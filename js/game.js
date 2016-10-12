@@ -23,17 +23,20 @@ window.onload = function() {
 		},
 
 		create: function(){
+			//load in title screen image
 			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
 
-    		//  Moves the image anchor to the middle, so it centers inside the game properly
-    		image.anchor.set(0.5);
+			//Moves the image anchor to the middle, so it centers inside the game properly
+			image.anchor.set(0.5);
 
-    		//  Enables all kind of input actions on this image (click, etc)
-    		image.inputEnabled = true;
+			//Enables all kind of input actions on this image (click, etc)
+			image.inputEnabled = true;
 
-    		text = game.add.text(250, 16, '', { fill: '#ffffff' });
+			//add in title screen text
+			text = game.add.text(250, 16, '', { fill: '#ffffff' });
 
-    		image.events.onInputDown.add(listener, this);
+			//allow player to go to next level
+			image.events.onInputDown.add(listener, this);
 
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
@@ -46,7 +49,7 @@ window.onload = function() {
 		this.game.state.start("gameplay");
 	}
 
-
+	//load game state
 	var gameplay = function(game){
 		console.log("starting game");
 	}
@@ -98,10 +101,10 @@ window.onload = function() {
 	//ends here
 
 
+	var infoText;
 	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
-		          'bg4', 'bg5', 'bg6',
-		          'bg7', 'bg8', 'bg9'];
+		          'bg4', 'bg5', 'bg6'];
 
 	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
 
@@ -134,7 +137,6 @@ window.onload = function() {
 		         .image ('pickup3Icon', 'tshirt icon.png')
 		         .image ('water', 'water 1.png')
 		         .image ('powerup', 'soda bottle 2.png')
-		         .spritesheet ('dude', 'dude.png', 32, 48)
 		         .spritesheet ('dudebro1', 'dudebro_PaddleSpriteSheet_12fps_120pixelsWide.png', 120, 140)
 		         .spritesheet ('dudebro2', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
 		         .spritesheet ('dudebro3', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80)
@@ -280,6 +282,12 @@ window.onload = function() {
 
 		
 
+		//info stuff
+		var infoStyle = {font: "32px Arial", fill: "#500050", align: "center"};
+		infoText = game.add.text(game.width / 2, 50, "Tap the screen to move\nCollect red solo cups for your party", infoStyle);
+
+		infoText.anchor.set(0.5,0.5);
+		game.time.events.add(3000, clearInfoText, this);
 		
 
 		//score label
@@ -406,6 +414,10 @@ window.onload = function() {
 
 		//update score
 		labelScore.text = score + " fps: " + game.time.fps;
+	}
+
+	function clearInfoText(){
+		infoText.text = "";
 	}
 
 	function collisionHandler(item1, item2){
@@ -559,10 +571,9 @@ window.onload = function() {
 		}
 
 		var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup' + currentLevel +'Icon');
-		pickupIndicator.alpha = 0.9;
+		//pickupIndicator.alpha = 0.9;
 		pickupIndicator.anchor.set(0.5, 0.5);
 		
-
 		//change levels
 		if(score >= 5 && currentLevel === 1){
 			console.log("move to level 2");
@@ -586,6 +597,10 @@ window.onload = function() {
 			powerups.minInt += 1250;
 			powerups.maxInt += 1000;
 
+			//give player info on what to do next
+			infoText.text = "Now collect glow sticks";
+			game.time.events.add(3000, clearInfoText, this);
+
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
 			//move to level 2
@@ -603,6 +618,9 @@ window.onload = function() {
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
 			powerups.maxInt += 500;
+
+			infoText.text = "Finally, collect your fraternity jerseys,\nBeta Rho"
+			game.time.events.add(3000, clearInfoText, this);
 
 		}
 
@@ -735,15 +753,17 @@ window.onload = function() {
 		create: function(){
 			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameLost'); //add an image to the game to serve as the backdrop.
 
-    		//  Moves the image anchor to the middle, so it centers inside the game properly
-    		GOimage.anchor.set(0.5);
+			//  Moves the image anchor to the middle, so it centers inside the game properly
+			GOimage.anchor.set(0.5);
 
-    		//  Enables all kind of input actions on this image (click, etc)
-    		GOimage.inputEnabled = true;
+			//  Enables all kind of input actions on this image (click, etc)
+			GOimage.inputEnabled = true;
 
-    		GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
+			GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
 
-    		GOimage.events.onInputDown.add(RestartGame, this);
+			GOimage.events.onInputDown.add(function(){
+				game.state.start("lineup");
+			}, this);
 
 			//create a text object
 			var GOtext = game.add.text(100,100,"Game Over!", {font: "bold 32px Arial", fill: "#fff"});
@@ -767,33 +787,81 @@ window.onload = function() {
 			//Will Load a Game Over screen asset when said asset is available
 			//For now, use blank Title Screen again as placeholder
 			game.load.image('gameWon', 'title.png');
+			
+			game.load.path = 'assets/sounds/';
+			
+			game.load.audio('uptop', 'uptop.mp3')
+			         .audio('whipcrack', 'whipcrack.mp3');
 		},
 
 		create: function(){
+			var winSound = game.add.audio('uptop'),
+			    whipSound = game.add.audio('whipcrack');
+			winSound.onStop.add(function(){
+				whipSound.play();
+				VicImage.events.onInputDown.add(function(){
+					game.state.start("lineup");
+				}, this);
+			});
+			
+			BGMusic.fadeOut(2000);
+			BGMusic.onFadeComplete.add(function(){
+				winSound.play();
+			});
+			
 			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
 
-    		//  Moves the image anchor to the middle, so it centers inside the game properly
-    		VicImage.anchor.set(0.5);
+			//  Moves the image anchor to the middle, so it centers inside the game properly
+			VicImage.anchor.set(0.5);
 
-    		//  Enables all kind of input actions on this image (click, etc)
-    		VicImage.inputEnabled = true;
-
-    		VicText = game.add.text(250, 16, '', { fill: '#ffffff' });
-
-    		VicImage.events.onInputDown.add(RestartGame, this);
+			//  Enables all kind of input actions on this image (click, etc)
+			VicImage.inputEnabled = true;
 
 			//create a text object
 			var VicText = game.add.text(100,100,"You Win!", {font: "bold 32px Arial", fill: "#fff"});
 		}
 	}
 	
+	var broNames = ['paddle', 'swag', 'yolo', 'stripes', 'green', 'pink'];
+	
+	var Lineup = function(game) {
+		console.log("Starting Lineup state");
+	}
+	Lineup.prototype = {
+		preload: function(){
+			game.load.path = 'assets/sprites/';
+			
+			for (var i = broNames.length - 1; i >= 0; --i) {
+				game.load.image('bro' + (i + 1),
+					broNames[i] + (health > i ? '_static.png' : '_sink.png'));
+			}
+		},
+
+		create: function(){
+			game.stage.backgroundColor = '#2D2D2D';
+			game.input.onDown.add(RestartGame, this);
+			
+			var style = {
+				font: "bold 32px Comic Sans MS",
+				fill: "#fff",
+				boundsAlignH: "center",
+				boundsAlignV: "middle"
+			};
+			for (var i = 5; i >= 0; --i) {
+				var x = game.width * (i + 1.5) / 8;
+				game.add.sprite(x, game.world.centerY - 50,
+					'bro' + (i + 1)).anchor.set(0.5);
+				game.add.text(0, 0, broNames[i], style).setTextBounds(
+					x, game.world.centerY + 20);
+			}
+		}
+	}
 	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
 	game.state.add("gameOver", GameOver);
 	game.state.add("victory", Victory);
-
-	game.state.start("menu");
-
+	game.state.add("lineup", Lineup);
 	
+	game.state.start("menu");
 };
