@@ -52,7 +52,7 @@ window.onload = function() {
 
 
 			//add in play button
-			button = game.add.button(game, game.world.centerX - 95, 400, 'playButton', listener);
+			button = game.add.button(game.world.centerX - 95, 400, 'playButton', listener);
 
 		}		
 	}
