@@ -96,8 +96,8 @@ window.onload = function() {
 		];
 
 	//other object variables
-	var world, water;
-	var bgKeys  = ['bg1', 'bg2', 'bg3',
+	var world, bgWalls, water,
+		bgKeys  = ['bg1', 'bg1', 'bg1', 'bg2', 'bg3', 'bg3',
 		           'bg5', 'bg6'];
 	var skyKeys = ['sky1', 'sky2', 'sky2',
 				   'sky3', 'sky3', 'sky4'];
