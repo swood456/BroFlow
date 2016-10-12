@@ -64,10 +64,12 @@ window.onload = function() {
 	
 	var items, rocks, bros, deadbros, powerups;
 
-	/*
+
 	//enemyTestCode
 	var enemy;
-	*/
+	var enemySpawned = false;
+	var enemyHealth = 3;
+	
 
 /*ORIGINAL DUDE BRO POSITIONS
 	var score, labelScore, health, labelHealth, healthPos = [
@@ -137,10 +139,10 @@ window.onload = function() {
 		         .spritesheet ('dudebro5', 'Green_SpriteSheet_10fps_42pixelsWide.png', 42, 74)
 		         .spritesheet ('dudebro6', 'Pink_SpriteSheet_10fps_42pixelswide.png', 42, 74);
 
-		/*
+		
 		//enemyTestCode
 		game.load.image ('enemy', 'enemy.png');
-		*/
+		
 
 		//Load in Sound effects and BG Music
 		game.load.path = 'assets/sounds/';
@@ -168,7 +170,7 @@ window.onload = function() {
 		
 		world    = game.add.group();
 		bgWalls  = new BGWalls(game, world, bgKeys);
-		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
+		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		deadbros = game.add.group(world, undefined, false, true, Phaser.Physics.ARCADE);
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
@@ -263,17 +265,9 @@ window.onload = function() {
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
-		/*
-		//enemyTestCode
-		enemy = game.add.sprite(600,400, 'enemy');
-		game.physics.enable(enemy, Phaser.Physics.ARCADE);
-		enemy.anchor.setTo(0.5,0.5);
-		enemy.body.collideWorldBounds = true;
-	
+		
 
-		enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
-		enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
-		*/
+		
 
 		//score label
 		var style = {font: "32px Arial", fill: "#500050", align: "center"};
@@ -381,11 +375,13 @@ window.onload = function() {
 		game.physics.arcade.overlap(items.group, powerups.group, collisionHandler, null, this);
 		game.physics.arcade.overlap(bros.group, powerups.group, collisionHandler, null, this);
 
-		/*
+		
 		//enemyTestCode
-		game.physics.arcade.collide (player, enemy);
-		game.physics.arcade.moveToObject(enemy, player, 10, 2000);
-		*/
+		if(enemySpawned){
+			game.physics.arcade.collide (player, enemy);
+			game.physics.arcade.moveToObject(enemy, player, 10, 2000);
+			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
+		}	
 
 		//update score
 		labelScore.text = score + " fps: " + game.time.fps;
@@ -395,6 +391,25 @@ window.onload = function() {
 		console.log("Collision Detected At: "+ item1.y);
 		item1.y = this.game.rnd.between(bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		console.log("Moved to:  "+ item1.y);
+	}
+
+	//enemyTestCode
+	function spawnEnemy(){
+		enemy = game.add.sprite(-300,400, 'enemy');
+		game.physics.enable(enemy, Phaser.Physics.ARCADE);
+		enemy.anchor.setTo(0.5,0.5);
+		enemy.body.collideWorldBounds = true;
+
+		enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
+		enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
+
+		enemySpawned = true;
+	}
+	function enemyHitRock(enemy){
+		enemyHealth -= 1;
+		if(enemyHealth <= 0){
+			enemy.kill();
+		}
 	}
 	
 	function setHealth(h, noEffect, noInvul) {
@@ -490,6 +505,9 @@ window.onload = function() {
 
 			//move to level 2
 			currentLevel = 2;
+
+			//enemyTestCode
+			spawnEnemy();
 
 			//change object that is spawned
 			items.keys = ['pickup2'];
