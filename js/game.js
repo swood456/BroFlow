@@ -442,10 +442,6 @@ window.onload = function() {
 		labelScore.text = score + " fps: " + game.time.fps;
 	}
 
-	function clearInfoText(){
-		infoText.text = "";
-	}
-
 	function collisionHandler(item1, item2){
 		console.log("Collision Detected At: "+ item1.y);
 		item1.y = this.game.rnd.between(bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
@@ -629,10 +625,6 @@ window.onload = function() {
 			powerups.minInt += 1250;
 			powerups.maxInt += 1000;
 
-			//give player info on what to do next
-			infoText.text = "Now collect glow sticks";
-			game.time.events.add(3000, clearInfoText, this);
-
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
 			//move to level 2
@@ -650,9 +642,6 @@ window.onload = function() {
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
 			powerups.maxInt += 500;
-
-			infoText.text = "Finally, collect your fraternity jerseys,\nBeta Rho"
-			game.time.events.add(3000, clearInfoText, this);
 
 		}
 
