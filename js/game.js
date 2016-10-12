@@ -542,8 +542,8 @@ window.onload = function() {
 
 		}
 
-		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
+		//else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
+		else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
 			//do some nice stuff to make people happy
 			items.active = false;
 			rocks.active = false;
@@ -551,12 +551,8 @@ window.onload = function() {
 			powerups.active = false;
 			
 			//wait for all the objects to be off the screen
+			//game.time.events.add(4000, moveOffscreen, this);
 			game.time.events.add(4000, moveOffscreen, this);
-
-			//invulnerable = true;
-			
-
-			
 
 		}
 	}
@@ -564,13 +560,22 @@ window.onload = function() {
 	function moveOffscreen(){
 		//remove player's ability to move
 		boatSpeed = 0;
+		player.body.collideWorldBounds = false;
+		player.bros[0].animations.play('speedRow');
 
 		//move the boat
-		var moveTween = game.add.tween(player);
-		console.log("attmept to tween to " + (world.x + player.width));
-		moveTween.to({x:(world.x + player.width)}, 3000);
+		console.log("attmept to tween");
+
+		//game.add.tween(player).to({ x: 2000 }, 3000, Phaser.Easing.Sinusoidal.InOut, true, 0, 0, false);
+		var moveTween = game.add.tween(player).to({ x: game.width + player.width }, 3000, Phaser.Easing.Sinusoidal.InOut, false, 0, 0, false);
 		moveTween.onComplete.add(moveToEndGameScreen, this);
-		moveTween.start;
+		moveTween.start();
+
+
+		/*var moveTween = game.add.tween(player);
+		moveTween.to({x:2000}, 3000,Phaser.Easing.Bounce.In);
+		moveTween.onComplete.add(moveToEndGameScreen, this);
+		moveTween.start;*/
 	}
 
 	function moveToEndGameScreen(){
@@ -606,6 +611,7 @@ window.onload = function() {
 	function speedUp(mult, time) {
 		speedMult = mult;
 		player.tint = getBaseTint();
+
 		player.bros[0].animations.play('speedRow');
 		powerupActive = true;
 		game.time.events.add(time, slowDown, this);
