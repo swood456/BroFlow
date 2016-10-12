@@ -542,8 +542,8 @@ window.onload = function() {
 
 		}
 
-		//else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-		else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
+		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
+		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
 			//do some nice stuff to make people happy
 			items.active = false;
 			rocks.active = false;
