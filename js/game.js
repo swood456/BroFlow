@@ -39,24 +39,18 @@ window.onload = function() {
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
 
 			//add in play button
-			game.add.button(game.world.centerX - 50, 600, 'playButton',
-				listener).anchor.set(1, 0);
+			game.add.button(game.world.centerX - 50, 600, 'playButton', function(){
+				//make a callback to go to the game state when finished
+				this.game.state.start("gameplay");
+			}).anchor.set(1, 0);
 			
 			//add in instruction button
-			game.add.button(game.world.centerX + 50, 600, 'instructionButton',
-				instructionListener).anchor.set(0, 0);
+			game.add.button(game.world.centerX + 50, 600, 'instructionButton', function(){
+				//make a callback to go to the game state when finished
+				this.game.state.start("instructions");
+			}).anchor.set(0, 0);
 
 		}		
-	}
-
-	function listener(){
-		//make a callback to go to the game state when finished
-		this.game.state.start("gameplay");
-	}
-
-	function instructionListener(){
-		//make a callback to go to the game state when finished
-		this.game.state.start("instructions");
 	}
 
 	//create object to be used for gameplay state
@@ -406,10 +400,28 @@ window.onload = function() {
 		//collectable code
 		//collisions
 		if (health > 0) {
+			//Collect items
 			game.physics.arcade.overlap(player, items.group, collectItem, null, this);
-			game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
-			game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
-			game.physics.arcade.overlap(player, powerups.group, powerupHit, null, this);
+			//Collect bros
+			game.physics.arcade.overlap(player, bros.group, function(thisPlayer, thisBro){
+				thisBro.kill();
+				setHealth(health + 1);
+				game.rnd.pick(broSounds).play();
+			}, null, this);
+			//Hit rocks
+			game.physics.arcade.overlap(player, rocks.group, function(thisPlayer, thisRock){
+				if(!invulnerable){
+					setHealth(health - 1);
+				}
+			}, null, this);
+			//Collect powerup
+			game.physics.arcade.overlap(player, powerups.group, function(thisplayer, thisPowerup){
+				thisPowerup.kill();
+				chugSound.play();
+				//temporarily make speed faster and invulnerable
+				speedUp(2, 5000);
+				setInvulnerable(4800);
+			}, null, this);
 		}
 
 		game.physics.arcade.overlap(items.group, rocks.group, collisionHandler, null, this);
@@ -661,26 +673,6 @@ window.onload = function() {
 				game.state.start("victory"); //Go to gameOver state if out of health
 			}, this);
 	}
-
-	function broPickup(thisPlayer, thisBro){
-		thisBro.kill();
-		setHealth(health + 1);
-		game.rnd.pick(broSounds).play();
-	}
-
-	function rockHit(thisPlayer, thisRock){
-		if(!invulnerable){
-			setHealth(health - 1);
-		}
-	}
-
-	function powerupHit(thisplayer, thisPowerup){
-		thisPowerup.kill();
-		chugSound.play();
-		//temporarily make speed faster and invulnerable
-		speedUp(2, 5000);
-		setInvulnerable(4800);
-	}
 	
 	function speedUp(mult, time) {
 		speedMult = mult;
@@ -722,12 +714,10 @@ window.onload = function() {
 			
 			invulTween = game.add.tween(player).from({alpha: 0.5},
 				200, "Linear", true, 0, Math.round(time / 400), true);
-			invulTween.onComplete.add(makeVulnerable);
+			invulTween.onComplete.add(function(){
+				invulnerable = false;
+			});
 		}
-	}
-
-	function makeVulnerable(){
-		invulnerable = false;
 	}
 
 	//State for the GameOver screen
@@ -801,8 +791,8 @@ window.onload = function() {
 				winSound.play();
 			});
 			
-			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
-			var Victory = game.add.sprite(0, 0, 'endScreen');
+			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon'),
+			    Victory = game.add.sprite(0, 0, 'endScreen');
 
 			//var endBroSprite;
 
