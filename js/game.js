@@ -21,8 +21,8 @@ window.onload = function() {
 
 			//load a title image
 			game.load.image('title', 'title.png');
-			game.load.image('instructionButton', 'instructionButton.png');
-			game.load.image('playButton', 'playButton.png');
+			game.load.image('instructionButton', 'instructions_button.png');
+			game.load.image('playButton', 'play_button.png');
 		},
 
 		create: function(){
