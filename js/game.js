@@ -20,9 +20,9 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 
 			//load a title image
-			game.load.image('title', 'title 2.png');
-			game.load.image('instructionButton', 'instructions_button.png');
-			game.load.image('playButton', 'play_button.png');
+			game.load.image('title', 'title 2.png')
+			         .image('instructionButton', 'instructions_button.png')
+			         .image('playButton', 'play_button.png');
 		},
 
 		create: function(){
