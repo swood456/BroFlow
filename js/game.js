@@ -66,12 +66,12 @@ window.onload = function() {
 	
 	//player variables	
 	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
-		scrollSpeed;
-
-	var invulnerable = false, invulTween, powerupActive = false;
+		scrollSpeed, invulnerable = false, invulTween,
+		powerupActive = false;
 
 	//var enemyInvulnerable = false, enemyInvulTween;
 	
+	//spawner variables
 	var items, rocks, bros, deadbros, powerups;
 
 	/*
@@ -80,20 +80,6 @@ window.onload = function() {
 	var enemySpawned = false;
 	var enemyHealth = 3;
 	*/
-	
-
-/*ORIGINAL DUDE BRO POSITIONS
-	var score, labelScore, health, labelHealth, healthPos = [
-			[-10,  100], // 1
-			[-47, -22], // 2
-			[-8, -20], // 3
-			[50,  0], // 4
-			[ 70, -20], // 5
-			[ 30, -10] // 6
-		],
-		currentLevel;
-*/
-//JORDAN SUGGESTED DUDE BRO POSITIONS
 	var score, labelScore, health, labelHealth, healthPos = [
 			[-10,  95], // 1 - paddler
 			[-42, -22], // 2 - red swag
@@ -103,8 +89,6 @@ window.onload = function() {
 			[-25,  15]  // 6 - pink
 		],
 		currentLevel;
-	//ends here
-
 
 	var infoText;
 	var world, bgWalls, water,
