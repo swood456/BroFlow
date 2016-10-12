@@ -815,6 +815,7 @@ window.onload = function() {
 			for (var i = broNames.length - 1; i >= 0; --i) {
 				game.load.image('bro' + (i + 1),
 					broNames[i] + (health > i ? '_static.png' : '_sink.png'));
+				game.load.image('bro_' + i + '_text', broNames[i] + '_nameTxt.png');
 			}
 		},
 
@@ -831,8 +832,10 @@ window.onload = function() {
 				var x = (game.width * (i + 1.5) / 8)|0;
 				game.add.sprite(x, game.world.centerY - 50,
 					'bro' + (i + 1)).anchor.set(0.5);
-				game.add.text(0, 0, broNames[i], style).setTextBounds(
-					x, game.world.centerY + 20);
+				var tempSprite = game.add.sprite(x, game.world.centerY + 30, 'bro_' + i +'_text');
+				tempSprite.anchor.set(0.5);
+				/*game.add.text(0, 0, broNames[i], style).setTextBounds(
+					x, game.world.centerY + 20);*/
 			}
 		}
 	}
