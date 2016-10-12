@@ -556,10 +556,9 @@ window.onload = function() {
 		}
 
 		var pickupIndicator = game.add.sprite( (score ) * (game.width / 16), bgWalls.minHeight / 2, 'pickup' + currentLevel +'Icon');
-		pickupIndicator.alpha = 0.9;
+		//pickupIndicator.alpha = 0.9;
 		pickupIndicator.anchor.set(0.5, 0.5);
 		
-
 		//change levels
 		if(score >= 5 && currentLevel === 1){
 			console.log("move to level 2");
@@ -771,9 +770,25 @@ window.onload = function() {
 			//Will Load a Game Over screen asset when said asset is available
 			//For now, use blank Title Screen again as placeholder
 			game.load.image('gameWon', 'title.png');
+			
+			game.load.path = 'assets/sounds/';
+			
+			game.load.audio('uptop', 'uptop.mp3')
+			         .audio('whipcrack', 'whipcrack.mp3');
 		},
 
 		create: function(){
+			var winSound = game.add.audio('uptop'),
+			    whipSound = game.add.audio('whipcrack');
+			winSound.onStop.add(function(){
+				whipSound.play();
+			});
+			
+			BGMusic.fadeOut(2000);
+			BGMusic.onFadeComplete.add(function(){
+				winSound.play();
+			});
+			
 			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
 
     		//  Moves the image anchor to the middle, so it centers inside the game properly
@@ -796,8 +811,6 @@ window.onload = function() {
 	game.state.add("gameplay", gameplay);
 	game.state.add("gameOver", GameOver);
 	game.state.add("victory", Victory);
-
-	game.state.start("menu");
-
 	
+	game.state.start("menu");
 };
