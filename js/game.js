@@ -379,7 +379,7 @@ window.onload = function() {
 		//enemyTestCode
 		if(enemySpawned){
 			game.physics.arcade.collide (player, enemy);
-			game.physics.arcade.moveToObject(enemy, player, 10, 2000);
+			game.physics.arcade.moveToObject(enemy, player, 10);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
 
@@ -400,8 +400,8 @@ window.onload = function() {
 		enemy.anchor.setTo(0.5,0.5);
 		enemy.body.collideWorldBounds = true;
 
-		enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
-		enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
+		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
+		//enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
 		enemySpawned = true;
 	}
@@ -568,8 +568,8 @@ window.onload = function() {
 
 		}
 
-		//else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-		else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
+		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
+		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
 			//do some nice stuff to make people happy
 			items.active = false;
 			rocks.active = false;
@@ -578,7 +578,7 @@ window.onload = function() {
 			
 			//wait for all the objects to be off the screen
 			//game.time.events.add(4000, moveOffscreen, this);
-			game.time.events.add(4000, moveOffscreen, this);
+			game.time.events.add(3000, moveOffscreen, this);
 
 		}
 	}
