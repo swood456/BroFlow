@@ -14,16 +14,15 @@ window.onload = function() {
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '');
 
 	//create the object the menu game state uses
-	var menu = function(game){
-		console.log("starting menu");
-	}
-	menu.prototype = {
+	var menu = {
 		preload: function(){
 			//set the file path for loading images
 			game.load.path = 'assets/sprites/';
 
 			//load a title image
-			game.load.image('title', 'title.png');
+			game.load.image('title', 'title 2.png');
+			game.load.image('instructionButton', 'instructions_button.png');
+			game.load.image('playButton', 'play_button.png');
 		},
 
 		create: function(){
@@ -35,15 +34,17 @@ window.onload = function() {
 
 			//Enables all kind of input actions on this image (click, etc)
 			image.inputEnabled = true;
-
-			//add in title screen text
-			text = game.add.text(250, 16, '', { fill: '#ffffff' });
-
-			//allow player to go to next level
-			image.events.onInputDown.add(listener, this);
-
+			
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
+
+			//add in play button
+			game.add.button(game.world.centerX - 50, 600, 'playButton',
+				listener).anchor.set(1, 0);
+			
+			//add in instruction button
+			game.add.button(game.world.centerX + 50, 600, 'instructionButton',
+				instructionListener).anchor.set(0, 0);
 
 		}		
 	}
@@ -53,12 +54,13 @@ window.onload = function() {
 		this.game.state.start("gameplay");
 	}
 
-	//create object to be used for gameplay state
-	var gameplay = function(game){
-		console.log("starting game");
+	function instructionListener(){
+		//make a callback to go to the game state when finished
+		this.game.state.start("instructions");
 	}
 
-	gameplay.prototype ={
+	//create object to be used for gameplay state
+	var gameplay = {
 		preload: preload,
 		create: create,
 		update: update
@@ -82,7 +84,7 @@ window.onload = function() {
 	*/
 	
 	//text variables
-	var labelScore, labelHealth, infoText;
+	var labelScore, labelHealth;
 
 	//various global variables
 	var score, health, currentLevel;
@@ -166,8 +168,6 @@ window.onload = function() {
 		allowControl = true;
 		//enemyInvulnerable = false;
 		
-		//enable advanced timing to show fps
-		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -298,14 +298,7 @@ window.onload = function() {
 		//initialize the drag
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-		
-		//info stuff
-		var infoStyle = {font: "32px Arial", fill: "#500050", align: "center"};
-		infoText = game.add.text(game.width / 2, 50, "Tap the screen to move\nCollect red solo cups for your party", infoStyle);
-
-		infoText.anchor.set(0.5,0.5);
-		game.time.events.add(3000, clearInfoText, this);
-		
+				
 
 		//score label
 		var style = {font: "32px Arial", fill: "#500050", align: "center"};
@@ -449,10 +442,6 @@ window.onload = function() {
 		labelScore.text = score + " fps: " + game.time.fps;
 	}
 
-	function clearInfoText(){
-		infoText.text = "";
-	}
-
 	function collisionHandler(item1, item2){
 		console.log("Collision Detected At: "+ item1.y);
 		item1.y = this.game.rnd.between(bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
@@ -527,9 +516,15 @@ window.onload = function() {
 			h = player.bros.length;
 		} else if (h <= 0) {
 			h = 0;
+			/*
 			game.camera.fade('#000000', 1500, false);
 			game.camera.onFadeComplete.add(function(){
 				game.state.start("gameOver"); //Go to gameOver state if out of health
+			}, this);
+			*/
+			game.time.events.add(1500, function(){
+				game.state.start("gameOver"); //Go to gameOver state if out of health
+				//TODO add bubbles
 			}, this);
 			gameoverSound.play();
 		}
@@ -623,16 +618,12 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt += 1250;
 			items.maxInt += 550;
-			rocks.minInt -= 750;
+			rocks.minInt -= 1100;
 			rocks.maxInt -= 850;
 			bros.minInt += 500;
 			bros.maxInt += 500;
 			powerups.minInt += 1250;
 			powerups.maxInt += 1000;
-
-			//give player info on what to do next
-			infoText.text = "Now collect glow sticks";
-			game.time.events.add(3000, clearInfoText, this);
 
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
@@ -645,15 +636,12 @@ window.onload = function() {
 			//change spawner properties
 			items.minInt += 1000;
 			items.maxInt += 1500;
-			rocks.minInt -= 800;
+			rocks.minInt -= 400;
 			rocks.maxInt -= 550;
 			bros.minInt += 500;
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
 			powerups.maxInt += 500;
-
-			infoText.text = "Finally, collect your fraternity jerseys,\nBeta Rho"
-			game.time.events.add(3000, clearInfoText, this);
 
 		}
 
@@ -765,10 +753,7 @@ window.onload = function() {
 	}
 
 	//State for the GameOver screen
-	var GameOver = function(game) {
-		console.log("Starting Game Over state");
-	}
-	GameOver.prototype = {
+	var GameOver = {
 		preload: function(){
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
@@ -804,13 +789,8 @@ window.onload = function() {
 	}
 
 	//State for the Victory screen
-	var Victory = function(game) {
-		console.log("Starting Victory state");
-	}
-
 	var endBroSprite, hasPlayed;
-
-	Victory.prototype = {
+	var Victory = {
 		preload: function(){
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
@@ -886,10 +866,7 @@ window.onload = function() {
 	
 	var broNames = ['paddle', 'swag', 'yolo', 'stripes', 'green', 'pink'];
 	
-	var Lineup = function(game) {
-		console.log("Starting Lineup state");
-	}
-	Lineup.prototype = {
+	var Lineup = {
 		preload: function(){
 			game.load.path = 'assets/sprites/';
 			
@@ -904,7 +881,7 @@ window.onload = function() {
 			game.input.onDown.add(RestartGame, this);
 			
 			var style = {
-				font: "bold 32px Comic Sans MS",
+				font: "bold 16px Comic Sans MS",
 				fill: "#fff",
 				boundsAlignH: "center",
 				boundsAlignV: "middle"
@@ -919,17 +896,34 @@ window.onload = function() {
 		}
 	}
 
-	var Instructions = function(game){
-		console.log("starting instructions menu");
-	}
-	Instructions.prototype = {
+	var Instructions = {
 		preload: function(){
 			//load in objects for info
 			game.load.path = 'assets/sprites/';
+			game.load.image ('rock', 'boulder.png')
+			         .image ('bricks', 'bricks.png')
+			         .image ('cup', 'cup.png')
+			         .image ('glowsticks', 'glowsticks.png')
+			         .image ('tshirts', 'tshirt.png');
 
 		},
 		create: function(){
 			game.stage.backgroundColor = '#2D2D2D';
+			var textStyle = {font: "32px Arial", fill: "#DEE4ED", align: "center"};
+
+			//put text to convey how to play the game
+			game.add.text(75,50, "Tap the screen to move towards that point", textStyle);
+			game.add.text(700, 300, "Avoid rocks and bricks", textStyle);
+			game.add.text(200, 500, "Collect the cups, glowsticks, and t-shirts to advance", textStyle);
+
+			//add in objects to screen
+			game.add.sprite(770,200, 'rock');
+			game.add.sprite(925,200, 'bricks');
+			game.add.sprite(365, 450, 'cup');
+			game.add.sprite(500, 450, 'glowsticks');
+			game.add.sprite(690, 450, 'tshirts');
+
+
 			game.input.onDown.add(RestartGame, this);
 
 		}
