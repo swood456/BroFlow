@@ -395,7 +395,7 @@ window.onload = function() {
 
 	//enemyTestCode
 	function spawnEnemy(){
-		enemy = game.add.sprite(-300,400, 'enemy');
+		enemy = game.add.sprite(200,400, 'enemy');
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
 		//enemy.body.collideWorldBounds = true;
