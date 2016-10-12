@@ -82,16 +82,20 @@ window.onload = function() {
 	}
 	
 	function startBubbleScreen(stage){
+		if (bubbleScreen.inTween) return;
+		
 		bubbleScreen.y = game.height;
 		bubbleScreen.alive = true;
 		bubbleScreen.exists = true;
 		if (bubbleScreen.outTween && bubbleScreen.outTween.stop) {
 			bubbleScreen.outTween.stop();
 		}
-		game.add.tween(bubbleScreen).to({y: -127}, 500, Phaser.Easing.Sinusoidal.In, true)
-			.onComplete.add(function(){
-				game.state.start(stage);
-			});
+		bubbleScreen.inTween =
+			game.add.tween(bubbleScreen).to({y: -127}, 500, Phaser.Easing.Sinusoidal.In, true);
+		bubbleScreen.inTween.onComplete.add(function(){
+			bubbleScreen.inTween = undefined;
+			game.state.start(stage);
+		});
 	}
 
 	//create object to be used for gameplay state
@@ -415,7 +419,7 @@ window.onload = function() {
 		powerups.update();
 		
 		//check if the player is alive and player is "tapping"
-		if(allowControl && health > 0 && game.input.activePointer.leftButton.isDown) {
+		if(allowControl && health > 0 && game.input.activePointer.isDown) {
 			//move player towards mouse button
 			game.physics.arcade.moveToPointer(player,
 				game.math.bezierInterpolation(
