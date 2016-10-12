@@ -865,7 +865,7 @@ window.onload = function() {
 			game.input.onDown.add(RestartGame, this);
 			
 			var style = {
-				font: "bold 32px Comic Sans MS",
+				font: "bold 16px Comic Sans MS",
 				fill: "#fff",
 				boundsAlignH: "center",
 				boundsAlignV: "middle"
