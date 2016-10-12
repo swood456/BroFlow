@@ -882,9 +882,16 @@ window.onload = function() {
 
 		},
 		create: function(){
-			game.stage.backgroundColor = '#2D2D2D';
+			game.stage.backgroundColor = '#299ED1';
 			var textStyle = {
 				font: "bold 32px Comic Sans MS",
+				fill: "#fff",
+				boundsAlignH: "center",
+				boundsAlignV: "middle"
+			};
+
+			var textStyleSmall = {
+				font: "bold 20px Comic Sans MS",
 				fill: "#fff",
 				boundsAlignH: "center",
 				boundsAlignV: "middle"
@@ -893,6 +900,9 @@ window.onload = function() {
 			game.add.text(100, 200, "Tap the screen to move towards that point", textStyle);
 			game.add.text(200, 350, "Avoid rocks and bricks", textStyle);
 			game.add.text(300, 500, "Collect the cups, glowsticks, and t-shirts to advance", textStyle);
+			var tempText = game.add.text(game.width / 2, 675, "tap to go back", textStyleSmall);
+			tempText.anchor.set(0.5);
+
 
 			//add in objects to screen
 			var rockSprite = game.add.sprite(310,400, 'rock');
