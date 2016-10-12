@@ -180,7 +180,7 @@ window.onload = function() {
 
 		//add in spawners
 		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
-		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
+		items    = new Spawner(game, world, ['pickup1'], 60, 100, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
@@ -807,12 +807,17 @@ window.onload = function() {
 	var Victory = function(game) {
 		console.log("Starting Victory state");
 	}
+
+	var endBroSprite, hasPlayed;
+
 	Victory.prototype = {
 		preload: function(){
 			game.load.path = 'assets/sprites/';
 			//Will Load a Game Over screen asset when said asset is available
 			//For now, use blank Title Screen again as placeholder
 			game.load.image('gameWon', 'title.png');
+			game.load.image('endScreen', 'end.png');
+			game.load.spritesheet ('endBoys', 'end boys.png', 537, 474);
 			
 			game.load.path = 'assets/sounds/';
 			
@@ -821,6 +826,9 @@ window.onload = function() {
 		},
 
 		create: function(){
+
+			hasPlayed = false;
+
 			var winSound = game.add.audio('uptop'),
 			    whipSound = game.add.audio('whipcrack');
 			winSound.onStop.add(function(){
@@ -836,6 +844,20 @@ window.onload = function() {
 			});
 			
 			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
+			var Victory = game.add.sprite(0, 0, 'endScreen');
+
+			//var endBroSprite;
+
+			endBroSprite = game.add.sprite(game.world.centerX, game.world.centerY, 'endBoys');
+			endBroSprite.anchor.set(0.5);
+			///game.add.sprite(game.world.centerX, game.world.centerY, 'endBoys');
+
+			//add in animations
+			endBroSprite.animations.add('highFive', [0,1,2,3,4], 2, false).onComplete.add(function(){
+				endBroSprite.animations.play('idleBros');
+			});
+			endBroSprite.animations.add('idleBros', [4], 1, true);
+			//endBroSprite.animations.play('highFive');
 
 			//  Moves the image anchor to the middle, so it centers inside the game properly
 			VicImage.anchor.set(0.5);
@@ -845,6 +867,20 @@ window.onload = function() {
 
 			//create a text object
 			var VicText = game.add.text(100,100,"You Win!", {font: "bold 32px Arial", fill: "#fff"});
+		},
+
+		update: function(){
+			if(endBroSprite.scale.x > 0){
+				endBroSprite.scale.x -= 0.002;
+				endBroSprite.scale.y -= 0.002;
+				endBroSprite.y -= 0.343;
+			}
+
+			if(!hasPlayed && endBroSprite.y < game.world.centerY - 25){
+				//console.log("HIGH FIVE NOW");
+				endBroSprite.animations.play('highFive');
+				hasPlayed = true;
+			}
 		}
 	}
 	
@@ -891,7 +927,7 @@ window.onload = function() {
 			//load in objects for info
 			game.load.path = 'assets/sprites/';
 
-		}
+		},
 		create: function(){
 			game.stage.backgroundColor = '#2D2D2D';
 			game.input.onDown.add(RestartGame, this);
