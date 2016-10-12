@@ -162,9 +162,6 @@ window.onload = function() {
 	}
 
 	function create () {
-
-		//make sure player is vulnerable
-		invulnerable = false;
 		//enemyInvulnerable = false;
 		
 		//enable advanced timing to show fps
@@ -296,11 +293,10 @@ window.onload = function() {
 		//make player collide with world boundry
 		player.body.collideWorldBounds = true;
 
+		//initialize the drag
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-
 		
-
 		//info stuff
 		var infoStyle = {font: "32px Arial", fill: "#500050", align: "center"};
 		infoText = game.add.text(game.width / 2, 50, "Tap the screen to move\nCollect red solo cups for your party", infoStyle);
@@ -318,11 +314,21 @@ window.onload = function() {
 		
 		labelHealth = game.add.text (100, 650, text, style);
 
+		//set the current level to be 1
 		currentLevel = 1;
+
+		//set the starting scroll speed of the world
 		scrollSpeed = 5;
+
+		//initialize the magnitude of the drag vector
 		dragMagnitude = 500;
+
+		//make sure we reset the speed of the boat from any powerups
 		boatSpeed = 500;
+
+		//set the speed multiplyer
 		speedMult = 1;
+
 		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
