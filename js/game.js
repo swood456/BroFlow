@@ -40,7 +40,7 @@ window.onload = function() {
 			//add in play button
 			game.add.button(game.world.centerX - 50, 600, 'playButton', function(){
 				//make a callback to go to the game state when finished
-				this.game.state.start('gameplay');
+				startBubbleScreen('gameplay');
 			}).anchor.set(1, 0);
 			
 			//add in instruction button
@@ -49,8 +49,35 @@ window.onload = function() {
 				this.game.state.start('instructions');
 			}).anchor.set(0, 0);
 			
-			
-		}		
+			setupBubbleScreen();
+		}
+	}
+	
+	function setupBubbleScreen(){
+		if (!bubbleScreen) {
+			bubbleScreen = game.stage.addChild(game.make.image(0, 0, 'bubbles'));
+			bubbleScreen.kill();
+		} else if (bubbleScreen.alive) {
+			bubbleScreen.outTween =
+				game.add.tween(bubbleScreen).to({bottom: 0}, 500, Phaser.Easing.Sinusoidal.Out, true)
+				.onComplete.add(function(){
+					bubbleScreen.kill();
+				});
+		}
+		//bubbleScreen.bringToTop();
+	}
+	
+	function startBubbleScreen(stage){
+		bubbleScreen.y = game.height;
+		bubbleScreen.alive = true;
+		bubbleScreen.exists = true;
+		if (bubbleScreen.outTween && bubbleScreen.outTween.stop) {
+			bubbleScreen.outTween.stop();
+		}
+		game.add.tween(bubbleScreen).to({y: -127}, 500, Phaser.Easing.Sinusoidal.In, true)
+			.onComplete.add(function(){
+				game.state.start(stage);
+			});
 	}
 
 	//create object to be used for gameplay state
@@ -335,6 +362,7 @@ window.onload = function() {
 		health = score = 0;
 		setHealth(1, true);
 
+		setupBubbleScreen();
 	}
 
 
@@ -781,6 +809,8 @@ window.onload = function() {
 
 			//  Enables all kind of input actions on this image (click, etc)
 			VicImage.inputEnabled = true;
+			
+			setupBubbleScreen();
 		},
 		
 		update: function(){
@@ -826,6 +856,8 @@ window.onload = function() {
 				game.add.text(0, 0, broNames[i], style).setTextBounds(
 					x, game.world.centerY + 20);
 			}
+			
+			setupBubbleScreen();
 		}
 	}
 
@@ -883,6 +915,7 @@ window.onload = function() {
 
 			game.input.onDown.add(RestartGame, this);
 
+			setupBubbleScreen();
 		}
 	}
 	
