@@ -173,7 +173,7 @@ window.onload = function() {
 
 		//add in spawners
 		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
-		items    = new Spawner(game, world, ['pickup1'], 60, 100, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
@@ -635,16 +635,14 @@ window.onload = function() {
 
 		}
 
-		else if(score >= 15 && currentLevel == 3){ //For now, Level 3 is the highest we go
-		//else if(score >= 1 && currentLevel == 1){ //For now, Level 3 is the highest we go
-			//do some nice stuff to make people happy
+		else if(score >= 15 && currentLevel == 3){
+			//deactivate spawners
 			items.active = false;
 			rocks.active = false;
 			bros.active = false;
 			powerups.active = false;
 			
 			//wait for all the objects to be off the screen
-			//game.time.events.add(4000, moveOffscreen, this);
 			game.time.events.add(3000, moveOffscreen, this);
 
 		}
@@ -656,18 +654,14 @@ window.onload = function() {
 		allowControl = player.body.collideWorldBounds = false;
 		player.bros[0].animations.play('speedRow');
 
-		//game.add.tween(player).to({ x: 2000 }, 3000, Phaser.Easing.Sinusoidal.InOut, true, 0, 0, false);
+		//move the player off the screen
 		var moveTween = game.add.tween(player).to({ x: game.width + player.width }, 3000, Phaser.Easing.Sinusoidal.InOut, false, 0, 0, false);
 		moveTween.onComplete.add(moveToEndGameScreen, this);
 		moveTween.start();
-
-		/*var moveTween = game.add.tween(player);
-		moveTween.to({x:2000}, 3000,Phaser.Easing.Bounce.In);
-		moveTween.onComplete.add(moveToEndGameScreen, this);
-		moveTween.start;*/
 	}
 
 	function moveToEndGameScreen(){
+		//fade the camera and go to end game screen
 		game.camera.fade('#000000', 1000, false);
 			game.camera.onFadeComplete.add(function(){
 				game.state.start("victory"); //Go to gameOver state if out of health
@@ -843,7 +837,7 @@ window.onload = function() {
 		create: function(){
 			game.stage.backgroundColor = '#299ED1';
 			var textStyle = {
-				font: 'bold 32px Comic Sans MS',
+				font: 'bold 32px "Buxton Sketch", "Comic Sans MS", cursive, sans-serif',
 				fill: '#fff',
 				boundsAlignH: 'center',
 				boundsAlignV: 'middle'
