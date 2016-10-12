@@ -24,13 +24,15 @@ window.onload = function() {
 			//load a title image
 			game.load.image('title', 'title 3.png')
 			         .image('instructionButton', 'instructions_button.png')
-			         .image('playButton', 'play_button.png')
-			         .image('bubbles', 'bubbles.png');
+			         .image('playButton', 'play_button.png');
+			
+			if (!bubbleScreen) {
+				game.load.image('bubbles', 'bubbles.png');
+			}
 
 			game.load.path = 'assets/sounds/';
 
 			game.load.audio ('backgroundMusic', 'StockBGMusic.mp3');
-
 
 		},
 
@@ -54,10 +56,11 @@ window.onload = function() {
 			//add in instruction button
 			game.add.button(game.world.centerX + 50, 600, 'instructionButton', function(){
 				//make a callback to go to the game state when finished
-				this.game.state.start('instructions');
+				startBubbleScreen('instructions');
 			}).anchor.set(0, 0);
 			
 			//background music
+			BGMusic.stop();
 			BGMusic = game.add.audio('backgroundMusic');
 			BGMusic.loopFull(0.08);
 			
@@ -561,10 +564,7 @@ window.onload = function() {
 			*/
 			BGMusic.stop();
 
-			game.time.events.add(1500, function(){
-				game.state.start("lineup"); //Go to gameOver state if out of health
-				//TODO add bubbles
-			}, this);
+			startBubbleScreen('lineup');
 			gameoverSound.play();
 		}
 		
@@ -760,7 +760,7 @@ window.onload = function() {
 	
 	function RestartGame() {
 		//For this callback, return to the menu/title screen
-		this.game.state.start('menu');
+		startBubbleScreen('menu');
 	}
 
 	//State for the Victory screen
@@ -789,7 +789,7 @@ window.onload = function() {
 			winSound.onStop.add(function(){
 				whipSound.play();
 				VicImage.events.onInputDown.add(function(){
-					game.state.start("lineup");
+					startBubbleScreen('lineup');
 				}, this);
 			});
 			
