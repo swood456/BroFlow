@@ -56,3 +56,11 @@ Stretch goals:
 	--Programing
 	--Sound
 	--Design
+
+
+Final stuff:
+	- gameover stuff
+	- something that says "tap to go back" on the instructions screen?
+	- fix spawn rate on items
+	- make sure all spawn rates are correct
+	- make sure code is at least somewhat readable
