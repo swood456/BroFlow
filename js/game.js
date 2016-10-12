@@ -379,7 +379,7 @@ window.onload = function() {
 		//enemyTestCode
 		if(enemySpawned){
 			game.physics.arcade.collide (player, enemy);
-			game.physics.arcade.moveToObject(enemy, player, 10, 2000);
+			game.physics.arcade.moveToObject(enemy, player, 10);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
 
@@ -400,8 +400,8 @@ window.onload = function() {
 		enemy.anchor.setTo(0.5,0.5);
 		enemy.body.collideWorldBounds = true;
 
-		enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
-		enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
+		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
+		//enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
 		enemySpawned = true;
 	}
