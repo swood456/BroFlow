@@ -204,7 +204,7 @@ window.onload = function() {
 		//load the bros into the game
 		var pos, broSprite;
 
-		//bro 3
+		//load in bro 3
 		pos = healthPos[2];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro3');
 		broSprite.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
@@ -212,7 +212,7 @@ window.onload = function() {
 		broSprite.animations.play('idle');
 		var bro3 = player.addChild(broSprite);
 
-		//bro 2
+		//load in bro 2
 		pos = healthPos[1];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro2');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
@@ -220,28 +220,28 @@ window.onload = function() {
 		broSprite.animations.play('idle');
 		var bro2 = player.addChild(broSprite);
 
-		//bro 5
+		//load in bro 5
 		pos = healthPos[4];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro5');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro5 = player.addChild(broSprite);
 
-		//bro 6
+		//load in bro 6
 		pos = healthPos[5];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro6');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro6 = player.addChild(broSprite);
 
-		//bro 4
+		//load in bro 4
 		pos = healthPos[3];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro4');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro4 = player.addChild(broSprite);
 		
-		//bro 1
+		//load in bro 1
 		pos = healthPos[0];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
 		broSprite.animations.add('idle', [0,1,2,3,4,5,6,7,8,9,10], 8, true);
