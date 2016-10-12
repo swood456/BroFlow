@@ -861,10 +861,9 @@ window.onload = function() {
 			game.input.onDown.add(RestartGame, this);
 			
 			var style = {
-				font: "bold 16px Comic Sans MS",
+				font: "bold 28px Comic Sans MS",
 				fill: "#fff",
-				boundsAlignH: "center",
-				boundsAlignV: "middle"
+				boundsAlignH: "center"
 			};
 			for (var i = 5; i >= 0; --i) {
 				var x = (game.width * (i + 1.5) / 8)|0;
