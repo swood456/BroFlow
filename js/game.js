@@ -207,9 +207,15 @@ window.onload = function() {
 		//load in bro 3
 		pos = healthPos[2];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro3');
+
+		//add in animations
 		broSprite.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
 		broSprite.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
+
+		//start playing idle animation
 		broSprite.animations.play('idle');
+
+		//Make bro a child of the player
 		var bro3 = player.addChild(broSprite);
 
 		//load in bro 2
@@ -252,7 +258,8 @@ window.onload = function() {
 		broSprite.animations.play('idle');
 		var bro1 = player.addChild(broSprite);
 		
-		//add the bros to the list of bros
+		//add the bros to the array in player
+		// then set the anchor and kill them
 		player.bros.push(bro1);
 		bro1.anchor.set(0.5, 1);
 		bro1.kill();
@@ -277,10 +284,16 @@ window.onload = function() {
 		bro6.anchor.set(0.5, 1);
 		bro6.kill();
 
-		
+		//enable arcade physics
 		game.physics.enable(player, Phaser.Physics.ARCADE);
+		
+		//set player size
 		player.body.setSize(164, 85, 33, 3);
+		
+		//set player anchor
 		player.anchor.setTo(0.5,0.5);
+		
+		//make player collide with world boundry
 		player.body.collideWorldBounds = true;
 
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
