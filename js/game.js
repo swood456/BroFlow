@@ -879,28 +879,36 @@ window.onload = function() {
 		preload: function(){
 			//load in objects for info
 			game.load.path = 'assets/sprites/';
-			game.load.image ('rock', 'boulder.png')
+			game.load.image ('rock', 'boulder.png',25,25)
 			         .image ('bricks', 'bricks.png')
 			         .image ('cup', 'cup.png')
 			         .image ('glowsticks', 'glowsticks.png')
 			         .image ('tshirts', 'tshirt.png');
 
+
+
 		},
 		create: function(){
 			game.stage.backgroundColor = '#2D2D2D';
-			var textStyle = {font: "32px Arial", fill: "#DEE4ED", align: "center"};
-
+			var textStyle = {
+				font: "bold 32px Comic Sans MS",
+				fill: "#fff",
+				boundsAlignH: "center",
+				boundsAlignV: "middle"
+			};
 			//put text to convey how to play the game
-			game.add.text(75,50, "Tap the screen to move towards that point", textStyle);
-			game.add.text(700, 300, "Avoid rocks and bricks", textStyle);
-			game.add.text(200, 500, "Collect the cups, glowsticks, and t-shirts to advance", textStyle);
+			game.add.text(100, 200, "Tap the screen to move towards that point", textStyle);
+			game.add.text(200, 350, "Avoid rocks and bricks", textStyle);
+			game.add.text(300, 500, "Collect the cups, glowsticks, and t-shirts to advance", textStyle);
 
 			//add in objects to screen
-			game.add.sprite(770,200, 'rock');
-			game.add.sprite(925,200, 'bricks');
-			game.add.sprite(365, 450, 'cup');
-			game.add.sprite(500, 450, 'glowsticks');
-			game.add.sprite(690, 450, 'tshirts');
+			var rockSprite = game.add.sprite(310,400, 'rock');
+			rockSprite.scale.setTo(0.5, 0.5);
+			var brickSprite = game.add.sprite(470,400, 'bricks');
+			brickSprite.scale.set(0.5,0.5);
+			game.add.sprite(490, 550, 'cup');
+			game.add.sprite(620, 550, 'glowsticks');
+			game.add.sprite(850, 550, 'tshirts');
 
 
 			game.input.onDown.add(RestartGame, this);
