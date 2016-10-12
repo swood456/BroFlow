@@ -882,12 +882,29 @@ window.onload = function() {
 			}
 		}
 	}
+
+	var Instructions = function(game){
+		console.log("starting instructions menu");
+	}
+	Instructions.prototype = {
+		preload: function(){
+			//load in objects for info
+			game.load.path = 'assets/sprites/';
+
+		}
+		create: function(){
+			game.stage.backgroundColor = '#2D2D2D';
+			game.input.onDown.add(RestartGame, this);
+
+		}
+	}
 	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
 	game.state.add("gameOver", GameOver);
 	game.state.add("victory", Victory);
 	game.state.add("lineup", Lineup);
+	game.state.add("instructions", Instructions);
 	
 	game.state.start("menu");
 };
