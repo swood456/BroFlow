@@ -707,9 +707,6 @@ window.onload = function() {
 
 	function rockHit(thisPlayer, thisRock){
 		if(!invulnerable){
-			//thisRock.kill();
-			//invulnerable = true;
-
 			setHealth(health - 1);
 		}
 	}
