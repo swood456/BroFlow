@@ -60,9 +60,8 @@ window.onload = function() {
 			}).anchor.set(0, 0);
 			
 			//background music
-			if (BGMusic) BGMusic.stop();
-			BGMusic = game.add.audio('backgroundMusic');
-			BGMusic.loopFull(0.08);
+			if (!BGMusic) BGMusic = game.add.audio('backgroundMusic');
+			if (!BGMusic.isPlaying) BGMusic.loopFull(0.08);
 			
 			setupBubbleScreen();
 		}
@@ -215,7 +214,7 @@ window.onload = function() {
 
 		//add in spawners
 		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
-		items    = new Spawner(game, world, ['pickup1'], 60, 100, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
@@ -686,9 +685,6 @@ window.onload = function() {
 			
 			//wait for all the objects to be off the screen
 			game.time.events.add(3000, moveOffscreen, this);
-
-			//stop music
-			BGMusic.stop();
 		}
 	}
 
