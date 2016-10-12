@@ -20,7 +20,7 @@ window.onload = function() {
 			game.load.path = 'assets/sprites/';
 
 			//load a title image
-			game.load.image('title', 'title 2.png')
+			game.load.image('title', 'title 3.png')
 			         .image('instructionButton', 'instructions_button.png')
 			         .image('playButton', 'play_button.png')
 			         .image('bubbles', 'bubbles.png');
@@ -35,7 +35,7 @@ window.onload = function() {
 			image.inputEnabled = true;
 			
 			//create a text object
-			var text = game.add.text(100,100,'SAVE THE DUDEBROS', {font: 'bold 32px Arial', fill: '#fff'});
+			//var text = game.add.text(100,100,'SAVE THE DUDEBROS', {font: 'bold 32px Arial', fill: '#fff'});
 
 			//add in play button
 			game.add.button(game.world.centerX - 50, 600, 'playButton', function(){
