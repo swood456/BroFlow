@@ -374,6 +374,7 @@ window.onload = function() {
 			player.top = enemy.top + enemy.height; //Don't let the player continue up either to prevent overlapping with enemy
 		}
 		*/
+
 		//gradually speed up the world when moving between levels
 		if(currentLevel === 2 && scrollSpeed < 7){
 			scrollSpeed += 0.05;
@@ -394,6 +395,7 @@ window.onload = function() {
 		
 		//check if the player is alive and player is "tapping"
 		if(health > 0 && game.input.activePointer.leftButton.isDown) {
+
 			//move player towards mouse button
 			game.physics.arcade.moveToPointer(player,
 				game.math.bezierInterpolation(
@@ -403,11 +405,16 @@ window.onload = function() {
 					))
 				)
 			);
+
+			//if the player is not powered up, make him use the normal row animation
 			if(!powerupActive){
 				player.bros[0].animations.play('row');
 			}
 			
 		}
+
+		//make the drag vector point in the same direction as the velocity vector
+		// this makes sure that the deceleration is smooth
 		var velocityMagnitude = player.body.velocity.getMagnitude();
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
