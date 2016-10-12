@@ -88,7 +88,7 @@ window.onload = function() {
 	*/
 	
 	//text variables
-	var labelScore, labelHealth, infoText;
+	var labelScore, labelHealth;
 
 	//various global variables
 	var score, health, currentLevel;
@@ -172,8 +172,6 @@ window.onload = function() {
 		allowControl = true;
 		//enemyInvulnerable = false;
 		
-		//enable advanced timing to show fps
-		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -304,14 +302,7 @@ window.onload = function() {
 		//initialize the drag
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-		
-		//info stuff
-		var infoStyle = {font: "32px Arial", fill: "#500050", align: "center"};
-		infoText = game.add.text(game.width / 2, 50, "Tap the screen to move\nCollect red solo cups for your party", infoStyle);
-
-		infoText.anchor.set(0.5,0.5);
-		game.time.events.add(3000, clearInfoText, this);
-		
+				
 
 		//score label
 		var style = {font: "32px Arial", fill: "#500050", align: "center"};
@@ -888,6 +879,16 @@ window.onload = function() {
 		},
 		create: function(){
 			game.stage.backgroundColor = '#2D2D2D';
+			var textStyle = {font: "32px Arial", fill: "#500050", align: "center"};
+
+			//put text to convey how to play the game
+			game.add.text(100,100, "Tap the screen to move towards that point", textStyle);
+
+
+			game.add.text(700, 300, "Avoid rocks and bricks", textStyle);
+			game.add.text(200, 450, "Collect the cups, glowsticks, and shirts to advance", textStyle);
+
+
 			game.input.onDown.add(RestartGame, this);
 
 		}
