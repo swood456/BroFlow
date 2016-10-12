@@ -102,10 +102,12 @@ window.onload = function() {
 	var skyKeys = ['sky1', 'sky2', 'sky2',
 				   'sky3', 'sky3', 'sky4'];
 
+	//sound variables
 	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
 
+
 	function preload () {
-		
+		//swap to correct diectory	
 		game.load.path = 'assets/sprites/';
 
 		//load images
@@ -160,17 +162,23 @@ window.onload = function() {
 	}
 
 	function create () {
+
+		//make sure player is vulnerable
 		invulnerable = false;
 		//enemyInvulnerable = false;
 		
+		//enable advanced timing to show fps
 		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
-		//game.stage.backgroundColor = '#0072bc';
+		//add in the water sprite
 		water = game.add.tileSprite(0, 0, game.width, game.height, 'water');
 		
+		//add in some groups
 		world    = game.add.group();
+
+		//add in spawners
 		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
 		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		deadbros = game.add.group(world, undefined, false, true, Phaser.Physics.ARCADE);
