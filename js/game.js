@@ -11,7 +11,7 @@ window.onload = function() {
 	}
 
 	//instantiate the game
-	var game = new Phaser.Game(1334, 750, Phaser.AUTO, '');
+	var game = new Phaser.Game(1334, 750, Phaser.AUTO, ''), bubbleScreen;
 
 	//create the object the menu game state uses
 	var menu = {
@@ -22,41 +22,35 @@ window.onload = function() {
 			//load a title image
 			game.load.image('title', 'title 2.png')
 			         .image('instructionButton', 'instructions_button.png')
-			         .image('playButton', 'play_button.png');
+			         .image('playButton', 'play_button.png')
+			         .image('bubbles', 'bubbles.png');
 		},
 
 		create: function(){
 			//load in title screen image
 			var image = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
-
 			//Moves the image anchor to the middle, so it centers inside the game properly
 			image.anchor.set(0.5);
-
 			//Enables all kind of input actions on this image (click, etc)
 			image.inputEnabled = true;
 			
 			//create a text object
-			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
+			var text = game.add.text(100,100,'SAVE THE DUDEBROS', {font: 'bold 32px Arial', fill: '#fff'});
 
 			//add in play button
-			game.add.button(game.world.centerX - 50, 600, 'playButton',
-				listener).anchor.set(1, 0);
+			game.add.button(game.world.centerX - 50, 600, 'playButton', function(){
+				//make a callback to go to the game state when finished
+				this.game.state.start('gameplay');
+			}).anchor.set(1, 0);
 			
 			//add in instruction button
-			game.add.button(game.world.centerX + 50, 600, 'instructionButton',
-				instructionListener).anchor.set(0, 0);
-
+			game.add.button(game.world.centerX + 50, 600, 'instructionButton', function(){
+				//make a callback to go to the game state when finished
+				this.game.state.start('instructions');
+			}).anchor.set(0, 0);
+			
+			
 		}		
-	}
-
-	function listener(){
-		//make a callback to go to the game state when finished
-		this.game.state.start("gameplay");
-	}
-
-	function instructionListener(){
-		//make a callback to go to the game state when finished
-		this.game.state.start("instructions");
 	}
 
 	//create object to be used for gameplay state
@@ -334,7 +328,7 @@ window.onload = function() {
 			game.add.audio('ohyeah')
 		];
 
-		BGMusic.loopFull(0.08); //Loops BG music at 60% Volume
+		BGMusic.loopFull(0.08); //Loops BG music at 8% Volume
 		
 		//set game life and score
 		invulnerable = false;
@@ -406,10 +400,28 @@ window.onload = function() {
 		//collectable code
 		//collisions
 		if (health > 0) {
+			//Collect items
 			game.physics.arcade.overlap(player, items.group, collectItem, null, this);
-			game.physics.arcade.overlap(player, bros.group, broPickup, null, this);
-			game.physics.arcade.overlap(player, rocks.group, rockHit, null, this);
-			game.physics.arcade.overlap(player, powerups.group, powerupHit, null, this);
+			//Collect bros
+			game.physics.arcade.overlap(player, bros.group, function(thisPlayer, thisBro){
+				thisBro.kill();
+				setHealth(health + 1);
+				game.rnd.pick(broSounds).play();
+			}, null, this);
+			//Hit rocks
+			game.physics.arcade.overlap(player, rocks.group, function(thisPlayer, thisRock){
+				if(!invulnerable){
+					setHealth(health - 1);
+				}
+			}, null, this);
+			//Collect powerup
+			game.physics.arcade.overlap(player, powerups.group, function(thisplayer, thisPowerup){
+				thisPowerup.kill();
+				chugSound.play();
+				//temporarily make speed faster and invulnerable
+				speedUp(2, 5000);
+				setInvulnerable(4800);
+			}, null, this);
 		}
 
 		game.physics.arcade.overlap(items.group, rocks.group, collisionHandler, null, this);
@@ -508,7 +520,7 @@ window.onload = function() {
 			}, this);
 			*/
 			game.time.events.add(1500, function(){
-				game.state.start("gameOver"); //Go to gameOver state if out of health
+				game.state.start("lineup"); //Go to gameOver state if out of health
 				//TODO add bubbles
 			}, this);
 			gameoverSound.play();
@@ -661,26 +673,6 @@ window.onload = function() {
 				game.state.start("victory"); //Go to gameOver state if out of health
 			}, this);
 	}
-
-	function broPickup(thisPlayer, thisBro){
-		thisBro.kill();
-		setHealth(health + 1);
-		game.rnd.pick(broSounds).play();
-	}
-
-	function rockHit(thisPlayer, thisRock){
-		if(!invulnerable){
-			setHealth(health - 1);
-		}
-	}
-
-	function powerupHit(thisplayer, thisPowerup){
-		thisPowerup.kill();
-		chugSound.play();
-		//temporarily make speed faster and invulnerable
-		speedUp(2, 5000);
-		setInvulnerable(4800);
-	}
 	
 	function speedUp(mult, time) {
 		speedMult = mult;
@@ -722,48 +714,15 @@ window.onload = function() {
 			
 			invulTween = game.add.tween(player).from({alpha: 0.5},
 				200, "Linear", true, 0, Math.round(time / 400), true);
-			invulTween.onComplete.add(makeVulnerable);
-		}
-	}
-
-	function makeVulnerable(){
-		invulnerable = false;
-	}
-
-	//State for the GameOver screen
-	var GameOver = {
-		preload: function(){
-			game.load.path = 'assets/sprites/';
-			//Will Load a Game Over screen asset when said asset is available
-			//For now, use blank Title Screen again as placeholder
-			game.load.image('gameLost', 'title.png');
-		},
-
-		create: function(){
-			var GOimage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameLost'); //add an image to the game to serve as the backdrop.
-
-			//  Moves the image anchor to the middle, so it centers inside the game properly
-			GOimage.anchor.set(0.5);
-
-			//  Enables all kind of input actions on this image (click, etc)
-			GOimage.inputEnabled = true;
-
-			GOtext = game.add.text(250, 16, '', { fill: '#ffffff' });
-
-			GOimage.events.onInputDown.add(function(){
-				game.state.start("lineup");
-			}, this);
-
-			//create a text object
-			var GOtext = game.add.text(100,100,"Game Over!", {font: "bold 32px Arial", fill: "#fff"});
-
-			BGMusic.stop();
+			invulTween.onComplete.add(function(){
+				invulnerable = false;
+			});
 		}
 	}
 	
 	function RestartGame() {
 		//For this callback, return to the menu/title screen
-		this.game.state.start("menu");
+		this.game.state.start('menu');
 	}
 
 	//State for the Victory screen
@@ -801,8 +760,8 @@ window.onload = function() {
 				winSound.play();
 			});
 			
-			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon');
-			var Victory = game.add.sprite(0, 0, 'endScreen');
+			var VicImage = game.add.sprite(game.world.centerX, game.world.centerY, 'gameWon'),
+			    Victory = game.add.sprite(0, 0, 'endScreen');
 
 			//var endBroSprite;
 
@@ -856,9 +815,9 @@ window.onload = function() {
 			game.input.onDown.add(RestartGame, this);
 			
 			var style = {
-				font: "bold 28px Comic Sans MS",
-				fill: "#fff",
-				boundsAlignH: "center"
+				font: 'bold 28px Comic Sans MS',
+				fill: '#fff',
+				boundsAlignH: 'center'
 			};
 			for (var i = 5; i >= 0; --i) {
 				var x = (game.width * (i + 1.5) / 8)|0;
@@ -882,26 +841,44 @@ window.onload = function() {
 
 		},
 		create: function(){
-			game.stage.backgroundColor = '#2D2D2D';
+			game.stage.backgroundColor = '#299ED1';
 			var textStyle = {
-				font: "bold 32px Comic Sans MS",
-				fill: "#fff",
-				boundsAlignH: "center",
-				boundsAlignV: "middle"
+				font: 'bold 32px Comic Sans MS',
+				fill: '#fff',
+				boundsAlignH: 'center',
+				boundsAlignV: 'middle'
+			};
+
+			var textStyleSmall = {
+				font: 'bold 20px Comic Sans MS',
+				fill: '#fff',
+				boundsAlignH: 'center',
+				boundsAlignV: 'middle'
 			};
 			//put text to convey how to play the game
-			game.add.text(100, 200, "Tap the screen to move towards that point", textStyle);
-			game.add.text(200, 350, "Avoid rocks and bricks", textStyle);
-			game.add.text(300, 500, "Collect the cups, glowsticks, and t-shirts to advance", textStyle);
+			var tempText = game.add.text(game.width / 2, 150, 'Tap the screen to move towards that point', textStyle);
+			tempText.anchor.set(0.5);
+
+			tempText = game.add.text(game.width / 2, 325, 'Avoid rocks and bricks', textStyle);
+			tempText.anchor.set(0.5);
+
+			tempText = game.add.text(game.width / 2, 500, 'Collect the cups, glowsticks, and t-shirts to advance', textStyle);
+			tempText.anchor.set(0.5);
+
+			tempText = game.add.text(game.width / 2, 700, 'tap to go back', textStyleSmall);
+			tempText.anchor.set(0.5);
+
 
 			//add in objects to screen
-			var rockSprite = game.add.sprite(310,400, 'rock');
-			rockSprite.scale.setTo(0.5, 0.5);
-			var brickSprite = game.add.sprite(470,400, 'bricks');
-			brickSprite.scale.set(0.5,0.5);
-			game.add.sprite(490, 550, 'cup');
-			game.add.sprite(620, 550, 'glowsticks');
-			game.add.sprite(850, 550, 'tshirts');
+			var rockSprite = game.add.sprite(350,275, 'rock');
+			//rockSprite.scale.setTo(0.5, 0.5);
+
+			var brickSprite = game.add.sprite(875,275, 'bricks');
+			//brickSprite.scale.set(0.5,0.5);
+
+			game.add.sprite(445, 515, 'cup');
+			game.add.sprite(585, 515, 'glowsticks');
+			game.add.sprite(825, 515, 'tshirts');
 
 
 			game.input.onDown.add(RestartGame, this);
@@ -909,12 +886,11 @@ window.onload = function() {
 		}
 	}
 	
-	game.state.add("menu", menu);
-	game.state.add("gameplay", gameplay);
-	game.state.add("gameOver", GameOver);
-	game.state.add("victory", Victory);
-	game.state.add("lineup", Lineup);
-	game.state.add("instructions", Instructions);
+	game.state.add('menu', menu);
+	game.state.add('gameplay', gameplay);
+	game.state.add('victory', Victory);
+	game.state.add('lineup', Lineup);
+	game.state.add('instructions', Instructions);
 	
-	game.state.start("menu");
+	game.state.start('menu');
 };
