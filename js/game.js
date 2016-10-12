@@ -60,7 +60,7 @@ window.onload = function() {
 	var player, dragMagnitude, boatSpeed, speedMult, slowDist = 200,
 		scrollSpeed;
 
-	var invulnerable = false, invulTween, powerupActive = false, enemyInvulnerable = false, enemyInvulTween;
+	var invulnerable = false, invulTween, powerupActive = false;
 	
 	var items, rocks, bros, deadbros, powerups;
 
@@ -379,7 +379,7 @@ window.onload = function() {
 		//enemyTestCode
 		if(enemySpawned){
 			game.physics.arcade.collide (player, enemy);
-			game.physics.arcade.moveToObject(enemy, player, 50);
+			game.physics.arcade.moveToObject(enemy, player, 100);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
 
@@ -395,7 +395,7 @@ window.onload = function() {
 
 	//enemyTestCode
 	function spawnEnemy(){
-		enemy = game.add.sprite(200,400, 'enemy');
+		enemy = game.add.sprite(-300,400, 'enemy');
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
 		//enemy.body.collideWorldBounds = true;
@@ -403,49 +403,12 @@ window.onload = function() {
 		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		//enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
-
 		enemySpawned = true;
 	}
 	function enemyHitRock(enemy){
-		
-		if(!enemyInvulnerable){ 
-			enemyHealth -= 1;
-		} else{
-			console.log("Enemy is Invulnerable");
-		}
-
+		enemyHealth -= 1;
 		if(enemyHealth <= 0){
 			enemy.kill();
-		}
-		
-		if (!enemyInvulnerable) {
-			setEnemyInvulnerable(1000); //Give enemy one second of invincibility if it is not already
-		};
-	}
-
-	//Enemy Invulnerability function in progress
-	function setEnemyInvulnerable(time) {
-		if (time === 0) {
-			enemyInvulnerable = false;
-			enemyInvulTween.stop();
-			enemy.alpha = 1;
-			return;
-		}
-		time = time || 1000;
-		
-		if (!enemyInvulTween || enemyInvulTween.totalDuration < time) {
-			enemyInvulnerable = true;
-
-			if(enemyInvulTween) {
-				enemyInvulTween.stop();
-				enemy.alpha = 1;
-			}
-			
-			enemyInvulTween = game.add.tween(enemy).from({alpha: 0.5},
-				200, "Linear", true, 0, Math.round(time / 400), true);
-			enemyInvulTween.onComplete.add(function(){
-				enemyInvulnerable = false;
-			} );
 		}
 	}
 	
