@@ -181,10 +181,9 @@ window.onload = function() {
 
 		//add in spawners
 		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
-		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
-		
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
+		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
 		/*
@@ -196,8 +195,10 @@ window.onload = function() {
 
 		*/
 
-		//make a player thing
+		//make the raft sprite
 		player = game.add.sprite(200,200, 'player');
+
+		//make a structure to hold all the bros on the raft
 		player.bros = [];
 		
 		//load the bros into the game
