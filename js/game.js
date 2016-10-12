@@ -763,7 +763,7 @@ window.onload = function() {
 	
 	function RestartGame() {
 		//For this callback, return to the menu/title screen
-		this.game.state.start("menu");
+		this.game.state.start('menu');
 	}
 
 	//State for the Victory screen
@@ -856,9 +856,9 @@ window.onload = function() {
 			game.input.onDown.add(RestartGame, this);
 			
 			var style = {
-				font: "bold 28px Comic Sans MS",
-				fill: "#fff",
-				boundsAlignH: "center"
+				font: 'bold 28px Comic Sans MS',
+				fill: '#fff',
+				boundsAlignH: 'center'
 			};
 			for (var i = 5; i >= 0; --i) {
 				var x = (game.width * (i + 1.5) / 8)|0;
@@ -884,34 +884,42 @@ window.onload = function() {
 		create: function(){
 			game.stage.backgroundColor = '#299ED1';
 			var textStyle = {
-				font: "bold 32px Comic Sans MS",
-				fill: "#fff",
-				boundsAlignH: "center",
-				boundsAlignV: "middle"
+				font: 'bold 32px Comic Sans MS',
+				fill: '#fff',
+				boundsAlignH: 'center',
+				boundsAlignV: 'middle'
 			};
 
 			var textStyleSmall = {
-				font: "bold 20px Comic Sans MS",
-				fill: "#fff",
-				boundsAlignH: "center",
-				boundsAlignV: "middle"
+				font: 'bold 20px Comic Sans MS',
+				fill: '#fff',
+				boundsAlignH: 'center',
+				boundsAlignV: 'middle'
 			};
 			//put text to convey how to play the game
-			game.add.text(100, 200, "Tap the screen to move towards that point", textStyle);
-			game.add.text(200, 350, "Avoid rocks and bricks", textStyle);
-			game.add.text(300, 500, "Collect the cups, glowsticks, and t-shirts to advance", textStyle);
-			var tempText = game.add.text(game.width / 2, 675, "tap to go back", textStyleSmall);
+			var tempText = game.add.text(game.width / 2, 150, 'Tap the screen to move towards that point', textStyle);
+			tempText.anchor.set(0.5);
+
+			tempText = game.add.text(game.width / 2, 325, 'Avoid rocks and bricks', textStyle);
+			tempText.anchor.set(0.5);
+
+			tempText = game.add.text(game.width / 2, 500, 'Collect the cups, glowsticks, and t-shirts to advance', textStyle);
+			tempText.anchor.set(0.5);
+
+			tempText = game.add.text(game.width / 2, 700, 'tap to go back', textStyleSmall);
 			tempText.anchor.set(0.5);
 
 
 			//add in objects to screen
-			var rockSprite = game.add.sprite(310,400, 'rock');
-			rockSprite.scale.setTo(0.5, 0.5);
-			var brickSprite = game.add.sprite(470,400, 'bricks');
-			brickSprite.scale.set(0.5,0.5);
-			game.add.sprite(490, 550, 'cup');
-			game.add.sprite(620, 550, 'glowsticks');
-			game.add.sprite(850, 550, 'tshirts');
+			var rockSprite = game.add.sprite(350,275, 'rock');
+			//rockSprite.scale.setTo(0.5, 0.5);
+
+			var brickSprite = game.add.sprite(875,275, 'bricks');
+			//brickSprite.scale.set(0.5,0.5);
+
+			game.add.sprite(445, 515, 'cup');
+			game.add.sprite(585, 515, 'glowsticks');
+			game.add.sprite(825, 515, 'tshirts');
 
 
 			game.input.onDown.add(RestartGame, this);
@@ -919,12 +927,12 @@ window.onload = function() {
 		}
 	}
 	
-	game.state.add("menu", menu);
-	game.state.add("gameplay", gameplay);
-	game.state.add("gameOver", GameOver);
-	game.state.add("victory", Victory);
-	game.state.add("lineup", Lineup);
-	game.state.add("instructions", Instructions);
+	game.state.add('menu', menu);
+	game.state.add('gameplay', gameplay);
+	game.state.add('gameOver', GameOver);
+	game.state.add('victory', Victory);
+	game.state.add('lineup', Lineup);
+	game.state.add('instructions', Instructions);
 	
-	game.state.start("menu");
+	game.state.start('menu');
 };
