@@ -13,6 +13,8 @@ window.onload = function() {
 	//instantiate the game
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, ''), bubbleScreen;
 
+	var BGMusic;
+
 	//create the object the menu game state uses
 	var menu = {
 		preload: function(){
@@ -24,6 +26,12 @@ window.onload = function() {
 			         .image('instructionButton', 'instructions_button.png')
 			         .image('playButton', 'play_button.png')
 			         .image('bubbles', 'bubbles.png');
+
+			game.load.path = 'assets/sounds/';
+
+			game.load.audio ('backgroundMusic', 'StockBGMusic.mp3');
+
+
 		},
 
 		create: function(){
@@ -49,7 +57,9 @@ window.onload = function() {
 				this.game.state.start('instructions');
 			}).anchor.set(0, 0);
 			
-			
+			//background music
+			BGMusic = game.add.audio('backgroundMusic');
+			BGMusic.loopFull(0.08);
 		}		
 	}
 
@@ -310,7 +320,7 @@ window.onload = function() {
 		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
-		BGMusic = game.add.audio('backgroundMusic');
+		
 		gameoverSound = game.add.audio('awwno');
 		badSound = game.add.audio('badSound');
 		chugSound = game.add.audio('chug');
@@ -328,7 +338,7 @@ window.onload = function() {
 			game.add.audio('ohyeah')
 		];
 
-		BGMusic.loopFull(0.08); //Loops BG music at 8% Volume
+		//BGMusic.loopFull(0.08); //Loops BG music at 8% Volume
 		
 		//set game life and score
 		invulnerable = false;
@@ -519,6 +529,8 @@ window.onload = function() {
 				game.state.start("gameOver"); //Go to gameOver state if out of health
 			}, this);
 			*/
+			BGMusic.stop();
+
 			game.time.events.add(1500, function(){
 				game.state.start("lineup"); //Go to gameOver state if out of health
 				//TODO add bubbles
@@ -645,6 +657,8 @@ window.onload = function() {
 			//wait for all the objects to be off the screen
 			game.time.events.add(3000, moveOffscreen, this);
 
+			//stop music
+			BGMusic.stop();
 		}
 	}
 
@@ -831,49 +845,55 @@ window.onload = function() {
 			         .image ('bricks', 'bricks.png')
 			         .image ('cup', 'cup.png')
 			         .image ('glowsticks', 'glowsticks.png')
-			         .image ('tshirts', 'tshirt.png');
+			         .image ('tshirts', 'tshirt.png')
+			         .image ('tapText', 'tapscreenText.png')
+			         .image ('avoidRocksText','avoidRocksText.png')
+			         .image ('collectItemsText', 'collectItemsText.png')
+			         .image ('collectDudesText', 'collectDudesText.png')
+			         .image ('tapToGoBack', 'tapToGoBacktext.png')
+			         .spritesheet ('swag', 'Swag_fistPump_highFive_7fps_40pixelsWide.png', 40, 75)
+		         	 .spritesheet ('yolo', 'Yolo_fistPump_highFive_40pixelsWide.png', 40, 80);
 
 		},
 		create: function(){
 			game.stage.backgroundColor = '#299ED1';
-			var textStyle = {
-				font: 'bold 32px "Buxton Sketch", "Comic Sans MS", cursive, sans-serif',
-				fill: '#fff',
-				boundsAlignH: 'center',
-				boundsAlignV: 'middle'
-			};
 
-			var textStyleSmall = {
-				font: 'bold 20px Comic Sans MS',
-				fill: '#fff',
-				boundsAlignH: 'center',
-				boundsAlignV: 'middle'
-			};
-			//put text to convey how to play the game
-			var tempText = game.add.text(game.width / 2, 150, 'Tap the screen to move towards that point', textStyle);
-			tempText.anchor.set(0.5);
+			//use the images stuff
+			var textSprite = game.add.sprite(game.width / 2, 100, 'tapText');
+			textSprite.anchor.set(0.5);
 
-			tempText = game.add.text(game.width / 2, 325, 'Avoid rocks and bricks', textStyle);
-			tempText.anchor.set(0.5);
+			textSprite = game.add.sprite(game.width / 2, 250, 'avoidRocksText');
+			textSprite.anchor.set(0.5);
 
-			tempText = game.add.text(game.width / 2, 500, 'Collect the cups, glowsticks, and t-shirts to advance', textStyle);
-			tempText.anchor.set(0.5);
+			textSprite = game.add.sprite(game.width / 2, 400, 'collectItemsText');
+			textSprite.anchor.set(0.5);
 
-			tempText = game.add.text(game.width / 2, 700, 'tap to go back', textStyleSmall);
-			tempText.anchor.set(0.5);
+			textSprite = game.add.sprite(game.width / 2, 550, 'collectDudesText');
+			textSprite.anchor.set(0.5);
+
+			textSprite = game.add.sprite(game.width / 2, 700, 'tapToGoBack');
+			textSprite.anchor.set(0.5);
 
 
 			//add in objects to screen
-			var rockSprite = game.add.sprite(350,275, 'rock');
+			var rockSprite = game.add.sprite(350,200, 'rock');
 			//rockSprite.scale.setTo(0.5, 0.5);
 
-			var brickSprite = game.add.sprite(875,275, 'bricks');
+			var brickSprite = game.add.sprite(875,200, 'bricks');
 			//brickSprite.scale.set(0.5,0.5);
 
-			game.add.sprite(445, 515, 'cup');
-			game.add.sprite(585, 515, 'glowsticks');
-			game.add.sprite(825, 515, 'tshirts');
+			game.add.sprite(495, 340, 'cup');
+			game.add.sprite(605, 340, 'glowsticks');
+			game.add.sprite(755, 340, 'tshirts');
 
+			//load in the dudebros
+			var broSprite = game.add.sprite(435, 510, 'swag');
+			broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
+			broSprite.animations.play('idle');
+
+			broSprite = game.add.sprite(860, 505, 'yolo');
+			broSprite.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
+			broSprite.animations.play('idle');
 
 			game.input.onDown.add(RestartGame, this);
 
