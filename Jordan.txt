@@ -1,0 +1,6 @@
+Jordan
+-item pickups, rock collisions
+-spawn overlap checks
+-enemy code (not implemented in game)
+-asset implementation
+-general coding tweaks/assistance
