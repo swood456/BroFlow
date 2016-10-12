@@ -95,6 +95,7 @@ window.onload = function() {
 	//ends here
 
 
+	var infoText;
 	var world, bgWalls, water,
 		bgKeys = ['bg1', 'bg2', 'bg3',
 		          'bg4', 'bg5', 'bg6',
@@ -275,6 +276,12 @@ window.onload = function() {
 
 		
 
+		//info stuff
+		var infoStyle = {font: "32px Arial", fill: "#500050", align: "center"};
+		infoText = game.add.text(game.width / 2, 50, "Tap the screen to move\nCollect red solo cups for your party", infoStyle);
+
+		infoText.anchor.set(0.5,0.5);
+		game.time.events.add(3000, clearInfoText, this);
 		
 
 		//score label
@@ -393,6 +400,10 @@ window.onload = function() {
 
 		//update score
 		labelScore.text = score + " fps: " + game.time.fps;
+	}
+
+	function clearInfoText(){
+		infoText.text = "";
 	}
 
 	function collisionHandler(item1, item2){
@@ -572,6 +583,10 @@ window.onload = function() {
 			powerups.minInt += 1250;
 			powerups.maxInt += 1000;
 
+			//give player info on what to do next
+			infoText.text = "Now collect glow sticks";
+			game.time.events.add(3000, clearInfoText, this);
+
 		} else if(score >= 10 && currentLevel === 2){
 			console.log("move to level 3");
 			//move to level 2
@@ -589,6 +604,9 @@ window.onload = function() {
 			bros.maxInt += 500;
 			powerups.minInt += 1000;
 			powerups.maxInt += 500;
+
+			infoText.text = "Finally, collect your fraternity jerseys,\nBeta Rho"
+			game.time.events.add(3000, clearInfoText, this);
 
 		}
 
