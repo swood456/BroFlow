@@ -72,7 +72,7 @@ window.onload = function() {
 	//var enemyInvulnerable = false, enemyInvulTween;
 	
 	//spawner variables
-	var items, rocks, bros, deadbros, powerups;
+	var items, rocks, bros, deadbros, powerups, bgWalls;
 
 	/*
 	//enemyTestCode
@@ -93,17 +93,21 @@ window.onload = function() {
 			[ 40, -10], // 4 - orange
 			[ 60,  10], // 5 - green
 			[-25,  15]  // 6 - pink
-		]
+		];
 
+	//other object variables
 	var world, bgWalls, water,
 		bgKeys  = ['bg1', 'bg1', 'bg1', 'bg2', 'bg3', 'bg3',
 		           'bg5', 'bg6'];
-		skyKeys = ['sky1', 'sky2', 'sky2', 'sky3', 'sky3', 'sky4'];
+	var skyKeys = ['sky1', 'sky2', 'sky2',
+				   'sky3', 'sky3', 'sky4'];
 
+	//sound variables
 	var BGMusic, gameoverSound, badSound, whipSound, broSounds, happySounds;
 
+
 	function preload () {
-		
+		//swap to correct diectory	
 		game.load.path = 'assets/sprites/';
 
 		//load images
@@ -162,19 +166,23 @@ window.onload = function() {
 		allowControl = true;
 		//enemyInvulnerable = false;
 		
+		//enable advanced timing to show fps
 		game.time.advancedTiming = true;
 		//load arcade physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
-		//game.stage.backgroundColor = '#0072bc';
+		//add in the water sprite
 		water = game.add.tileSprite(0, 0, game.width, game.height, 'water');
 		
+		//add in some groups
 		world    = game.add.group();
-		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
-		items    = new Spawner(game, world, ['pickup1'], 600, 1000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		deadbros = game.add.group(world, undefined, false, true, Phaser.Physics.ARCADE);
+
+		//add in spawners
+		bgWalls  = new BGWalls(game, world, bgKeys, skyKeys);
+		items    = new Spawner(game, world, ['pickup1'], 6000, 10000, bgWalls.minHeight, game.height - (game.cache.getImage('pickup1').height));
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
-		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
+		bros     = new Spawner(game, world, ['broLife2'], 5000, 9000, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
 
 		/*
@@ -186,22 +194,30 @@ window.onload = function() {
 
 		*/
 
-		//make a player thing
+		//make the raft sprite
 		player = game.add.sprite(200,200, 'player');
+
+		//make a structure to hold all the bros on the raft
 		player.bros = [];
 		
 		//load the bros into the game
 		var pos, broSprite;
 
-		//bro 3
+		//load in bro 3
 		pos = healthPos[2];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro3');
+
+		//add in animations
 		broSprite.animations.add('idle', [0,1,2,3,4,5,6], 12, true);
 		broSprite.animations.add('highfive', [7,8,9,10,11,12,13,14], 7, false);
+
+		//start playing idle animation
 		broSprite.animations.play('idle');
+
+		//Make bro a child of the player
 		var bro3 = player.addChild(broSprite);
 
-		//bro 2
+		//load in bro 2
 		pos = healthPos[1];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro2');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 7, true);
@@ -209,28 +225,28 @@ window.onload = function() {
 		broSprite.animations.play('idle');
 		var bro2 = player.addChild(broSprite);
 
-		//bro 5
+		//load in bro 5
 		pos = healthPos[4];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro5');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro5 = player.addChild(broSprite);
 
-		//bro 6
+		//load in bro 6
 		pos = healthPos[5];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro6');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro6 = player.addChild(broSprite);
 
-		//bro 4
+		//load in bro 4
 		pos = healthPos[3];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro4');
 		broSprite.animations.add('idle', [0,1,2,3,4,5], 10, true);
 		broSprite.animations.play('idle');
 		var bro4 = player.addChild(broSprite);
 		
-		//bro 1
+		//load in bro 1
 		pos = healthPos[0];
 		broSprite = game.make.sprite(pos[0], pos[1], 'dudebro1');
 		broSprite.animations.add('idle', [0,1,2,3,4,5,6,7,8,9,10], 8, true);
@@ -241,7 +257,8 @@ window.onload = function() {
 		broSprite.animations.play('idle');
 		var bro1 = player.addChild(broSprite);
 		
-		//add the bros to the list of bros
+		//add the bros to the array in player
+		// then set the anchor and kill them
 		player.bros.push(bro1);
 		bro1.anchor.set(0.5, 1);
 		bro1.kill();
@@ -266,17 +283,22 @@ window.onload = function() {
 		bro6.anchor.set(0.5, 1);
 		bro6.kill();
 
-		
+		//enable arcade physics
 		game.physics.enable(player, Phaser.Physics.ARCADE);
+		
+		//set player size
 		player.body.setSize(164, 85, 33, 3);
+		
+		//set player anchor
 		player.anchor.setTo(0.5,0.5);
+		
+		//make player collide with world boundry
 		player.body.collideWorldBounds = true;
 
+		//initialize the drag
 		player.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		player.body.drag.y = Math.sqrt(2) * dragMagnitude;
-
 		
-
 		//info stuff
 		var infoStyle = {font: "32px Arial", fill: "#500050", align: "center"};
 		infoText = game.add.text(game.width / 2, 50, "Tap the screen to move\nCollect red solo cups for your party", infoStyle);
@@ -294,11 +316,21 @@ window.onload = function() {
 		
 		labelHealth = game.add.text (100, 650, text, style);
 
+		//set the current level to be 1
 		currentLevel = 1;
+
+		//set the starting scroll speed of the world
 		scrollSpeed = 5;
+
+		//initialize the magnitude of the drag vector
 		dragMagnitude = 500;
+
+		//make sure we reset the speed of the boat from any powerups
 		boatSpeed = 500;
+
+		//set the speed multiplyer
 		speedMult = 1;
+
 		invulnerable = false;
 
 		//Add Sound and Music Vars to scene
@@ -344,6 +376,7 @@ window.onload = function() {
 			player.top = enemy.top + enemy.height; //Don't let the player continue up either to prevent overlapping with enemy
 		}
 		*/
+
 		//gradually speed up the world when moving between levels
 		if(currentLevel === 2 && scrollSpeed < 7){
 			scrollSpeed += 0.05;
@@ -373,11 +406,16 @@ window.onload = function() {
 					))
 				)
 			);
+
+			//if the player is not powered up, make him use the normal row animation
 			if(!powerupActive){
 				player.bros[0].animations.play('row');
 			}
 			
 		}
+
+		//make the drag vector point in the same direction as the velocity vector
+		// this makes sure that the deceleration is smooth
 		var velocityMagnitude = player.body.velocity.getMagnitude();
 		player.body.drag.x = Math.abs(player.body.velocity.x / velocityMagnitude * dragMagnitude);
 		player.body.drag.y = Math.abs(player.body.velocity.y / velocityMagnitude * dragMagnitude);
@@ -666,9 +704,6 @@ window.onload = function() {
 
 	function rockHit(thisPlayer, thisRock){
 		if(!invulnerable){
-			//thisRock.kill();
-			//invulnerable = true;
-
 			setHealth(health - 1);
 		}
 	}
