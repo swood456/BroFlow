@@ -24,6 +24,8 @@ window.onload = function() {
 
 			//load a title image
 			game.load.image('title', 'title.png');
+			game.load.image('instructionButton', 'instructionButton.png');
+			game.load.image('playButton', 'playButton.png');
 		},
 
 		create: function(){
@@ -40,10 +42,17 @@ window.onload = function() {
 			text = game.add.text(250, 16, '', { fill: '#ffffff' });
 
 			//allow player to go to next level
-			image.events.onInputDown.add(listener, this);
+			//image.events.onInputDown.add(listener, this);
 
 			//create a text object
 			var text = game.add.text(100,100,"SAVE THE DUDEBROS", {font: "bold 32px Arial", fill: "#fff"});
+
+			var button;
+			//add in instruction button
+
+
+			//add in play button
+			button = game.add.button(game, game.world.centerX - 95, 400, 'playButton', listener);
 
 		}		
 	}
@@ -883,7 +892,7 @@ window.onload = function() {
 		}
 	}
 
-	var Instructions = function(game){
+	/*var Instructions = function(game){
 		console.log("starting instructions menu");
 	}
 	Instructions.prototype = {
@@ -897,14 +906,14 @@ window.onload = function() {
 			game.input.onDown.add(RestartGame, this);
 
 		}
-	}
+	}*/
 	
 	game.state.add("menu", menu);
 	game.state.add("gameplay", gameplay);
 	game.state.add("gameOver", GameOver);
 	game.state.add("victory", Victory);
 	game.state.add("lineup", Lineup);
-	game.state.add("instructions", Instructions);
+	//game.state.add("instructions", Instructions);
 	
 	game.state.start("menu");
 };
