@@ -419,7 +419,7 @@ window.onload = function() {
 		powerups.update();
 		
 		//check if the player is alive and player is "tapping"
-		if(allowControl && health > 0 && game.input.activePointer.leftButton.isDown) {
+		if(allowControl && health > 0 && game.input.activePointer.isDown) {
 			//move player towards mouse button
 			game.physics.arcade.moveToPointer(player,
 				game.math.bezierInterpolation(
