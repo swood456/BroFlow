@@ -82,7 +82,7 @@ window.onload = function() {
 	}
 	
 	function startBubbleScreen(stage){
-		if (bubbleScreen.inTween) return;
+		if (bubbleScreen.alive) return;
 		
 		bubbleScreen.y = game.height;
 		bubbleScreen.alive = true;
@@ -90,12 +90,10 @@ window.onload = function() {
 		if (bubbleScreen.outTween && bubbleScreen.outTween.stop) {
 			bubbleScreen.outTween.stop();
 		}
-		bubbleScreen.inTween =
-			game.add.tween(bubbleScreen).to({y: -127}, 500, Phaser.Easing.Sinusoidal.In, true);
-		bubbleScreen.inTween.onComplete.add(function(){
-			bubbleScreen.inTween = undefined;
-			game.state.start(stage);
-		});
+		game.add.tween(bubbleScreen).to({y: -127}, 500, Phaser.Easing.Sinusoidal.In, true)
+			.onComplete.add(function(){
+				game.state.start(stage);
+			});
 	}
 
 	//create object to be used for gameplay state
