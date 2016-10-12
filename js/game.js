@@ -160,6 +160,7 @@ window.onload = function() {
 
 	function create () {
 		invulnerable = false;
+		enemyInvulnerable = false;
 		
 		game.time.advancedTiming = true;
 		//load arcade physics
@@ -175,6 +176,13 @@ window.onload = function() {
 		rocks    = new Spawner(game, world, ['boulder', 'bricks'], 1800, 2000, bgWalls.minHeight, game.height - (game.cache.getImage('boulder').height / 2));
 		bros     = new Spawner(game, world, ['broLife2'], 500, 900, bgWalls.minHeight, game.height - (game.cache.getImage('broLife2').height));
 		powerups = new Spawner(game, world, ['powerup'], 15000, 20000, bgWalls.minHeight, game.height - (game.cache.getImage('powerup').height));
+
+
+		//make the enemy object to be spawned later
+		enemy = game.add.sprite(-100, game.world.centerY, 'enemy');
+		game.physics.enable(enemy, Phaser.Physics.ARCADE);
+		enemy.anchor.setTo(0.5,0.5);
+		enemy.kill();
 
 		//make a player thing
 		player = game.add.sprite(200,200, 'player');
@@ -378,8 +386,8 @@ window.onload = function() {
 		
 		//enemyTestCode
 		if(enemySpawned){
-			game.physics.arcade.collide (player, enemy);
 			game.physics.arcade.moveToObject(enemy, player, 100);
+			game.physics.arcade.collide (player, enemy);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
 
@@ -395,16 +403,23 @@ window.onload = function() {
 
 	//enemyTestCode
 	function spawnEnemy(){
+		/*
 		enemy = game.add.sprite(200,400, 'enemy');
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
+		*/
 		//enemy.body.collideWorldBounds = true;
 
 		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		//enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
+		enemy.alive = enemy.exists = true;
+		enemyHealth = 3;
+		setEnemyInvulnerable(3000);
+
 		enemySpawned = true;
 	}
+
 	function enemyHitRock(enemy){
 		if(!enemyInvulnerable){ 
 			enemyHealth -= 1;
@@ -417,7 +432,7 @@ window.onload = function() {
 		}
 		
 		if (!enemyInvulnerable) {
-			setEnemyInvulnerable(1000); //Give enemy one second of invincibility if it is not already
+			setEnemyInvulnerable(1500); //Give enemy a bit of mercy invincibility if it is not already invulnerable
 		};
 	}
 
