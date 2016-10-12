@@ -552,7 +552,7 @@ window.onload = function() {
 			
 			//wait for all the objects to be off the screen
 			//game.time.events.add(4000, moveOffscreen, this);
-			game.time.events.add(4000, moveOffscreen, this);
+			game.time.events.add(3000, moveOffscreen, this);
 
 		}
 	}
