@@ -379,7 +379,7 @@ window.onload = function() {
 		//enemyTestCode
 		if(enemySpawned){
 			game.physics.arcade.collide (player, enemy);
-			game.physics.arcade.moveToObject(enemy, player, 10);
+			game.physics.arcade.moveToObject(enemy, player, 50);
 			game.physics.arcade.overlap(enemy, rocks.group, enemyHitRock, null, this);
 		}	
 
@@ -395,22 +395,32 @@ window.onload = function() {
 
 	//enemyTestCode
 	function spawnEnemy(){
-		enemy = game.add.sprite(-300,400, 'enemy');
+		enemy = game.add.sprite(200,400, 'enemy');
 		game.physics.enable(enemy, Phaser.Physics.ARCADE);
 		enemy.anchor.setTo(0.5,0.5);
-		enemy.body.collideWorldBounds = true;
+		//enemy.body.collideWorldBounds = true;
 
 		//enemy.body.drag.x = Math.sqrt(2) * dragMagnitude;
 		//enemy.body.drag.y = Math.sqrt(2) * dragMagnitude;
 
+
 		enemySpawned = true;
 	}
 	function enemyHitRock(enemy){
-		enemyHealth -= 1;
+		
+		if(!enemyInvulnerable){ 
+			enemyHealth -= 1;
+		} else{
+			console.log("Enemy is Invulnerable");
+		}
+
 		if(enemyHealth <= 0){
 			enemy.kill();
 		}
-		setEnemyInvulnerable(1000); //Give enemy one second of invincibility
+		
+		if (!enemyInvulnerable) {
+			setEnemyInvulnerable(1000); //Give enemy one second of invincibility if it is not already
+		};
 	}
 
 	//Enemy Invulnerability function in progress
@@ -425,6 +435,7 @@ window.onload = function() {
 		
 		if (!enemyInvulTween || enemyInvulTween.totalDuration < time) {
 			enemyInvulnerable = true;
+
 			if(enemyInvulTween) {
 				enemyInvulTween.stop();
 				enemy.alpha = 1;
